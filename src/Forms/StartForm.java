@@ -98,9 +98,24 @@ public class StartForm extends JFrame {
             inputGroupPanel.setTextFieldsValid();
         }
         inputGroupPanel.setPanelNonEditableCustom(GROUP_PANEL_BACKGROUND_COLOR, GROUP_NON_EDITABLE_FOREGROUND, FONT_NON_EDITABLE);
+
+        JPanel groupPanel = getGroupsUtilitiesPanel();
         safelyDeleteComponent(highResolutionImagePanel);
-        addComponent(this.addGroupPanel, false, true);
+        addComponent(groupPanel, false, true);
+        //addComponent(this.addGroupPanel, true, true);
         groupPanels.add(inputGroupPanel);
+    }
+
+    private static JPanel getGroupsUtilitiesPanel() {
+        JPanel groupPanel = new JPanel();
+        groupPanel.setOpaque(false);
+        groupPanel.setLayout(new BoxLayout(groupPanel, BoxLayout.X_AXIS));
+        HighResolutionImagePanel openGroupFormPanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Group-Form-Open-Icon.png", 25,24), 30, 45);
+        HighResolutionImagePanel editGroupData = new HighResolutionImagePanel(new HighResolutionImageLabel("Edit-Group-Icon.png", 25,27), 30, 45);
+        groupPanel.add(openGroupFormPanel);
+        groupPanel.add(Box.createHorizontalStrut(100));
+        groupPanel.add(editGroupData);
+        return groupPanel;
     }
 
     private void addComponent(Component component, boolean hasVerticalStrutBefore, boolean hasVerticalStrutAfter) {

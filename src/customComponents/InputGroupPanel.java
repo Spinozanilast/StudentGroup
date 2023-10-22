@@ -9,7 +9,6 @@ import java.awt.event.FocusEvent;
  * A custom panel that contains input fields.
  */
 public class InputGroupPanel extends RoundedPanel {
-    private final Dimension WIDER_SIZE = new Dimension(715,43);
     private final Dimension STANDARD_SIZE = new Dimension(640, 45);
     private JPanel layoutPanel;
     private Color backgroundColor;
@@ -253,15 +252,5 @@ public class InputGroupPanel extends RoundedPanel {
         setTextBoxesBackground(textBoxesBackground);
         setTextFieldsForeground(foregroundColor);
         isInputValid = true;
-    }
-
-    public void setPanelReadyToEdit(){
-        setSize(WIDER_SIZE);
-    }
-
-    private void clearLayout(){
-        layoutPanel.removeAll();
-        layoutPanel.revalidate();
-        layoutPanel.repaint();
     }
 }

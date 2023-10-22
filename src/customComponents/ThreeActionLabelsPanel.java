@@ -8,18 +8,6 @@ public class ThreeActionLabelsPanel extends JPanel {
     private Color backPanelColor;
     private Dimension standardSize;
 
-    public JLabel getLeftLabel() {
-        return leftLabel;
-    }
-
-    public JLabel getCenterLabel() {
-        return centerLabel;
-    }
-
-    public JLabel getRightLabel() {
-        return rightLabel;
-    }
-
     private JLabel leftLabel;
     private JLabel centerLabel;
     private JLabel rightLabel;
@@ -107,7 +95,19 @@ public class ThreeActionLabelsPanel extends JPanel {
         centerLabel.setText(text);
     }
 
-    public void setRightLabelTexxt(String text) {
+    public void setRightLabelText(String text) {
         rightLabel.setText(text);
+    }
+
+    public JLabel getLeftLabel() {
+        return leftLabel;
+    }
+
+    public JLabel getCenterLabel() {
+        return centerLabel;
+    }
+
+    public JLabel getRightLabel() {
+        return rightLabel;
     }
 }
