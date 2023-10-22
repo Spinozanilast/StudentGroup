@@ -4,11 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * A custom panel that contains input fields.
  */
-public class InputGroupPanel extends RoundedPanel {
+public class InputGroupPanel extends RoundedPanel implements Comparable<InputGroupPanel>{
     private final Dimension STANDARD_SIZE = new Dimension(640, 45);
     private JPanel layoutPanel;
     private Color backgroundColor;
@@ -252,5 +255,42 @@ public class InputGroupPanel extends RoundedPanel {
         setTextBoxesBackground(textBoxesBackground);
         setTextFieldsForeground(foregroundColor);
         isInputValid = true;
+    }
+
+    /**
+     * @param otherGroupPanel the object to be compared.
+     * @return a negative integer, zero, or a positive integer as this object
+     * is less than, equal to, or greater than the specified object.
+     * @throws NullPointerException if the specified object is null
+     * @throws ClassCastException   if the specified object's type prevents it
+     *                              from being compared to this object.
+     * @apiNote It is strongly recommended, but <i>not</i> strictly required that
+     * {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any
+     * class that implements the {@code Comparable} interface and violates
+     * this condition should clearly indicate this fact.  The recommended
+     * language is "Note: this class has a natural ordering that is
+     * inconsistent with equals."
+     */
+    @Override
+    public int compareTo(InputGroupPanel otherGroupPanel) {
+        var otherLeftLabelText = otherGroupPanel.textFieldsLeftToRight[0].getText();
+        var thisLeftLabelText = this.textFieldsLeftToRight[0].getText();
+        return otherLeftLabelText.compareTo(thisLeftLabelText);
+    }
+
+    private static void sortGroupListByLeftLabelText(List<InputGroupPanel> groupPanelList){
+        Collections.sort(groupPanelList);
+    }
+
+    private static void sortPanelListByLabelText(List<InputGroupPanel> groupPanelList, int textFieldIndex) {
+        Collections.sort(groupPanelList, Comparator.comparing(panel -> panel.textFieldsLeftToRight[textFieldIndex].getText()));
+    }
+
+    private static void sortPanelListByCenterLabelText(List<InputGroupPanel> groupPanelList) {
+        sortPanelListByLabelText(groupPanelList, 1);
+    }
+
+    private static void sortPanelListByRightLabelText(List<InputGroupPanel> groupPanelList) {
+        sortPanelListByLabelText(groupPanelList, 2);
     }
 }
