@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 public class AddGroupPanel extends RoundedPanel {
     private Color labelsForeground;
     private Color backPanelColor;
-    private final Color mouseOverColor = new Color(201,255,255);
+    private final Color MOUSE_OVER_COLOR = new Color(201,255,255);
     private final Color NOT_ENABLED_BACK_COLOR = new Color(171, 171, 171);
     private Dimension standardSize;
     private HighResolutionImageLabel highResolutionImageLabel;
@@ -32,7 +32,7 @@ public class AddGroupPanel extends RoundedPanel {
         highResolutionImageLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                setBackground(mouseOverColor);
+                setBackground(MOUSE_OVER_COLOR);
             }
             @Override
             public void mouseExited(MouseEvent e) {

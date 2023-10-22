@@ -52,10 +52,21 @@ public class StartForm extends JFrame {
     }
     private void setStartInputState(){
         ThreeActionLabelsPanel threeActionLabelsPanel = new ThreeActionLabelsPanel(Color.BLACK, BACKGROUND_COLOR, "Номер группы", "Номер курса", "ФИО старосты");
+        threeActionLabelsPanel.addMouseListener(new MouseAdapter() {
+            /**
+             * {@inheritDoc}
+             *
+             * @param e
+             */
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                layoutGroupsPanel.removeAll();
+            }
+        });
         addComponent(threeActionLabelsPanel, false, false);
         AddGroupPanel addGroupPanel = new AddGroupPanel(Color.BLACK, GROUP_PANEL_BACKGROUND_COLOR);
         this.addGroupPanel = addGroupPanel;
-        addComponentListener(addGroupPanel, false, true,
+        addComponentMouseListener(addGroupPanel, false, true,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -80,8 +91,6 @@ public class StartForm extends JFrame {
                                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                                     getResultGroupByInputValidity(inputGroupPanel, highResolutionImagePanel);
                                 }
-                                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                                }
                             }
                         });
                     }
@@ -101,8 +110,8 @@ public class StartForm extends JFrame {
 
         JPanel groupPanel = getGroupsUtilitiesPanel();
         safelyDeleteComponent(highResolutionImagePanel);
-        addComponent(groupPanel, false, true);
-        //addComponent(this.addGroupPanel, true, true);
+        addComponent(groupPanel, false, false);
+        addComponent(this.addGroupPanel, false, true);
         groupPanels.add(inputGroupPanel);
     }
 
@@ -115,6 +124,7 @@ public class StartForm extends JFrame {
         groupPanel.add(openGroupFormPanel);
         groupPanel.add(Box.createHorizontalStrut(100));
         groupPanel.add(editGroupData);
+        groupPanel.setMaximumSize(new Dimension(150, 45));
         return groupPanel;
     }
 
@@ -128,8 +138,8 @@ public class StartForm extends JFrame {
         }
     }
 
-    private void addComponentListener(AddGroupPanel addGroupPanel, boolean hasVerticalStrutBefore, boolean hasVerticalStrutAfter,
-                              MouseAdapter mouseAdapter) {
+    private void addComponentMouseListener(AddGroupPanel addGroupPanel, boolean hasVerticalStrutBefore, boolean hasVerticalStrutAfter,
+                                           MouseAdapter mouseAdapter) {
         addComponent(addGroupPanel, hasVerticalStrutBefore, hasVerticalStrutAfter);
         addGroupPanel.setMouseClickEvent(mouseAdapter);
     }
