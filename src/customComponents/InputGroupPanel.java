@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * A custom panel that contains input fields.
+ * Пользовательская панель, содержащая поля ввода для создания обложки группы.
  */
 public class InputGroupPanel extends RoundedPanel implements Comparable<InputGroupPanel>{
     private final Dimension STANDARD_SIZE = new Dimension(640, 45);
@@ -24,14 +24,14 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
     private boolean isInputValid = false;
 
     /**
-     * Constructs an InputGroupPanel with the specified colors and text strokes.
+     * Создаёт панель InputGroupPanel с указанными цветами и текстовыми значениями полей для ввода.
      *
-     * @param foregroundColor     the foreground color of the input fields.
-     * @param backgroundColor     the background color of the panel.
-     * @param textBoxesBackground the background color of the input fields.
-     * @param leftTextBoxStroke   the default text for the left input field.
-     * @param centerTextBoxStroke the default text for the center input field.
-     * @param rightTextBoxStroke  the default text for the right input field.
+     * @param foregroundColor     цвет переднего плана полей ввода.
+     * @param backgroundColor     цвет фона панели.
+     * @param textBoxesBackground цвет фона полей ввода.
+     * @param leftTextBoxStroke   текст по умолчанию для левого поля ввода.
+     * @param centerTextBoxStroke текст по умолчанию для центрального поля ввода.
+     * @param rightTextBoxStroke  текст по умолчанию для правого поля ввода.
      */
     public InputGroupPanel(Color foregroundColor, Color backgroundColor, Color textBoxesBackground,
                            String leftTextBoxStroke, String centerTextBoxStroke, String rightTextBoxStroke) {
@@ -56,11 +56,11 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
     }
 
     /**
-     * Sets the text for the input Text Fields.
+     * Устанавливает текст для полей ввода.
      *
-     * @param leftTextBoxText   the text for the left input field.
-     * @param centerTextBoxText the text for the center input field.
-     * @param rightTextBoxText  the text for the right input field.
+     * @param leftTextBoxText   текст для левого поля ввода.
+     * @param centerTextBoxText текст для центрального поля ввода.
+     * @param rightTextBoxText  текст для правого поля ввода.
      */
     public void setLabelsTexts(String leftTextBoxText, String centerTextBoxText, String rightTextBoxText) {
         RoundJTextField leftTextBox = new RoundJTextField(20);
@@ -167,24 +167,46 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
             }
         });
     }
+    /**
+     * Устанавливает цвет фона для полей ввода.
+     *
+     * @param textBoxesBackground цвет фона для полей ввода.
+     */
     public void setTextBoxesBackground(Color textBoxesBackground) {
         for (RoundJTextField textField: textFieldsLeftToRight){
             textField.setBackground(textBoxesBackground);
         }
     }
 
+    /**
+     * Устанавливает цвет переднего плана для полей ввода.
+     *
+     * @param foregroundColor цвет переднего плана для полей ввода.
+     */
     public void setTextFieldsForeground(Color foregroundColor) {
         for (RoundJTextField textField: textFieldsLeftToRight){
             textField.setForeground(foregroundColor);
         }
     }
 
+    /**
+     * Устанавливает выравнивание для полей ввода.
+     *
+     * @param leftTextBoxAlignment   выравнивание для левого поля ввода.
+     * @param centerTextBoxAlignment выравнивание для центрального поля ввода.
+     * @param rightTextBoxAlignment  выравнивание для правого поля ввода.
+     */
     public void setTextBoxesAlignments(int leftTextBoxAlignment, int centerTextBoxAlignment, int rightTextBoxAlignment){
         textFieldsLeftToRight[0].setHorizontalAlignment(leftTextBoxAlignment);
         textFieldsLeftToRight[1].setHorizontalAlignment(centerTextBoxAlignment);
         textFieldsLeftToRight[2].setHorizontalAlignment(rightTextBoxAlignment);
     }
 
+    /**
+     * Устанавливает возможность редактирования для полей ввода.
+     *
+     * @param areEditable true, если поля ввода должны быть редактируемыми, false в противном случае.
+     */
     public void setTextBoxesEditable(boolean areEditable){
         for (RoundJTextField textField: textFieldsLeftToRight){
             textField.setEditable(areEditable);
@@ -192,24 +214,45 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
     }
 
 
+    /**
+     * Устанавливает шрифт для полей ввода.
+     *
+     * @param font шрифт для полей ввода.
+     */
     public void setTextBoxesFont(Font font){
         for (RoundJTextField textField: textFieldsLeftToRight){
             textField.setFont(font);
         }
     }
 
+    /**
+     * Устанавливает возможность ввода текста для полей ввода.
+     *
+     * @param areEnable true, если поля ввода должны быть доступными для ввода, false в противном случае.
+     */
     public void setTextNonEnable(boolean areEnable){
         for (RoundJTextField textField: textFieldsLeftToRight){
             textField.setEnabled(areEnable);
         }
     }
 
+    /**
+     * Устанавливает стандартные значения для редактируемой панели.
+     */
     public void setPanelEditableStandardValues(){
         setTextBoxesEditable(true);
         setTextBoxesBackground(textBoxesBackground);
         setTextBoxesAlignments(SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER);
         setTextFieldsForeground(foregroundColor);
     }
+
+    /**
+     * Устанавливает настраиваемые значения для не редактируемой панели.
+     *
+     * @param textBoxesBackground цвет фона для полей ввода.
+     * @param foregroundColor     цвет переднего плана для полей ввода.
+     * @param font                шрифт для полей ввода.
+     */
     public void setPanelNonEditableCustom(Color textBoxesBackground, Color foregroundColor, Font font){
         setTextBoxesEditable(false);
         setTextBoxesBackground(textBoxesBackground);
@@ -218,6 +261,11 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
         setTextBoxesAlignments(SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.RIGHT);
     }
 
+    /**
+     * Проверяет, является ли ввод корректным.
+     *
+     * @return true, если ввод корректен, false в противном случае.
+     */
     public boolean isInputValid(){
         boolean validity = true;
 
@@ -244,12 +292,19 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
         return textsNotEqualInitials && textsNotEmpty && validTextsLength;
     }
 
+
+    /**
+     * Устанавливает поля ввода в внешнее оповещающее некорректное состояние.
+     */
     public void setTextFieldsUnValid(){
         setTextBoxesBackground(Color.red);
         setTextFieldsForeground(Color.white);
         isInputValid = false;
     }
 
+    /**
+     * Устанавливает поля ввода в корректное состояние.
+     */
     public void setTextFieldsValid(){
         setTextBoxesBackground(textBoxesBackground);
         setTextFieldsForeground(foregroundColor);
@@ -257,18 +312,19 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
     }
 
     /**
-     * @param otherGroupPanel the object to be compared.
-     * @return a negative integer, zero, or a positive integer as this object
-     * is less than, equal to, or greater than the specified object.
-     * @throws NullPointerException if the specified object is null
-     * @throws ClassCastException   if the specified object's type prevents it
-     *                              from being compared to this object.
-     * @apiNote It is strongly recommended, but <i>not</i> strictly required that
-     * {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any
-     * class that implements the {@code Comparable} interface and violates
-     * this condition should clearly indicate this fact.  The recommended
-     * language is "Note: this class has a natural ordering that is
-     * inconsistent with equals."
+     * Сравнивает данный объект InputGroupPanel с указанным объектом InputGroupPanel для упорядочивания.
+     *
+     * @param otherGroupPanel объект, с которым сравнивается данный объект.
+     * @return отрицательное целое число, ноль или положительное целое число, если этот объект
+     *         меньше, равен или больше указанного объекта.
+     * @throws NullPointerException если указанный объект равен null.
+     * @throws ClassCastException   если тип указанного объекта несовместим
+     *                              с типом этого объекта.
+     * @apiNote Сильно рекомендуется, но <i>не</i> строго обязательно, чтобы
+     * {@code (x.compareTo(y)==0) == (x.equals(y))}. В общем случае, любой класс,
+     * реализующий интерфейс {@code Comparable} и нарушающий это условие,
+     * должен явно указывать на это. Рекомендуемый язык: "Примечание: этот класс имеет
+     * естественный порядок, несовместимый с equals."
      */
     @Override
     public int compareTo(InputGroupPanel otherGroupPanel) {
@@ -277,19 +333,54 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
         return otherLeftLabelText.compareTo(thisLeftLabelText);
     }
 
-    public static void sortGroupListByLeftText(List<InputGroupPanel> groupPanelList){
-        Collections.sort(groupPanelList);
+    /**
+     * Сортирует заданный список объектов InputGroupPanel по их левому текстовому полю в порядке возрастания или убывания.
+     *
+     * @param groupPanelList список объектов InputGroupPanel, которые нужно отсортировать.
+     * @param ascending      true для сортировки в порядке возрастания, false для сортировки в порядке убывания.
+     */
+    public static void sortGroupListByLeftText(List<InputGroupPanel> groupPanelList, boolean ascending){
+        if (ascending){
+            Collections.sort(groupPanelList);
+        }
+        else {
+            Collections.sort(groupPanelList, Collections.reverseOrder());
+        }
     }
 
-    public static void sortPanelListByLabelTextField(List<InputGroupPanel> groupPanelList, int textFieldIndex) {
-        Collections.sort(groupPanelList, Comparator.comparing(panel -> panel.textFieldsLeftToRight[textFieldIndex].getText()));
+    /**
+     * Сортирует заданный список объектов InputGroupPanel по текстовому полю с указанным индексом в порядке возрастания или убывания.
+     *
+     * @param groupPanelList список объектов InputGroupPanel, которые нужно отсортировать.
+     * @param textFieldIndex индекс текстового поля, по которому нужно провести сортировку.
+     * @param ascending      true для сортировки в порядке возрастания, false для сортировки в порядке убывания.
+     */
+    public static void sortPanelListByLabelTextField(List<InputGroupPanel> groupPanelList, int textFieldIndex, boolean ascending) {
+        if (ascending) {
+            Collections.sort(groupPanelList, Comparator.comparing(panel -> panel.textFieldsLeftToRight[textFieldIndex].getText()));
+        }
+        else {
+            Collections.sort(groupPanelList, Comparator.comparing(panel -> panel.textFieldsLeftToRight[textFieldIndex].getText(),Collections.reverseOrder()));
+        }
     }
 
-    public static void sortPanelListByCenterText(List<InputGroupPanel> groupPanelList) {
-        sortPanelListByLabelTextField(groupPanelList, 1);
+    /**
+     * Сортирует заданный список объектов InputGroupPanel по центральному текстовому полю в порядке возрастания или убывания.
+     *
+     * @param groupPanelList список объектов InputGroupPanel, которые нужно отсортировать.
+     * @param ascending      true для сортировки в порядке возрастания, false для сортировки в порядке убывания.
+     */
+    public static void sortPanelListByCenterText(List<InputGroupPanel> groupPanelList, boolean ascending) {
+        sortPanelListByLabelTextField(groupPanelList, 1, ascending);
     }
 
-    public static void sortPanelListByRighText(List<InputGroupPanel> groupPanelList) {
-        sortPanelListByLabelTextField(groupPanelList, 2);
+    /**
+     * Сортирует заданный список объектов InputGroupPanel по правому текстовому полю в порядке возрастания или убывания.
+     *
+     * @param groupPanelList список объектов InputGroupPanel, которые нужно отсортировать.
+     * @param ascending      true для сортировки в порядке возрастания, false для сортировки в порядке убывания.
+     */
+    public static void sortPanelListByRighText(List<InputGroupPanel> groupPanelList, boolean ascending) {
+        sortPanelListByLabelTextField(groupPanelList, 2, ascending);
     }
 }
