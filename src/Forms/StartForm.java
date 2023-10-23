@@ -57,15 +57,23 @@ public class StartForm extends JFrame {
         threeActionLabelsPanel.getLeftLabel().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (groupPanels.isEmpty()) {
+                    return;
+                }
+
                 layoutGroupsPanel.removeAll();
-                InputGroupPanel.sortGroupListByLeftText(groupPanels);
-
-
-                //layoutGroupsPanel.revalidate();
-                //layoutGroupsPanel.repaint();
+                addComponent(threeActionLabelsPanel, false, false);
+                InputGroupPanel.sortGroupListByLeftText(groupPanels, true);
+                for (InputGroupPanel groupPanel : groupPanels) {
+                    addComponent(groupPanel, true, true);
+                    JPanel utilitiesPanel = getGroupsUtilitiesPanel(groupPanel);
+                    addComponent(utilitiesPanel, false, false);
+                }
+                layoutGroupsPanel.revalidate();
+                layoutGroupsPanel.repaint();
             }
         });
-        //TODO: Написать сортировку групп
+
         addComponent(threeActionLabelsPanel, false, false);
         AddGroupPanel addGroupPanel = new AddGroupPanel(Color.BLACK, GROUP_PANEL_BACKGROUND_COLOR);
         this.addGroupPanel = addGroupPanel;
@@ -75,12 +83,14 @@ public class StartForm extends JFrame {
                     public void mouseClicked(MouseEvent e) {
                         InputGroupPanel inputGroupPanel = new InputGroupPanel(Color.BLACK, GROUP_PANEL_BACKGROUND_COLOR, TEXT_BOXES_BACKGROUND_COLOR,"№ Группы", "Курс", "ФИО старосты");
                         addComponent(inputGroupPanel, false, false);
-                        addGroupPanel.setShady(false);
+
                         addGroupPanel.repaint();
                         layoutGroupsPanel.revalidate();
+
                         HighResolutionImagePanel highResolutionImagePanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Tick-Circle.png", 35, 35), 640, 45);
                         addComponent(highResolutionImagePanel, false, true);
                         safelyDeleteComponent(addGroupPanel);
+
                         highResolutionImagePanel.setFocusable(true);
                         highResolutionImagePanel.addMouseListener(new MouseAdapter() {
                             @Override
@@ -111,14 +121,14 @@ public class StartForm extends JFrame {
         }
         inputGroupPanel.setPanelNonEditableCustom(GROUP_PANEL_BACKGROUND_COLOR, GROUP_NON_EDITABLE_FOREGROUND, FONT_NON_EDITABLE);
 
-        JPanel groupPanel = getGroupsUtilitiesPanel();
+        JPanel utilitiesPanel = getGroupsUtilitiesPanel(inputGroupPanel);
         safelyDeleteComponent(highResolutionImagePanel);
-        addComponent(groupPanel, false, false);
+        addComponent(utilitiesPanel, false, false);
         addComponent(this.addGroupPanel, false, true);
         groupPanels.add(inputGroupPanel);
     }
 
-    private static JPanel getGroupsUtilitiesPanel() {
+    private static JPanel getGroupsUtilitiesPanel(InputGroupPanel inputGroupPanel) {
         JPanel groupPanel = new JPanel();
         groupPanel.setOpaque(false);
         groupPanel.setLayout(new BoxLayout(groupPanel, BoxLayout.X_AXIS));
@@ -127,14 +137,17 @@ public class StartForm extends JFrame {
         openGroupFormPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+                GroupForm groupForm = new GroupForm(inputGroupPanel.getTextFieldValues()[0],
+                        inputGroupPanel.getTextFieldValues()[1],
+                        inputGroupPanel.getTextFieldValues()[2]);
+                groupForm.setVisible(true);
             }
         });
 
         editGroupData.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+
             }
         });
         groupPanel.add(openGroupFormPanel);

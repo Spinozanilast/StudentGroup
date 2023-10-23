@@ -8,7 +8,13 @@ public class GroupForm extends JFrame {
     private JPanel innerLeftLayoutPanel = new JPanel();
     private JPanel innerUpLayoutPanel = new JPanel();
     private JPanel contentLayoutPanel = new JPanel();
-    public GroupForm(){
+    public GroupForm(String groupNumber, String courseNumber, String headmanFullName){
+        setTitle("Студенческая группа");
+        ImageIcon icon = new ImageIcon("assets/AloneGroupIcon.png");
+        setIconImage(icon.getImage());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1000, 500);
+        setLocationRelativeTo(null);
         setLayouts();
         setStartFormState();
     }
@@ -21,7 +27,11 @@ public class GroupForm extends JFrame {
 
         mainPanel.add(innerUpLayoutPanel, BorderLayout.NORTH);
         mainPanel.add(innerLeftLayoutPanel, BorderLayout.EAST);
-        mainPanel.add(contentLayoutPanel, BorderLayout.CENTER);
+        innerLeftLayoutPanel.setBackground(Color.RED);
+        innerUpLayoutPanel.setBackground(Color.BLACK);
+        contentLayoutPanel.setBackground(Color.CYAN);
+        this.add(mainPanel);
+        this.setContentPane(mainPanel);
     }
 
     private void setStartFormState(){
