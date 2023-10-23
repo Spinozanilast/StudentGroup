@@ -124,6 +124,19 @@ public class StartForm extends JFrame {
         groupPanel.setLayout(new BoxLayout(groupPanel, BoxLayout.X_AXIS));
         HighResolutionImagePanel openGroupFormPanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Group-Form-Open-Icon.png", 25,24), 30, 45);
         HighResolutionImagePanel editGroupData = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Edit-Group-Icon.png", 25,27), 30, 45);
+        openGroupFormPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+            }
+        });
+
+        editGroupData.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+            }
+        });
         groupPanel.add(openGroupFormPanel);
         groupPanel.add(Box.createHorizontalStrut(100));
         groupPanel.add(editGroupData);
