@@ -241,8 +241,7 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
             validTextsLength = false;
         }
 
-        validity = textsNotEqualInitials && textsNotEmpty && validTextsLength;
-        return validity;
+        return textsNotEqualInitials && textsNotEmpty && validTextsLength;
     }
 
     public void setTextFieldsUnValid(){
@@ -278,19 +277,19 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
         return otherLeftLabelText.compareTo(thisLeftLabelText);
     }
 
-    private static void sortGroupListByLeftLabelText(List<InputGroupPanel> groupPanelList){
+    public static void sortGroupListByLeftText(List<InputGroupPanel> groupPanelList){
         Collections.sort(groupPanelList);
     }
 
-    private static void sortPanelListByLabelText(List<InputGroupPanel> groupPanelList, int textFieldIndex) {
+    public static void sortPanelListByLabelTextField(List<InputGroupPanel> groupPanelList, int textFieldIndex) {
         Collections.sort(groupPanelList, Comparator.comparing(panel -> panel.textFieldsLeftToRight[textFieldIndex].getText()));
     }
 
-    private static void sortPanelListByCenterLabelText(List<InputGroupPanel> groupPanelList) {
-        sortPanelListByLabelText(groupPanelList, 1);
+    public static void sortPanelListByCenterText(List<InputGroupPanel> groupPanelList) {
+        sortPanelListByLabelTextField(groupPanelList, 1);
     }
 
-    private static void sortPanelListByRightLabelText(List<InputGroupPanel> groupPanelList) {
-        sortPanelListByLabelText(groupPanelList, 2);
+    public static void sortPanelListByRighText(List<InputGroupPanel> groupPanelList) {
+        sortPanelListByLabelTextField(groupPanelList, 2);
     }
 }

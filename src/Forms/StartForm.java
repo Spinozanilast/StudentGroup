@@ -9,6 +9,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -52,17 +54,18 @@ public class StartForm extends JFrame {
     }
     private void setStartInputState(){
         ThreeActionLabelsPanel threeActionLabelsPanel = new ThreeActionLabelsPanel(Color.BLACK, BACKGROUND_COLOR, "Номер группы", "Номер курса", "ФИО старосты");
-        threeActionLabelsPanel.addMouseListener(new MouseAdapter() {
-            /**
-             * {@inheritDoc}
-             *
-             * @param e
-             */
+        threeActionLabelsPanel.getLeftLabel().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 layoutGroupsPanel.removeAll();
+                InputGroupPanel.sortGroupListByLeftText(groupPanels);
+
+
+                //layoutGroupsPanel.revalidate();
+                //layoutGroupsPanel.repaint();
             }
         });
+        //TODO: Написать сортировку групп
         addComponent(threeActionLabelsPanel, false, false);
         AddGroupPanel addGroupPanel = new AddGroupPanel(Color.BLACK, GROUP_PANEL_BACKGROUND_COLOR);
         this.addGroupPanel = addGroupPanel;
@@ -75,7 +78,7 @@ public class StartForm extends JFrame {
                         addGroupPanel.setShady(false);
                         addGroupPanel.repaint();
                         layoutGroupsPanel.revalidate();
-                        HighResolutionImagePanel highResolutionImagePanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Tick-Circle.png", 35, 35), 640, 45);
+                        HighResolutionImagePanel highResolutionImagePanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Tick-Circle.png", 35, 35), 640, 45);
                         addComponent(highResolutionImagePanel, false, true);
                         safelyDeleteComponent(addGroupPanel);
                         highResolutionImagePanel.setFocusable(true);
@@ -119,8 +122,8 @@ public class StartForm extends JFrame {
         JPanel groupPanel = new JPanel();
         groupPanel.setOpaque(false);
         groupPanel.setLayout(new BoxLayout(groupPanel, BoxLayout.X_AXIS));
-        HighResolutionImagePanel openGroupFormPanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Group-Form-Open-Icon.png", 25,24), 30, 45);
-        HighResolutionImagePanel editGroupData = new HighResolutionImagePanel(new HighResolutionImageLabel("Edit-Group-Icon.png", 25,27), 30, 45);
+        HighResolutionImagePanel openGroupFormPanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Group-Form-Open-Icon.png", 25,24), 30, 45);
+        HighResolutionImagePanel editGroupData = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Edit-Group-Icon.png", 25,27), 30, 45);
         groupPanel.add(openGroupFormPanel);
         groupPanel.add(Box.createHorizontalStrut(100));
         groupPanel.add(editGroupData);
@@ -142,6 +145,18 @@ public class StartForm extends JFrame {
                                            MouseAdapter mouseAdapter) {
         addComponent(addGroupPanel, hasVerticalStrutBefore, hasVerticalStrutAfter);
         addGroupPanel.setMouseClickEvent(mouseAdapter);
+    }
+
+    private void addMouseListenerToLabel(JLabel label, Comparator<InputGroupPanel> comparator) {
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                layoutGroupsPanel.removeAll();
+                Collections.sort(groupPanels, comparator);
+                layoutGroupsPanel.revalidate();
+                layoutGroupsPanel.repaint();
+            }
+        });
     }
 
     private void safelyDeleteComponent(Component component){

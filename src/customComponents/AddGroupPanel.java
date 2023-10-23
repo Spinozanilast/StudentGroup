@@ -26,7 +26,7 @@ public class AddGroupPanel extends RoundedPanel {
 
         setLayout(new BorderLayout());
 
-        highResolutionImageLabel = new HighResolutionImageLabel("Add-Group.png",40, 20);
+        highResolutionImageLabel = new HighResolutionImageLabel("Icons/Add-Group.png",40, 20);
         add(highResolutionImageLabel, BorderLayout.CENTER);
 
         highResolutionImageLabel.addMouseListener(new MouseAdapter() {
