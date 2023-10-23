@@ -7,10 +7,14 @@ public class ThreeActionLabelsPanel extends JPanel {
     private Color labelsForeground;
     private Color backPanelColor;
     private Dimension standardSize;
-
     private JLabel leftLabel;
     private JLabel centerLabel;
     private JLabel rightLabel;
+
+    private boolean isLeftArrowDown = true;
+    private boolean isCenterArrowDown = true;
+    private boolean isRightArrowDown = true;
+
     public ThreeActionLabelsPanel(Color foregroundColor, Color backgroundColor, String leftLabelText, String centerLabelText, String rightLabelText){
         standardSize = new Dimension(640,45);
         labelsForeground = foregroundColor;
@@ -73,16 +77,19 @@ public class ThreeActionLabelsPanel extends JPanel {
     }
 
     public void setLeftLabelIcon(String filename) {
+        isLeftArrowDown = !isLeftArrowDown;
         ImageIcon icon = new ImageIcon(filename);
         leftLabel.setIcon(icon);
     }
 
     public void setCenterLabelIcon(String filename) {
+        isCenterArrowDown = !isCenterArrowDown;
         ImageIcon icon = new ImageIcon(filename);
         centerLabel.setIcon(icon);
     }
 
     public void setRightLabelIcon(String filename) {
+        isRightArrowDown = !isRightArrowDown;
         ImageIcon icon = new ImageIcon(filename);
         rightLabel.setIcon(icon);
     }

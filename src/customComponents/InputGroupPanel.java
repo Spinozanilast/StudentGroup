@@ -311,6 +311,10 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
         isInputValid = true;
     }
 
+    public String[] getTextFieldValues(){
+        return new String[] {textFieldsLeftToRight[0].getText(), textFieldsLeftToRight[1].getText(), textFieldsLeftToRight[2].getText()};
+    }
+
     /**
      * Сравнивает данный объект InputGroupPanel с указанным объектом InputGroupPanel для упорядочивания.
      *
