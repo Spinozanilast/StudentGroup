@@ -4,13 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ThreeActionLabelsPanel extends JPanel {
+    public static final String DOWN_ARROW_ICON = "assets/DownArrowIcon.png";
+    public static final String UP_ARROW_ICON = "assets/UpArrowIcon.png";
+
     private Color labelsForeground;
     private Color backPanelColor;
     private Dimension standardSize;
     private JLabel leftLabel;
     private JLabel centerLabel;
     private JLabel rightLabel;
-
     private boolean isLeftArrowDown = true;
     private boolean isCenterArrowDown = true;
     private boolean isRightArrowDown = true;
@@ -116,5 +118,23 @@ public class ThreeActionLabelsPanel extends JPanel {
 
     public JLabel getRightLabel() {
         return rightLabel;
+    }
+
+    public boolean isLeftArrowDown() {
+        return isLeftArrowDown;
+    }
+
+    public boolean isCenterArrowDown() {
+        return isCenterArrowDown;
+    }
+
+    public boolean isRightArrowDown() {
+        return isRightArrowDown;
+    }
+
+    public enum LabelType {
+        LEFT,
+        CENTER,
+        RIGHT,
     }
 }

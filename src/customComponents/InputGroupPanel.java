@@ -384,7 +384,7 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
      * @param groupPanelList список объектов InputGroupPanel, которые нужно отсортировать.
      * @param ascending      true для сортировки в порядке возрастания, false для сортировки в порядке убывания.
      */
-    public static void sortPanelListByRighText(List<InputGroupPanel> groupPanelList, boolean ascending) {
+    public static void sortPanelListByRightText(List<InputGroupPanel> groupPanelList, boolean ascending) {
         sortPanelListByLabelTextField(groupPanelList, 2, ascending);
     }
 }
