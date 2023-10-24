@@ -11,6 +11,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Класс Start form controller, представляющий часть стартовой формы, где пользователь так или иначе может
+ * взаимодействовать.
+ */
 public class StartFormController {
     private final StartForm view;
     private final GroupModel model;
@@ -23,7 +27,7 @@ public class StartFormController {
         view = new StartForm();
         layoutGroupsPanel = view.getLayoutGroupsPanel();
         threeActionLabelsPanel = view.getThreeActionLabelsPanel();
-        setStartInputState();
+        initializeListenersForView();
     }
 
     private void initializeListeners() {
@@ -32,7 +36,7 @@ public class StartFormController {
         // You can use anonymous classes or lambda expressions to define the event handlers
     }
 
-    private void setStartInputState() {
+    private void initializeListenersForView() {
         threeActionLabelsPanel.getLeftLabel().addMouseListener(getLeftLabelMouseListener());
         threeActionLabelsPanel.getCenterLabel().addMouseListener(getCenterLabelMouseListener());
         threeActionLabelsPanel.getRightLabel().addMouseListener(getRightLabelMouseListener());

@@ -1,15 +1,11 @@
 package Forms;
 
-import Forms.controllers.StartFormController;
-import Forms.models.GroupModel;
-import customComponents.*;
+import customComponents.AddGroupPanel;
+import customComponents.ThreeActionLabelsPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * Класс StartForm, являющийся начальной стадией создания учебной группы.
