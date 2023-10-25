@@ -1,28 +1,28 @@
-package Forms;
+package Forms.views;
 
-import customComponents.AddGroupPanel;
-import customComponents.ThreeActionLabelsPanel;
+import CustomComponents.AddGroupPanel;
+import CustomComponents.ThreeActionLabelsPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 
 /**
- * Класс StartForm, являющийся начальной стадией создания учебной группы.
+ * Класс StartFrame, являющийся начальной стадией создания учебной группы.
  */
-public class StartForm extends JFrame {
+public class StartFrame extends JFrame {
     public static final Color BACKGROUND_COLOR = new Color(243,243,243);
     public static final Color GROUP_PANEL_BACKGROUND_COLOR = new Color(239,255,255);
     public static final Color GROUP_NON_EDITABLE_FOREGROUND = new Color(29,105,200);
     public static final Color TEXT_BOXES_BACKGROUND_COLOR = new Color(193,228,228, 179);
     public static final Font FONT_NON_EDITABLE = new Font("Montserrat", Font.BOLD, 20);
-    private final ThreeActionLabelsPanel threeActionLabelsPanel = new ThreeActionLabelsPanel(Color.BLACK, StartForm.BACKGROUND_COLOR, "Номер группы", "Номер курса", "ФИО старосты");
+    private final ThreeActionLabelsPanel threeActionLabelsPanel = new ThreeActionLabelsPanel(Color.BLACK, StartFrame.BACKGROUND_COLOR, "Номер группы", "Номер курса", "ФИО старосты");
     private JPanel layoutGroupsPanel;
 
     /**
      * Конструктор класса StartForm.
      */
-    public StartForm() {
+    public StartFrame() {
         initFormState();
         initLayoutPanel();
     }

@@ -1,10 +1,10 @@
-package Forms;
+package Forms.views;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GroupForm extends JFrame {
-    private JPanel mainPanel = new JPanel();
+    private final JPanel mainPanel = new JPanel();
     private JPanel innerLeftLayoutPanel = new JPanel();
     private JPanel innerUpLayoutPanel = new JPanel();
     private JPanel contentLayoutPanel = new JPanel();
@@ -16,7 +16,6 @@ public class GroupForm extends JFrame {
         setSize(1000, 500);
         setLocationRelativeTo(null);
         setLayouts();
-        setStartFormState();
     }
 
     private void setLayouts(){
@@ -32,10 +31,6 @@ public class GroupForm extends JFrame {
         contentLayoutPanel.setBackground(Color.CYAN);
         this.add(mainPanel);
         this.setContentPane(mainPanel);
-    }
-
-    private void setStartFormState(){
-
     }
 
     private void clearLayout(Container layoutComponent, boolean isRepaint){

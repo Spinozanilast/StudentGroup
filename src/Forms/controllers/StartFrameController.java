@@ -1,8 +1,8 @@
 package Forms.controllers;
 
-import Forms.StartForm;
+import Forms.views.StartFrame;
 import Forms.models.GroupModel;
-import customComponents.*;
+import CustomComponents.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,38 +12,40 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * Класс Start form controller, представляющий часть стартовой формы, где пользователь так или иначе может
- * взаимодействовать.
+ * Класс Start frame controller, представляющий часть стартовой формы, где пользователь так или иначе может
+ * взаимодействовать с данными или изменять их представление.
  */
-public class StartFormController {
-    private final StartForm view;
-    private final GroupModel model;
+public class StartFrameController {
+    private final ThreeActionLabelsPanel threeActionLabelsPanel;
+    private final StartFrame formView;
+    private final GroupModel groupModel;
     private final JPanel layoutGroupsPanel;
     private AddGroupPanel addGroupPanel;
-    private ThreeActionLabelsPanel threeActionLabelsPanel;
 
-    public StartFormController(GroupModel model) {
-        this.model = model;
-        view = new StartForm();
-        layoutGroupsPanel = view.getLayoutGroupsPanel();
-        threeActionLabelsPanel = view.getThreeActionLabelsPanel();
+    /**
+     *  Создает новый контроллер начальной формы.
+     *
+     * @param groupModel модель, содержащая и обрабатывающая группы
+     */
+    public StartFrameController(GroupModel groupModel) {
+        this.groupModel = groupModel;
+        formView = new StartFrame();
+        layoutGroupsPanel = formView.getLayoutGroupsPanel();
+        threeActionLabelsPanel = formView.getThreeActionLabelsPanel();
         initializeListenersForView();
     }
 
-    private void initializeListeners() {
-        // Add event listeners for the components in StartForm
-        // For example, you can add listeners for buttons, text fields, etc.
-        // You can use anonymous classes or lambda expressions to define the event handlers
-    }
-
+    /**
+     * Инициализирует слушателей для представления.
+     */
     private void initializeListenersForView() {
         threeActionLabelsPanel.getLeftLabel().addMouseListener(getLeftLabelMouseListener());
         threeActionLabelsPanel.getCenterLabel().addMouseListener(getCenterLabelMouseListener());
         threeActionLabelsPanel.getRightLabel().addMouseListener(getRightLabelMouseListener());
-        view.addComponent(threeActionLabelsPanel, false, false);
-        AddGroupPanel addGroupPanel = new AddGroupPanel(Color.BLACK, StartForm.GROUP_PANEL_BACKGROUND_COLOR);
+        formView.addComponent(threeActionLabelsPanel, false, false);
+        AddGroupPanel addGroupPanel = new AddGroupPanel(Color.BLACK, StartFrame.GROUP_PANEL_BACKGROUND_COLOR);
         this.addGroupPanel = addGroupPanel;
-        view.addComponentMouseListener(addGroupPanel, getAddGroupPanelMouseListener());
+        formView.addComponentMouseListener(addGroupPanel, getAddGroupPanelMouseListener());
     }
 
     /**
@@ -56,25 +58,25 @@ public class StartFormController {
         return new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (model.getGroupPanels().isEmpty()) {
+                if (groupModel.getGroupPanels().isEmpty()) {
                     return;
                 }
                 setStartLabelsForLayout();
                 switch (labelType) {
                     case LEFT:
-                        InputGroupPanel.sortGroupListByLeftText(model.getGroupPanels(), !threeActionLabelsPanel.isLeftArrowDown());
+                        InputGroupPanel.sortGroupListByLeftText(groupModel.getGroupPanels(), !threeActionLabelsPanel.isLeftArrowDown());
                         threeActionLabelsPanel.setLeftLabelIcon(threeActionLabelsPanel.isLeftArrowDown() ?
                                 ThreeActionLabelsPanel.DOWN_ARROW_ICON :
                                 ThreeActionLabelsPanel.UP_ARROW_ICON);
                         break;
                     case CENTER:
-                        InputGroupPanel.sortPanelListByCenterText(model.getGroupPanels(), !threeActionLabelsPanel.isCenterArrowDown());
+                        InputGroupPanel.sortPanelListByCenterText(groupModel.getGroupPanels(), !threeActionLabelsPanel.isCenterArrowDown());
                         threeActionLabelsPanel.setCenterLabelIcon(threeActionLabelsPanel.isCenterArrowDown() ?
                                 ThreeActionLabelsPanel.DOWN_ARROW_ICON :
                                 ThreeActionLabelsPanel.UP_ARROW_ICON);
                         break;
                     case RIGHT:
-                        InputGroupPanel.sortPanelListByRightText(model.getGroupPanels(), !threeActionLabelsPanel.isRightArrowDown());
+                        InputGroupPanel.sortPanelListByRightText(groupModel.getGroupPanels(), !threeActionLabelsPanel.isRightArrowDown());
                         threeActionLabelsPanel.setRightLabelIcon(threeActionLabelsPanel.isRightArrowDown() ?
                                 ThreeActionLabelsPanel.DOWN_ARROW_ICON :
                                 ThreeActionLabelsPanel.UP_ARROW_ICON);
@@ -94,7 +96,7 @@ public class StartFormController {
     private void setStartLabelsForLayout() {
         layoutGroupsPanel.removeAll();
         layoutGroupsPanel.add(Box.createVerticalStrut(15));
-        view.addComponent(threeActionLabelsPanel, false, false);
+        formView.addComponent(threeActionLabelsPanel, false, false);
     }
 
     /**
@@ -106,11 +108,11 @@ public class StartFormController {
         if (withClearing) {
             setStartLabelsForLayout();
         }
-        for (InputGroupPanel groupPanel : model.getGroupPanels()) {
-            view.addComponent(groupPanel, true, true);
+        for (InputGroupPanel groupPanel : groupModel.getGroupPanels()) {
+            formView.addComponent(groupPanel, true, true);
             JPanel utilitiesPanel = getGroupsUtilitiesPanel(groupPanel);
-            view.addComponent(utilitiesPanel, false, false);
-            view.addComponent(addGroupPanel, false, true);
+            formView.addComponent(utilitiesPanel, false, false);
+            formView.addComponent(addGroupPanel, false, true);
         }
         layoutGroupsPanel.revalidate();
         layoutGroupsPanel.repaint();
@@ -152,13 +154,13 @@ public class StartFormController {
         return new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                InputGroupPanel inputGroupPanel = new InputGroupPanel(Color.BLACK, StartForm.GROUP_PANEL_BACKGROUND_COLOR, StartForm.TEXT_BOXES_BACKGROUND_COLOR, "№ Группы", "Курс", "ФИО старосты");
-                view.addComponent(inputGroupPanel, false, false);
+                InputGroupPanel inputGroupPanel = new InputGroupPanel(Color.BLACK, StartFrame.GROUP_PANEL_BACKGROUND_COLOR, StartFrame.TEXT_BOXES_BACKGROUND_COLOR, "№ Группы", "Курс", "ФИО старосты");
+                formView.addComponent(inputGroupPanel, false, false);
                 addGroupPanel.repaint();
                 layoutGroupsPanel.revalidate();
                 HighResolutionImagePanel highResolutionImagePanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Tick-Circle.png", 35, 35), 640, 45);
-                view.addComponent(highResolutionImagePanel, false, true);
-                view.safelyDeleteComponent(addGroupPanel);
+                formView.addComponent(highResolutionImagePanel, false, true);
+                formView.safelyDeleteComponent(addGroupPanel);
                 highResolutionImagePanel.setFocusable(true);
                 highResolutionImagePanel.addMouseListener(getHighResolutionImagePanelMouseListener(inputGroupPanel, highResolutionImagePanel, false));
                 highResolutionImagePanel.addKeyListener(getHighResolutionImagePanelKeyListener(inputGroupPanel, highResolutionImagePanel, false));
@@ -217,16 +219,16 @@ public class StartFormController {
         else {
             inputGroupPanel.setTextFieldsValid();
         }
-        inputGroupPanel.setPanelNonEditableCustom(StartForm.GROUP_PANEL_BACKGROUND_COLOR, StartForm.GROUP_NON_EDITABLE_FOREGROUND, StartForm.FONT_NON_EDITABLE);
+        inputGroupPanel.setPanelNonEditableCustom(StartFrame.GROUP_PANEL_BACKGROUND_COLOR, StartFrame.GROUP_NON_EDITABLE_FOREGROUND, StartFrame.FONT_NON_EDITABLE);
         if (!isEditMode) {
             JPanel utilitiesPanel = getGroupsUtilitiesPanel(inputGroupPanel);
-            view.safelyDeleteComponent(highResolutionImagePanel);
-            view.addComponent(utilitiesPanel, false, false);
-            view.addComponent(this.addGroupPanel, false, true);
-            model.addGroupPanel(inputGroupPanel);
+            formView.safelyDeleteComponent(highResolutionImagePanel);
+            formView.addComponent(utilitiesPanel, false, false);
+            formView.addComponent(this.addGroupPanel, false, true);
+            groupModel.addGroupPanel(inputGroupPanel);
         }
         else {
-            view.safelyDeleteComponent(highResolutionImagePanel);
+            formView.safelyDeleteComponent(highResolutionImagePanel);
             addAllGroupPanels(true);
         }
     }
@@ -242,8 +244,12 @@ public class StartFormController {
         JPanel groupPanel = new JPanel();
         groupPanel.setOpaque(false);
         groupPanel.setLayout(new BoxLayout(groupPanel, BoxLayout.X_AXIS));
+
         HighResolutionImagePanel openGroupFormPanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Group-Form-Open-Icon.png", 25,24), 30, 45);
+        openGroupFormPanel.setToolTipText("Открыть основное окно для просмотра содержания группы");
+
         HighResolutionImagePanel editGroupData = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Edit-Group-Icon.png", 25,27), 30, 45);
+        editGroupData.setToolTipText("Редактировать начальные данные о группе сверху");
 //        openGroupFormPanel.addMouseListener(new MouseAdapter() {
 //            @Override
 //            public void mouseClicked(MouseEvent e) {
@@ -256,24 +262,24 @@ public class StartFormController {
         editGroupData.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int editablePanelIndex = model.getGroupPanels().indexOf(inputGroupPanel);
+                int editablePanelIndex = groupModel.getGroupPanels().indexOf(inputGroupPanel);
                 setStartLabelsForLayout();
-                for (int i = 0; i < model.getGroupPanels().size(); i++){
+                for (int i = 0; i < groupModel.getGroupPanels().size(); i++){
                     if (i == editablePanelIndex){
-                        view.addComponent(model.getGroupPanels().get(i),false, true);
-                        model.getGroupPanels().get(i).setPanelEditableStandardValues();
+                        formView.addComponent(groupModel.getGroupPanels().get(i),false, true);
+                        groupModel.getGroupPanels().get(i).setPanelEditableStandardValues();
                         HighResolutionImagePanel highResolutionImagePanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Tick-Circle.png", 35, 35), 640, 45);
-                        view.addComponent(highResolutionImagePanel, false, true);
-                        view.safelyDeleteComponent(addGroupPanel);
+                        formView.addComponent(highResolutionImagePanel, false, true);
+                        formView.safelyDeleteComponent(addGroupPanel);
                         highResolutionImagePanel.setFocusable(true);
-                        highResolutionImagePanel.addMouseListener(getHighResolutionImagePanelMouseListener(model.getGroupPanels().get(i), highResolutionImagePanel, true));
+                        highResolutionImagePanel.addMouseListener(getHighResolutionImagePanelMouseListener(groupModel.getGroupPanels().get(i), highResolutionImagePanel, true));
                         continue;
                     }
-                    view.addComponent(model.getGroupPanels().get(i), true, true);
-                    JPanel utilitiesPanel = getGroupsUtilitiesPanel(model.getGroupPanels().get(i));
-                    view.addComponent(utilitiesPanel, false, false);
+                    formView.addComponent(groupModel.getGroupPanels().get(i), true, true);
+                    JPanel utilitiesPanel = getGroupsUtilitiesPanel(groupModel.getGroupPanels().get(i));
+                    formView.addComponent(utilitiesPanel, false, false);
                 }
-                view.addComponent(addGroupPanel, false, true);
+                formView.addComponent(addGroupPanel, false, true);
             }
         });
         groupPanel.add(openGroupFormPanel);
@@ -283,7 +289,10 @@ public class StartFormController {
         return groupPanel;
     }
 
+    /**
+     * Сделать компонент view видимым.
+     */
     public void showStartForm() {
-        view.setVisible(true);
+        formView.setVisible(true);
     }
 }
