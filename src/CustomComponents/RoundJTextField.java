@@ -1,19 +1,20 @@
 package CustomComponents;
 
-        import javax.swing.*;
-        import java.awt.*;
-        import java.awt.geom.RoundRectangle2D;
+import javax.swing.JTextField;
+import java.awt.Graphics;
+import java.awt.Shape;
+import java.awt.geom.RoundRectangle2D;
 
 /**
- * A custom JTextField with a round shape.
+ * Класс RoundJTextField представляет текстовое поле с закругленными углами.
  */
 public class RoundJTextField extends JTextField {
     private Shape shape;
 
     /**
-     * Constructs a RoundJTextField with the specified size.
+     * Создает новый экземпляр класса RoundJTextField с указанным размером.
      *
-     * @param size the number of columns to display.
+     * @param size Размер текстового поля.
      */
     public RoundJTextField(int size) {
         super(size);
@@ -26,10 +27,7 @@ public class RoundJTextField extends JTextField {
         g.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
         super.paintComponent(g);
     }
-    //    protected void paintBorder(Graphics g) {
-    //        g.setColor(getForeground());
-//        g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 15, 15);
-//    }
+
     @Override
     public boolean contains(int x, int y) {
         if (shape == null || !shape.getBounds().equals(getBounds())) {

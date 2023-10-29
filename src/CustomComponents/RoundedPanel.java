@@ -9,27 +9,29 @@ import java.awt.RenderingHints;
 import javax.swing.JPanel;
 
 /**
- * This class represents a Rounded Border JPanel.
+ * Класс RoundedPanel представляет панель с закругленными углами.
  */
 public class RoundedPanel extends JPanel {
-
-    /** Stroke size. it is recommended to set it to 1 for better view */
+    /** Толщина границы */
     protected int strokeSize = 1;
-    /** Color of shadow */
+    /** Цвет тени */
     protected Color shadowColor = Color.black;
-    /** Sets if it drops shadow */
+    /** Устанавливается в true, если отбрасывает тень */
     protected boolean shady = true;
-    /** Sets if it has an High Quality view */
+    /** Устанавливается в true, если отображается в высоком качестве */
     protected boolean highQuality = true;
-    /** Double values for Horizzontal and Vertical radius of corner arcs */
+    /** Устанавливается размеры закруглений */
     protected Dimension arcs = new Dimension(20, 20);
-    /** Distance between border of shadow and border of opaque panel */
+    /** Расстояние между границей тени и границы панели */
     protected int shadowGap = 5;
-    /** The offset of shadow.  */
+    /** Выступ тени.  */
     protected int shadowOffset = 4;
-    /** The transparency value of shadow. ( 0 - 255) */
+    /** Значение прозрачности для тени (0 - 255) */
     protected int shadowAlpha = 150;
 
+    /**
+     * Создает новый экземпляр класса RoundedPanel.
+     */
     public RoundedPanel() {
         super();
         setOpaque(false);
@@ -44,138 +46,136 @@ public class RoundedPanel extends JPanel {
         Color shadowColorA = new Color(shadowColor.getRed(), shadowColor.getGreen(), shadowColor.getBlue(), shadowAlpha);
         Graphics2D graphics = (Graphics2D) g;
 
-        //Sets antialiasing if HQ.
         if (highQuality) {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
 
-        //Draws shadow borders if any.
         if (shady) {
             graphics.setColor(shadowColorA);
             graphics.fillRoundRect(
-                    shadowOffset,// X position
-                    shadowOffset,// Y position
-                    width - strokeSize - shadowOffset, // width
-                    height - strokeSize - shadowOffset, // height
-                    arcs.width, arcs.height);// arc Dimension
+                    shadowOffset,// X позиция
+                    shadowOffset,// Y позиция
+                    width - strokeSize - shadowOffset, // ширина
+                    height - strokeSize - shadowOffset, // высота
+                    arcs.width, arcs.height);// закругления
         } else {
             shadowGap = 1;
         }
 
-        //Draws the rounded opaque panel with borders.
+        // Рисуем закругленную непрозрачную панель с границами.
         graphics.setColor(getBackground());
         graphics.fillRoundRect(0, 0, width - shadowGap, height - shadowGap, arcs.width, arcs.height);
         graphics.setColor(getForeground());
         graphics.setStroke(new BasicStroke(strokeSize));
         graphics.drawRoundRect(0, 0, width - shadowGap, height - shadowGap, arcs.width, arcs.height);
 
-        //Sets strokes to default, is better.
+        // Восстанавливаем значения границ по умолчанию.
         graphics.setStroke(new BasicStroke());
     }
 
     /**
-     * Check if component has High Quality enabled.
+     * Проверяет, включено ли высокое качество отображения компонента.
      *
-     * @return <b>TRUE</b> if it is HQ ; <b>FALSE</b> Otherwise
+     * @return <b>true</b>, если включено высокое качество, иначе <b>false</b>.
      */
     public boolean isHighQuality() {
         return highQuality;
     }
 
     /**
-     * Sets whether this component has High Quality or not
+     * Устанавливает высокое качество отображения компонента.
      *
-     * @param highQuality if <b>TRUE</b>, set this component to HQ
+     * @param highQuality <b>true</b>, чтобы включить высокое качество, <b>false</b> в противном случае.
      */
     public void setHighQuality(boolean highQuality) {
         this.highQuality = highQuality;
     }
 
     /**
-     * Returns the Color of shadow.
+     * Возвращает цвет тени.
      *
-     * @return a Color object.
+     * @return объект Color.
      */
     public Color getShadowColor() {
         return shadowColor;
     }
 
     /**
-     * Sets the Color of shadow
+     * Устанавливает цвет тени.
      *
-     * @param shadowColor Color of shadow
+     * @param shadowColor Цвет тени.
      */
     public void setShadowColor(Color shadowColor) {
         this.shadowColor = shadowColor;
     }
 
     /**
-     * Check if component drops shadow.
+     * Проверяет, отображается ли тень.
      *
-     * @return <b>TRUE</b> if it drops shadow ; <b>FALSE</b> Otherwise
+     * @return <b>true</b>, если тень отображается, иначе <b>false</b>.
      */
     public boolean isShady() {
         return shady;
     }
 
     /**
-     * Sets whether this component drops shadow
+     * Устанавливает, отображается ли тень.
      *
-     * @param shady if <b>TRUE</b>, it draws shadow
+     * @param shady <b>true</b>, чтобы отобразить тень, <b>false</b> в противном случае.
      */
     public void setShady(boolean shady) {
         this.shady = shady;
     }
 
     /**
-     * Returns the size of strokes.
+     * Возвращает размер границы.
      *
-     * @return the value of size.
+     * @return значение размера границы.
      */
     public float getStrokeSize() {
         return strokeSize;
     }
 
     /**
-     * Sets the stroke size value.
+     * Устанавливает значение размера границы.
      *
-     * @param strokeSize stroke size value
+     * @param strokeSize Значение размера границы.
      */
     public void setStrokeSize(int strokeSize) {
         this.strokeSize = strokeSize;
     }
 
     /**
-     * Get the value of arcs
+     * Возвращает размеры закруглений.
      *
-     * @return the value of arcs
+     * @return размеры закруглений.
      */
     public Dimension getArcs() {
         return arcs;
     }
 
     /**
-     * Set the value of arcs
+     * Устанавливает размеры закруглений.
      *
-     * @param arcs new value of arcs
+     * @param arcs новые размеры закруглений.
      */
     public void setArcs(Dimension arcs) {
         this.arcs = arcs;
     }
 
     /**
-     * Get the value of shadowOffset
+     * Возвращает смещение тени.
      *
-     * @return the value of shadowOffset
+     * @return значение смещения тени.
      */
     public int getShadowOffset() {
         return shadowOffset;
     }
 
     /**
-     * Set the value of shadowOffset
+     * Устанавливает смещение тени.
      *
-     * @param shadowOffset new value of shadowOffset
+     * @param shadowOffset новое значение смещения тени.
      */
     public void setShadowOffset(int shadowOffset) {
         if (shadowOffset >= 1) {
@@ -186,18 +186,18 @@ public class RoundedPanel extends JPanel {
     }
 
     /**
-     * Get the value of shadowGap
+     * Возвращает расстояние между границей тени и границей панели.
      *
-     * @return the value of shadowGap
+     * @return значение расстояния.
      */
     public int getShadowGap() {
         return shadowGap;
     }
 
     /**
-     * Set the value of shadowGap
+     * Устанавливает расстояние между границей тени и границей панели.
      *
-     * @param shadowGap new value of shadowGap
+     * @param shadowGap новое значение расстояния.
      */
     public void setShadowGap(int shadowGap) {
         if (shadowGap >= 1) {
@@ -208,18 +208,18 @@ public class RoundedPanel extends JPanel {
     }
 
     /**
-     * Get the value of shadowAlpha
+     * Возвращает значение прозрачности для тени.
      *
-     * @return the value of shadowAlpha
+     * @return значение прозрачности для тени.
      */
     public int getShadowAlpha() {
         return shadowAlpha;
     }
 
     /**
-     * Set the value of shadowAlpha
+     * Устанавливает значение прозрачности для тени.
      *
-     * @param shadowAlpha new value of shadowAlpha
+     * @param shadowAlpha новое значение прозрачности для тени.
      */
     public void setShadowAlpha(int shadowAlpha) {
         if (shadowAlpha >= 0 && shadowAlpha <= 255) {
@@ -229,4 +229,3 @@ public class RoundedPanel extends JPanel {
         }
     }
 }
-
