@@ -1,4 +1,4 @@
-package Database.DataAccess;
+package Database.Managers;
 
 public class SQLiteDBManager {
 
