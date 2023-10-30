@@ -5,14 +5,14 @@ import CustomComponents.InputGroupPanel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupModel {
+public class GroupsModel {
     private List<InputGroupPanel> groupPanels;
 
     /**
-     * Конструктор класса GroupModel.
-     * Создает новый экземпляр GroupModel и инициализирует список groupPanels.
+     * Конструктор класса GroupsModel.
+     * Создает новый экземпляр GroupsModel и инициализирует список groupPanels.
      */
-    public GroupModel() {
+    public GroupsModel() {
         groupPanels = new ArrayList<>();
     }
 

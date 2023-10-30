@@ -22,6 +22,7 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
     private String centerTextBoxStroke;
     private String rightTextBoxStroke;
     private boolean isInputValid = false;
+    String[] previousTextBoxesStrings = null;
 
     /**
      * Создаёт панель InputGroupPanel с указанными цветами и текстовыми значениями полей для ввода.
@@ -48,7 +49,7 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
         setShady(false);
         setMaximumSize(STANDARD_SIZE);
         setBackground(backgroundColor);
-        setLabelsTexts(leftTextBoxStroke, centerTextBoxStroke, rightTextBoxStroke);
+        initTextFieldsTexts(leftTextBoxStroke, centerTextBoxStroke, rightTextBoxStroke);
         setPanelLayout();
         initLabelsViews(textFieldsLeftToRight[0], textFieldsLeftToRight[1], textFieldsLeftToRight[2]);
         initEventsListeners();
@@ -62,7 +63,7 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
      * @param centerTextBoxText текст для центрального поля ввода.
      * @param rightTextBoxText  текст для правого поля ввода.
      */
-    public void setLabelsTexts(String leftTextBoxText, String centerTextBoxText, String rightTextBoxText) {
+    private void initTextFieldsTexts(String leftTextBoxText, String centerTextBoxText, String rightTextBoxText) {
         RoundJTextField leftTextBox = new RoundJTextField(20);
         textFieldsLeftToRight[0] = leftTextBox;
         leftTextBox.setText(leftTextBoxText);
@@ -78,6 +79,20 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
         rightTextBox.setText(rightTextBoxText);
         rightTextBox.setHorizontalAlignment(SwingConstants.CENTER);
     }
+
+    /**
+     * Метод для установки текстовых значений в текстовые поля слева направо (левое, центральное и правое соответственно)
+     *
+     * @param leftTextBoxStroke Текстовое значение для левого текстового поля.
+     * @param centerTextBoxStroke Текстовое значение для центрального текстового поля.
+     * @param rightTextBoxStroke Текстовое значение для правого текстового поля.
+     */
+    public void setTextFieldsLeftToRightStrings(String leftTextBoxStroke, String centerTextBoxStroke, String rightTextBoxStroke){
+        textFieldsLeftToRight[0].setText(leftTextBoxStroke);
+        textFieldsLeftToRight[1].setText(centerTextBoxStroke);
+        textFieldsLeftToRight[2].setText(rightTextBoxStroke);
+    }
+
     /**
      * Устанавливает компоновку для панели.
      * Компоненты располагаются вертикально в компоновке Y_AXIS.
@@ -259,6 +274,7 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
         setTextFieldsForeground(foregroundColor);
         setTextBoxesFont(font);
         setTextBoxesAlignments(SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.RIGHT);
+        previousTextBoxesStrings = new String[] {textFieldsLeftToRight[0].getText(), textFieldsLeftToRight[1].getText(), textFieldsLeftToRight[2].getText()};
     }
 
     /**
@@ -311,6 +327,11 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
         isInputValid = true;
     }
 
+    /**
+     * Возвращает строковые значения текствовых полей.
+     *
+     * @return Массив строк из значений Текстовых полей соответствующей панели.
+     */
     public String[] getTextFieldValues(){
         return new String[] {textFieldsLeftToRight[0].getText(), textFieldsLeftToRight[1].getText(), textFieldsLeftToRight[2].getText()};
     }

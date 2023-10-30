@@ -2,10 +2,7 @@ package Database.DAOS;
 
 import Database.Models.GroupModel;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +67,7 @@ public class GroupDAO {
     /**
      * Метод для получения списка всех групп из базы данных
      *
-     * @return список объектов GroupModel, представляющих группы
+     * @return список объектов GroupsModel, представляющих группы
      */
     public List<GroupModel> getAllGroups() {
         List<GroupModel> groupModelList = new ArrayList<>();
@@ -103,5 +100,29 @@ public class GroupDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Метод для проверки, пуста ли таблица "StudentGroups" в базе данных.
+     *
+     * @return true, если таблица пуста, иначе false.
+     *
+     * @throws SQLException если возникает ошибка при выполнении запроса к базе данных.
+     */
+    public boolean isTableEmpty() {
+        boolean isEmpty = false;
+        try {
+            Statement statement = connectionDB.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM StudentGroups");
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                isEmpty = (count == 0);
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isEmpty;
     }
 }
