@@ -14,6 +14,7 @@ import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -242,6 +243,11 @@ public class StartFrameController {
      * @param isEditMode флаг указывающий на режим редактирования
      */
     private void getResultGroupByInputValidity(InputGroupPanel inputGroupPanel, HighResolutionImagePanel highResolutionImagePanel, boolean isEditMode) {
+        if (areGroupsContainingString(inputGroupPanel)){
+            inputGroupPanel.setTextFieldsUnValid();
+            JOptionPane.showMessageDialog(formView, "Значения групп или ФИО старост совпадают, проверьте значения этих полей и исправьте либо удалите существующую группу.");
+            return;
+        }
         if (!inputGroupPanel.isInputValid()){
             inputGroupPanel.setTextFieldsUnValid();
             return;
@@ -343,12 +349,54 @@ public class StartFrameController {
         return groupPanel;
     }
 
-    private void createGroupsFromDB(){
-        if (groupDAO.isTableEmpty()) return;
+    /**
+     * Проверяет, содержатся ли значения из inputGroupPanel в других группах.
+     *
+     * @param inputGroupPanel панель ввода группы
+     * @return true, если значения не содержатся в других группах, иначе false
+     */
+    private boolean areGroupsContainingString(InputGroupPanel inputGroupPanel) {
+        int numOfTextFields = inputGroupPanel.getTextFieldValues().length;
+        final int courseNumberIndexSkip = 1;
+        String[] textFieldValues = inputGroupPanel.getTextFieldValues();
+        for (int i = 0; i < numOfTextFields; i++) {
+            if (i == courseNumberIndexSkip){
+                //Значит, что лишь значения номера группы и старосты не должно повторяться у разных групп
+                continue;
+            }
+            if (isValuePresentInAnyGroup(textFieldValues[i], i)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    /**
+     * Проверяет, содержится ли значение в любой из групп.
+     *
+     * @param value значение для проверки
+     * @param index индекс значения в массиве
+     * @return true, если значение содержится в любой из групп, иначе false
+     */
+    private boolean isValuePresentInAnyGroup(String value, int index) {
+        for (InputGroupPanel groupPanel : groupsModel.getGroupPanels()) {
+            String[] groupTextFieldValues = groupPanel.getTextFieldValues();
+            if (value.equals(groupTextFieldValues[index])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Создает группы из базы данных.
+     * Если таблица пустая, то ничего не делает.
+     */
+    private void createGroupsFromDB() {
+        if (groupDAO.isTableEmpty()) return;
         List<Database.Models.GroupModel> groupModelList = new ArrayList<>();
         groupModelList = groupDAO.getAllGroups();
-        for (GroupModel groupModel: groupModelList){
+        for (GroupModel groupModel : groupModelList) {
             InputGroupPanel inputGroupPanel = new InputGroupPanel(Color.BLACK, StartFrame.GROUP_PANEL_BACKGROUND_COLOR,
                     StartFrame.TEXT_BOXES_BACKGROUND_COLOR, "№ группы", "Курс", "ФИО старосты");
             inputGroupPanel.setTextFieldsLeftToRightStrings(groupModel.getGroupNumber(), String.valueOf(groupModel.getCourseNumber()), groupModel.getHeadmanFullName());
@@ -358,7 +406,6 @@ public class StartFrameController {
             JPanel utilitiesPanel = getGroupsUtilitiesPanel(inputGroupPanel);
             formView.addComponent(utilitiesPanel, true, false);
         }
-        
     }
 
     /**
