@@ -4,9 +4,7 @@ import CustomComponents.AddGroupPanel;
 import CustomComponents.ThreeActionLabelsPanel;
 
 import javax.swing.*;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 
 /**

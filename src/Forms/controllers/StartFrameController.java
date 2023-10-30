@@ -1,14 +1,11 @@
 package Forms.controllers;
 
-import Forms.views.StartFrame;
-import Forms.models.GroupModel;
 import CustomComponents.*;
+import Forms.models.GroupModel;
+import Forms.views.StartFrame;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
-import java.awt.Color;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;

@@ -1,7 +1,5 @@
 package Database.Models;
 
-import Database.Models.StudentModel;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,8 +1,7 @@
 package CustomComponents;
 
-import javax.swing.JTextField;
-import java.awt.Graphics;
-import java.awt.Shape;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
 /**
