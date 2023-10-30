@@ -4,9 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Класс GroupForm представляет форму для отображения информации о студенческой группе.
+ * Класс GroupFrame представляет форму для отображения информации о студенческой группе.
  */
-public class GroupForm extends JFrame {
+public class GroupFrame extends JFrame {
     private Color LABEL_FOREGROUND = new Color(29,105,200);
     private Color PANEL_BACKGROUND = new Color(242,250,255);
     private final JPanel mainPanel = new JPanel();
@@ -16,17 +16,17 @@ public class GroupForm extends JFrame {
     private JPanel contentLayoutPanel = new JPanel();
 
     /**
-     * Создает новый экземпляр класса GroupForm с указанными номером группы, номером курса и ФИО старосты.
+     * Создает новый экземпляр класса GroupFrame с указанными номером группы, номером курса и ФИО старосты.
      *
      * @param groupNumber       Номер группы.
      * @param courseNumber      Номер курса.
      * @param headmanFullName   ФИО старосты.
      */
-    public GroupForm(String groupNumber, String courseNumber, String headmanFullName, String studentsCount) {
+    public GroupFrame(String groupNumber, String courseNumber, String headmanFullName, String studentsCount) {
         setTitle("Данные группы " + groupNumber);
         ImageIcon icon = new ImageIcon("assets/AloneGroupIcon.png");
         setIconImage(icon.getImage());
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1000, 500);
         setLocationRelativeTo(null);
         setLayouts();

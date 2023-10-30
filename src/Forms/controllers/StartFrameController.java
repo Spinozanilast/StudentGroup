@@ -5,16 +5,15 @@ import Database.DAOS.GroupDAO;
 import Database.Managers.SQLiteConnectionProvider;
 import Database.Models.GroupModel;
 import Forms.models.GroupsModel;
-import Forms.views.GroupForm;
+import Forms.views.GroupFrame;
 import Forms.views.StartFrame;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -72,10 +71,12 @@ public class StartFrameController {
         threeActionLabelsPanel.getLeftLabel().addMouseListener(getLeftLabelMouseListener());
         threeActionLabelsPanel.getCenterLabel().addMouseListener(getCenterLabelMouseListener());
         threeActionLabelsPanel.getRightLabel().addMouseListener(getRightLabelMouseListener());
+        threeActionLabelsPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
         formView.addComponent(threeActionLabelsPanel, false, false);
         createGroupsFromDB();
         AddGroupPanel addGroupPanel = new AddGroupPanel(Color.BLACK, StartFrame.GROUP_PANEL_BACKGROUND_COLOR);
         this.addGroupPanel = addGroupPanel;
+        addGroupPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
         formView.addComponentMouseListener(addGroupPanel, getAddGroupPanelMouseListener());
     }
 
@@ -126,7 +127,6 @@ public class StartFrameController {
      */
     private void setStartLabelsForLayout() {
         layoutGroupsPanel.removeAll();
-        layoutGroupsPanel.add(Box.createVerticalStrut(15));
         formView.addComponent(threeActionLabelsPanel, false, false);
     }
 
@@ -140,10 +140,12 @@ public class StartFrameController {
             setStartLabelsForLayout();
         }
         for (InputGroupPanel groupPanel : groupsModel.getGroupPanels()) {
-            formView.addComponent(groupPanel, true, true);
+            groupPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
+            formView.addComponent(groupPanel, false, false);
             JPanel utilitiesPanel = getGroupsUtilitiesPanel(groupPanel);
+            utilitiesPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
             formView.addComponent(utilitiesPanel, false, false);
-            formView.addComponent(addGroupPanel, false, true);
+            formView.addComponent(addGroupPanel, false, false);
         }
         layoutGroupsPanel.revalidate();
         layoutGroupsPanel.repaint();
@@ -186,11 +188,12 @@ public class StartFrameController {
             @Override
             public void mouseClicked(MouseEvent e) {
                 InputGroupPanel inputGroupPanel = new InputGroupPanel(Color.BLACK, StartFrame.GROUP_PANEL_BACKGROUND_COLOR, StartFrame.TEXT_BOXES_BACKGROUND_COLOR, "№ Группы", "Курс", "ФИО старосты");
+                inputGroupPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
                 formView.addComponent(inputGroupPanel, false, false);
                 addGroupPanel.repaint();
                 layoutGroupsPanel.revalidate();
                 HighResolutionImagePanel highResolutionImagePanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Tick-Circle.png", 35, 35), 640, 45);
-                formView.addComponent(highResolutionImagePanel, false, true);
+                formView.addComponent(highResolutionImagePanel, false, false);
                 formView.safelyDeleteComponent(addGroupPanel);
                 highResolutionImagePanel.setFocusable(true);
                 highResolutionImagePanel.addMouseListener(getHighResolutionImagePanelMouseListener(inputGroupPanel, highResolutionImagePanel, false));
@@ -259,9 +262,10 @@ public class StartFrameController {
         writeGroupToDB(inputGroupPanel.getTextFieldValues());
         if (!isEditMode) {
             JPanel utilitiesPanel = getGroupsUtilitiesPanel(inputGroupPanel);
+            utilitiesPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
             formView.safelyDeleteComponent(highResolutionImagePanel);
             formView.addComponent(utilitiesPanel, false, false);
-            formView.addComponent(this.addGroupPanel, false, true);
+            formView.addComponent(this.addGroupPanel, false, false);
             groupsModel.addGroupPanel(inputGroupPanel);
         }
         else {
@@ -305,21 +309,27 @@ public class StartFrameController {
         groupPanel.setOpaque(false);
         groupPanel.setLayout(new BoxLayout(groupPanel, BoxLayout.X_AXIS));
 
-        HighResolutionImagePanel openGroupFormPanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Group-Form-Open-Icon.png", 25,24), 30, 45);
-        openGroupFormPanel.setToolTipText("Открыть основное окно для просмотра содержания группы");
-
-        HighResolutionImagePanel editGroupData = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Edit-Group-Icon.png", 25,27), 30, 45);
-        editGroupData.setToolTipText("Редактировать начальные данные о группе сверху");
-        openGroupFormPanel.addMouseListener(new MouseAdapter() {
+        JLabel jLabelOpenGroupForm = new JLabel(new ImageIcon("assets/Open-Form-Icon.png"));
+        JLabel jLabelDeleteGroup = new JLabel(new ImageIcon("assets/Delete-Icon.png"));
+        JLabel jLabelEditGroupData = new JLabel(new ImageIcon("assets/Edit-Icon.png"));
+        jLabelDeleteGroup.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                GroupForm groupForm = new GroupForm(inputGroupPanel.getTextFieldValues()[0],
-                        inputGroupPanel.getTextFieldValues()[1],
-                        inputGroupPanel.getTextFieldValues()[2], "0");
-                groupForm.setVisible(true);
+                groupDAO.deleteGroup(inputGroupPanel.getTextFieldValues()[0]);
+                groupsModel.getGroupPanels().remove(inputGroupPanel);
+                addAllGroupPanels(true);
             }
         });
-        editGroupData.addMouseListener(new MouseAdapter() {
+        jLabelOpenGroupForm.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                GroupFrame groupFrame = new GroupFrame(inputGroupPanel.getTextFieldValues()[0],
+                        inputGroupPanel.getTextFieldValues()[1],
+                        inputGroupPanel.getTextFieldValues()[2], "0");
+                groupFrame.setVisible(true);
+            }
+        });
+        jLabelEditGroupData.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int editablePanelIndex = groupsModel.getGroupPanels().indexOf(inputGroupPanel);
@@ -342,10 +352,13 @@ public class StartFrameController {
                 formView.addComponent(addGroupPanel, false, true);
             }
         });
-        groupPanel.add(openGroupFormPanel);
-        groupPanel.add(Box.createHorizontalStrut(100));
-        groupPanel.add(editGroupData);
-        groupPanel.setMaximumSize(new Dimension(150, 45));
+        groupPanel.add(jLabelOpenGroupForm);
+        groupPanel.add(Box.createHorizontalGlue());
+        groupPanel.add(jLabelEditGroupData);
+        groupPanel.add(Box.createHorizontalGlue());
+        groupPanel.add(jLabelDeleteGroup);
+        groupPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
+        groupPanel.setMaximumSize(new Dimension(630, 45));
         return groupPanel;
     }
 
@@ -365,10 +378,10 @@ public class StartFrameController {
                 continue;
             }
             if (isValuePresentInAnyGroup(textFieldValues[i], i)) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     /**
@@ -394,7 +407,7 @@ public class StartFrameController {
      */
     private void createGroupsFromDB() {
         if (groupDAO.isTableEmpty()) return;
-        List<Database.Models.GroupModel> groupModelList = new ArrayList<>();
+        List<Database.Models.GroupModel> groupModelList;
         groupModelList = groupDAO.getAllGroups();
         for (GroupModel groupModel : groupModelList) {
             InputGroupPanel inputGroupPanel = new InputGroupPanel(Color.BLACK, StartFrame.GROUP_PANEL_BACKGROUND_COLOR,
@@ -402,9 +415,12 @@ public class StartFrameController {
             inputGroupPanel.setTextFieldsLeftToRightStrings(groupModel.getGroupNumber(), String.valueOf(groupModel.getCourseNumber()), groupModel.getHeadmanFullName());
             inputGroupPanel.setTextFieldsValid();
             inputGroupPanel.setPanelNonEditableCustom(StartFrame.GROUP_PANEL_BACKGROUND_COLOR, StartFrame.GROUP_NON_EDITABLE_FOREGROUND, StartFrame.FONT_NON_EDITABLE);
+            inputGroupPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
             formView.addComponent(inputGroupPanel, false, false);
             JPanel utilitiesPanel = getGroupsUtilitiesPanel(inputGroupPanel);
-            formView.addComponent(utilitiesPanel, true, false);
+            utilitiesPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
+            formView.addComponent(utilitiesPanel, false, false);
+            groupsModel.addGroupPanel(inputGroupPanel);
         }
     }
 

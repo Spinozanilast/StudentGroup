@@ -11,12 +11,15 @@ import java.awt.event.MouseAdapter;
  * Класс StartFrame, являющийся начальной стадией создания учебной группы.
  */
 public class StartFrame extends JFrame {
+    public static final Dimension STANDARD_ELEMENT_PREFFERED_SIZE = new Dimension(640,45);
     public static final Color BACKGROUND_COLOR = new Color(243,243,243);
     public static final Color GROUP_PANEL_BACKGROUND_COLOR = new Color(239,255,255);
     public static final Color GROUP_NON_EDITABLE_FOREGROUND = new Color(29,105,200);
     public static final Color TEXT_BOXES_BACKGROUND_COLOR = new Color(193,228,228, 179);
     public static final Font FONT_NON_EDITABLE = new Font("Montserrat", Font.BOLD, 20);
-    private final ThreeActionLabelsPanel threeActionLabelsPanel = new ThreeActionLabelsPanel(Color.BLACK, StartFrame.BACKGROUND_COLOR, "Номер группы", "Номер курса", "ФИО старосты");
+    private static final Dimension STANDARD_FRAME_SIZE = new Dimension(1500,750);
+    private final ThreeActionLabelsPanel threeActionLabelsPanel = new ThreeActionLabelsPanel(Color.BLACK,
+            StartFrame.BACKGROUND_COLOR, "Номер группы", "Номер курса", "ФИО старосты");
     private JPanel layoutGroupsPanel;
 
     /**
@@ -35,7 +38,8 @@ public class StartFrame extends JFrame {
         ImageIcon icon = new ImageIcon("assets/GroupIcon.png");
         setIconImage(icon.getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 500);
+        setSize(STANDARD_FRAME_SIZE);
+        setPreferredSize(STANDARD_FRAME_SIZE);
         setLocationRelativeTo(null);
         layoutGroupsPanel = new JPanel();
     }
@@ -44,11 +48,13 @@ public class StartFrame extends JFrame {
      * Инициализирует панель макета.
      */
     private void initLayoutPanel(){
+        setLayout(new BorderLayout());
         layoutGroupsPanel.setBackground(BACKGROUND_COLOR);
         layoutGroupsPanel.setLayout(new BoxLayout(layoutGroupsPanel, BoxLayout.Y_AXIS));
-        layoutGroupsPanel.add(Box.createVerticalStrut(15));
         JScrollPane scrollPane = new JScrollPane(layoutGroupsPanel);
-        add(layoutGroupsPanel);
+        scrollPane.createVerticalScrollBar();
+        scrollPane.setBorder(null);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     /**

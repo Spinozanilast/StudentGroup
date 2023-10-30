@@ -93,7 +93,7 @@ public class GroupDAO {
      * @param groupNumber номер группы
      */
     public void deleteGroup(String groupNumber) {
-        String query = "DELETE FROM students WHERE groupNumber = ?";
+        String query = "DELETE FROM StudentGroups WHERE groupNumber = ?";
         try (PreparedStatement statement = connectionDB.prepareStatement(query)) {
             statement.setString(1, groupNumber);
             statement.executeUpdate();
