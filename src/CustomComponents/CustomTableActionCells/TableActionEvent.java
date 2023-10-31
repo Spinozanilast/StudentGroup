@@ -1,4 +1,4 @@
-package CustomComponents.CustomTable;
+package CustomComponents.CustomTableActionCells;
 
 /**
  *

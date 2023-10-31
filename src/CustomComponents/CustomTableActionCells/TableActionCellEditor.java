@@ -1,4 +1,4 @@
-package CustomComponents.CustomTable;
+package CustomComponents.CustomTableActionCells;
 
 import java.awt.Component;
 import javax.swing.DefaultCellEditor;
