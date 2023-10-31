@@ -98,19 +98,19 @@ public class StartFrameController {
                 setStartLabelsForLayout();
                 switch (labelType) {
                     case LEFT:
-                        InputGroupPanel.sortGroupListByLeftText(groupsModel.getGroupPanels(), !threeActionLabelsPanel.isLeftArrowDown());
+                        InputGroupPanel.sortGroupListByLeftText(groupsModel.getGroupPanels(), threeActionLabelsPanel.isLeftArrowDown());
                         threeActionLabelsPanel.setLeftLabelIcon(threeActionLabelsPanel.isLeftArrowDown() ?
                                 ThreeActionLabelsPanel.DOWN_ARROW_ICON :
                                 ThreeActionLabelsPanel.UP_ARROW_ICON);
                         break;
                     case CENTER:
-                        InputGroupPanel.sortPanelListByCenterText(groupsModel.getGroupPanels(), !threeActionLabelsPanel.isCenterArrowDown());
+                        InputGroupPanel.sortPanelListByCenterText(groupsModel.getGroupPanels(), threeActionLabelsPanel.isCenterArrowDown());
                         threeActionLabelsPanel.setCenterLabelIcon(threeActionLabelsPanel.isCenterArrowDown() ?
                                 ThreeActionLabelsPanel.DOWN_ARROW_ICON :
                                 ThreeActionLabelsPanel.UP_ARROW_ICON);
                         break;
                     case RIGHT:
-                        InputGroupPanel.sortPanelListByRightText(groupsModel.getGroupPanels(), !threeActionLabelsPanel.isRightArrowDown());
+                        InputGroupPanel.sortPanelListByRightText(groupsModel.getGroupPanels(), threeActionLabelsPanel.isRightArrowDown());
                         threeActionLabelsPanel.setRightLabelIcon(threeActionLabelsPanel.isRightArrowDown() ?
                                 ThreeActionLabelsPanel.DOWN_ARROW_ICON :
                                 ThreeActionLabelsPanel.UP_ARROW_ICON);

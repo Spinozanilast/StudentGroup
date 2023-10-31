@@ -1,14 +1,17 @@
 package Forms.views;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
  * Класс GroupFrame представляет форму для отображения информации о студенческой группе.
  */
 public class GroupFrame extends JFrame {
+    private Dimension BUTTON_PREFFERED_SIZE = new Dimension(200,40);
     private Color LABEL_FOREGROUND = new Color(29,105,200);
     private Color PANEL_BACKGROUND = new Color(242,250,255);
+    private Color BUTTON_BACKGROUND = new Color(0,95,184);
     private final JPanel mainPanel = new JPanel();
     private JPanel innerMenuPanel = new JPanel();
     private JPanel innerAttributesPanel = new JPanel();
@@ -17,6 +20,8 @@ public class GroupFrame extends JFrame {
     private JLabel courseValueLabel;
     private JLabel studentsNumValueLabel;
     private JLabel headmanValueLabel;
+    private JButton jbtShowStudentsList;
+    private  JButton jbtShowStatistics;
 
 
     /**
@@ -35,26 +40,24 @@ public class GroupFrame extends JFrame {
         setLocationRelativeTo(null);
         setLayouts();
         setUpPanelViewComponents(courseNumber, studentsCount, headmanFullName);
+        setUpButtonsPanel();
     }
 
     private void setLayouts() {
-        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         innerMenuPanel.setLayout(new BoxLayout(innerMenuPanel, BoxLayout.X_AXIS));
         innerUpPanel.setLayout(new BoxLayout(innerUpPanel, BoxLayout.X_AXIS));
         contentLayoutPanel.setLayout(new BoxLayout(contentLayoutPanel, BoxLayout.Y_AXIS));
 
-        mainPanel.add(innerUpPanel, BorderLayout.NORTH);
+        mainPanel.add(innerUpPanel);
         mainPanel.add(innerMenuPanel);
         mainPanel.add(contentLayoutPanel);
 
-        innerMenuPanel.setBackground(Color.RED);
-
-        this.add(mainPanel);
-        this.setContentPane(mainPanel);
+        add(mainPanel);
+        setContentPane(mainPanel);
     }
 
     private void setUpPanelViewComponents(String course, String studentsCount, String headmanFullName){
-        JPanel panelForLabels = new JPanel();
         int strutWidth = 17;
 
         JLabel courseLabel = new JLabel("Курс: ");
@@ -65,40 +68,64 @@ public class GroupFrame extends JFrame {
         studentsNumValueLabel = new JLabel(studentsCount);
         headmanValueLabel = new JLabel(headmanFullName);
 
-        panelForLabels.setLayout(new BoxLayout(panelForLabels, BoxLayout.X_AXIS));
+        innerUpPanel.setLayout(new BoxLayout(innerUpPanel, BoxLayout.X_AXIS));
         stylizeLabels(LABEL_FOREGROUND, courseLabel, studentsNumLabel, headmanFullNameLabel);
         stylizeLabels(Color.BLACK, courseValueLabel, studentsNumValueLabel, headmanValueLabel);
 
-        panelForLabels.add(Box.createHorizontalStrut(strutWidth));
-        panelForLabels.add(courseLabel);
-        panelForLabels.add(Box.createHorizontalStrut(strutWidth));
-        panelForLabels.add(courseValueLabel);
-        panelForLabels.add(Box.createHorizontalGlue());
-        panelForLabels.add(studentsNumLabel);
-        panelForLabels.add(Box.createHorizontalStrut(strutWidth));
-        panelForLabels.add(studentsNumValueLabel);
-        panelForLabels.add(Box.createHorizontalGlue());
-        panelForLabels.add(headmanFullNameLabel);
-        panelForLabels.add(Box.createHorizontalStrut(strutWidth));
-        panelForLabels.add(headmanValueLabel);
+        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
+        innerUpPanel.add(courseLabel);
+        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
+        innerUpPanel.add(courseValueLabel);
+        innerUpPanel.add(Box.createHorizontalGlue());
+        innerUpPanel.add(studentsNumLabel);
+        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
+        innerUpPanel.add(studentsNumValueLabel);
+        innerUpPanel.add(Box.createHorizontalGlue());
+        innerUpPanel.add(headmanFullNameLabel);
+        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
+        innerUpPanel.add(headmanValueLabel);
 
-        panelForLabels.setBackground(PANEL_BACKGROUND);
-
-        innerUpPanel.add(panelForLabels);
+        innerUpPanel.setBackground(PANEL_BACKGROUND);
     }
 
     private void setUpButtonsPanel(){
-        JButton jbtShowStudentsList = new JButton("Список студентов");
-        JButton jbtShowStatistics = new JButton("Статистика");
+        jbtShowStudentsList = new JButton("Список студентов");
+        jbtShowStatistics = new JButton("Статистика");
 
-        innerMenuPanel.add(jbtShowStudentsList);
-        innerMenuPanel.add(jbtShowStatistics);
+        stylizeButtons(Color.WHITE, BUTTON_BACKGROUND, jbtShowStudentsList, jbtShowStatistics);
+
+        innerMenuPanel.setBackground(PANEL_BACKGROUND);
+        addButton(jbtShowStudentsList, false);
+        addButton(jbtShowStatistics, true);
+    }
+
+    private void setUpContentPanel(){
+        JTable table = new JTable();
+
+    }
+
+    private void addButton(JButton button, boolean isEndButton){
+        innerMenuPanel.add(button);
+
+        if (isEndButton) return;
+        innerMenuPanel.add(Box.createHorizontalGlue());
     }
 
     private void stylizeLabels(Color foreground, JLabel ...labels){
         for(JLabel label: labels) {
             label.setFont(new Font("Montserrat", Font.BOLD | Font.ITALIC, 24));
             label.setForeground(foreground);
+        }
+    }
+
+    private void stylizeButtons(Color foreground, Color background, JButton ...jButtons){
+        for (JButton jButton: jButtons){
+            jButton.setPreferredSize(BUTTON_PREFFERED_SIZE);
+            jButton.setForeground(foreground);
+            jButton.setBackground(background);
+            jButton.setFont(new Font("Montserrat", Font.TRUETYPE_FONT, 18));
+            jButton.setBorder(null);
+            jButton.setBorder(new EmptyBorder(10,10,10,10));
         }
     }
 
