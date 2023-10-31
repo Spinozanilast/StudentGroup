@@ -1,5 +1,11 @@
 package Database.Models;
 
+/**
+ * Модель студента.
+ * <p>
+ * Автор: Будчанин В.А.
+ * Версия: 1.1
+ */
 public class StudentModel {
     private int studentID;
     private String groupNumber;

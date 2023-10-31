@@ -4,12 +4,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Провайдер подключения к базе данных SQLite.
+ * <p>
+ * Автор: Будчанин В.А.
+ * Версия: 1.0
+ */
 public class SQLiteConnectionProvider {
     private static final String DB_URL = "jdbc:sqlite:D:\\3КУРС\\Java\\CourseWork\\src\\Database\\DatabaseFiles\\StudentGroupDB.sqlite";
-
     private boolean isConnectionClosed = false;
     private Connection connection;
 
+    /**
+     * Создает новый провайдер подключения к базе данных SQLite.
+     */
     public SQLiteConnectionProvider() {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -18,6 +26,11 @@ public class SQLiteConnectionProvider {
         }
     }
 
+    /**
+     * Возвращает подключение к базе данных.
+     *
+     * @return объект Connection для подключения к базе данных
+     */
     public Connection getConnection() {
         if (connection == null) {
             try {
@@ -31,6 +44,9 @@ public class SQLiteConnectionProvider {
         return connection;
     }
 
+    /**
+     * Закрывает подключение к базе данных.
+     */
     public void closeConnection() {
         if (connection != null) {
             try {

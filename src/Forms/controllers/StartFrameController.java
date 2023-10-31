@@ -5,7 +5,7 @@ import Database.DAOS.GroupDAO;
 import Database.Managers.SQLiteConnectionProvider;
 import Database.Models.GroupModel;
 import Forms.models.GroupsModel;
-import Forms.views.GroupFrame;
+import Forms.models.StudentsModel;
 import Forms.views.StartFrame;
 
 import javax.swing.*;
@@ -17,8 +17,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Класс Start frame controller, представляющий часть стартовой формы, где пользователь так или иначе может
- * взаимодействовать с данными или изменять их представление.
+ * Контроллер для формы старта, отвечающий за обработку событий и взаимодействие с моделями и представлениями.
+ * Реализует ActionListener и MouseAdapter для обработки событий кнопок и меток.
+ * <p>
+ * Автор: Будчанин В.А.
+ * Версия: 1.2
  */
 public class StartFrameController {
     private final ThreeActionLabelsPanel threeActionLabelsPanel;
@@ -26,7 +29,7 @@ public class StartFrameController {
     private final GroupsModel groupsModel;
     private final JPanel layoutGroupsPanel;
     private AddGroupPanel addGroupPanel;
-    private GroupDAO groupDAO;
+    private static GroupDAO groupDAO;
     private boolean groupPanelIsEditable = false;
     private InputGroupPanel editableInputGroupPanel = null;
     private String previousGroupNumberOfEditable;
@@ -338,10 +341,8 @@ public class StartFrameController {
         jLabelOpenGroupForm.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                GroupFrame groupFrame = new GroupFrame(inputGroupPanel.getTextFieldValues()[0],
-                        inputGroupPanel.getTextFieldValues()[1],
-                        inputGroupPanel.getTextFieldValues()[2], "0");
-                groupFrame.setVisible(true);
+                GroupFormController groupFormController = new GroupFormController(new StudentsModel(), inputGroupPanel.getTextFieldValues(), "0");
+                groupFormController.showGroupFrame();
             }
         });
         jLabelEditGroupData.addMouseListener(new MouseAdapter() {

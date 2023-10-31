@@ -17,19 +17,18 @@ public class GroupFrame extends JFrame {
     private JPanel innerAttributesPanel = new JPanel();
     private JPanel innerUpPanel = new JPanel();
     private JPanel contentLayoutPanel = new JPanel();
-    private JLabel courseValueLabel;
     private JLabel studentsNumValueLabel;
-    private JLabel headmanValueLabel;
     private JButton jbtShowStudentsList;
     private  JButton jbtShowStatistics;
 
-
     /**
-     * Создает новый экземпляр класса GroupFrame с указанными номером группы, номером курса и ФИО старосты.
+     * Создает новый экземпляр класса GroupFrame с указанными номером группы, номером курса и ФИО старосты вместе с
+     * кол-вом студентов в группе.
      *
      * @param groupNumber       Номер группы.
      * @param courseNumber      Номер курса.
      * @param headmanFullName   ФИО старосты.
+     * @param studentsCount     Количество студентов.
      */
     public GroupFrame(String groupNumber, String courseNumber, String headmanFullName, String studentsCount) {
         setTitle("Данные группы " + groupNumber);
@@ -41,6 +40,17 @@ public class GroupFrame extends JFrame {
         setLayouts();
         setUpPanelViewComponents(courseNumber, studentsCount, headmanFullName);
         setUpButtonsPanel();
+    }
+
+    /**
+     * Создает новый экземпляр класса GroupFrame с указанными данными о группе (группа, курс и ФИО старосты) вместе с
+     * кол-вом студентов в группе.
+     *
+     * @param groupData         Массив данных о группе (группа, курс и ФИО старосты).
+     * @param studentsCount     Количество студентов.
+     */
+    public GroupFrame(String[] groupData, String studentsCount) {
+        this(groupData[0], groupData[1], groupData[2], studentsCount);
     }
 
     private void setLayouts() {
@@ -64,9 +74,9 @@ public class GroupFrame extends JFrame {
         JLabel studentsNumLabel = new JLabel("Количество студентов: ");
         JLabel headmanFullNameLabel = new JLabel("Староста: ");
 
-        courseValueLabel = new JLabel(course);
+        JLabel courseValueLabel = new JLabel(course);
+        JLabel headmanValueLabel = new JLabel(headmanFullName);
         studentsNumValueLabel = new JLabel(studentsCount);
-        headmanValueLabel = new JLabel(headmanFullName);
 
         innerUpPanel.setLayout(new BoxLayout(innerUpPanel, BoxLayout.X_AXIS));
         stylizeLabels(LABEL_FOREGROUND, courseLabel, studentsNumLabel, headmanFullNameLabel);
@@ -143,14 +153,6 @@ public class GroupFrame extends JFrame {
         }
     }
 
-    public JLabel getCourseValueLabel() {
-        return courseValueLabel;
-    }
-
-    public void setCourseValueLabel(JLabel courseValueLabel) {
-        this.courseValueLabel = courseValueLabel;
-    }
-
     public JLabel getStudentsNumValueLabel() {
         return studentsNumValueLabel;
     }
@@ -159,11 +161,15 @@ public class GroupFrame extends JFrame {
         this.studentsNumValueLabel = studentsNumValueLabel;
     }
 
-    public JLabel getHeadmanValueLabel() {
-        return headmanValueLabel;
+    public JPanel getContentLayoutPanel() {
+        return contentLayoutPanel;
     }
 
-    public void setHeadmanValueLabel(JLabel headmanValueLabel) {
-        this.headmanValueLabel = headmanValueLabel;
+    public JButton getJbtShowStudentsList() {
+        return jbtShowStudentsList;
+    }
+
+    public JButton getJbtShowStatistics() {
+        return jbtShowStatistics;
     }
 }

@@ -6,6 +6,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс GroupDAO предоставляет методы для взаимодействия с таблицей групп в базе данных.
+ * <p>
+ * Автор: Будчанин В.А.
+ * Версия: 1.1
+ */
 public class GroupDAO {
     private Connection connectionDB;
 

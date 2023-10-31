@@ -8,7 +8,10 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 
 /**
- * Класс StartFrame, являющийся начальной стадией создания учебной группы.
+ * Класс StartFrame представляет собой начальную форму создания учебной группы.
+ * <p>
+ * Автор: Будчанин В.А.
+ * Версия: 1.4
  */
 public class StartFrame extends JFrame {
     public static final Dimension STANDARD_ELEMENT_PREFFERED_SIZE = new Dimension(640,45);
