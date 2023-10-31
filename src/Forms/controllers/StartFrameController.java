@@ -27,6 +27,9 @@ public class StartFrameController {
     private final JPanel layoutGroupsPanel;
     private AddGroupPanel addGroupPanel;
     private GroupDAO groupDAO;
+    private boolean groupPanelIsEditable = false;
+    private InputGroupPanel editableInputGroupPanel = null;
+    private String previousGroupNumberOfEditable;
 
     /**
      *  Создает новый контроллер начальной формы.
@@ -74,8 +77,7 @@ public class StartFrameController {
         threeActionLabelsPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
         formView.addComponent(threeActionLabelsPanel, false, false);
         createGroupsFromDB();
-        AddGroupPanel addGroupPanel = new AddGroupPanel(Color.BLACK, StartFrame.GROUP_PANEL_BACKGROUND_COLOR);
-        this.addGroupPanel = addGroupPanel;
+        addGroupPanel = new AddGroupPanel(Color.BLACK, StartFrame.GROUP_PANEL_BACKGROUND_COLOR);
         addGroupPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
         formView.addComponentMouseListener(addGroupPanel, getAddGroupPanelMouseListener());
     }
@@ -246,7 +248,7 @@ public class StartFrameController {
      * @param isEditMode флаг указывающий на режим редактирования
      */
     private void getResultGroupByInputValidity(InputGroupPanel inputGroupPanel, HighResolutionImagePanel highResolutionImagePanel, boolean isEditMode) {
-        if (areGroupsContainingString(inputGroupPanel)){
+        if (areGroupsContainingString(inputGroupPanel) && !groupPanelIsEditable){
             inputGroupPanel.setTextFieldsUnValid();
             JOptionPane.showMessageDialog(formView, "Значения групп или ФИО старост совпадают, проверьте значения этих полей и исправьте либо удалите существующую группу.");
             return;
@@ -258,8 +260,21 @@ public class StartFrameController {
         else {
             inputGroupPanel.setTextFieldsValid();
         }
+
         inputGroupPanel.setPanelNonEditableCustom(StartFrame.GROUP_PANEL_BACKGROUND_COLOR, StartFrame.GROUP_NON_EDITABLE_FOREGROUND, StartFrame.FONT_NON_EDITABLE);
-        writeGroupToDB(inputGroupPanel.getTextFieldValues());
+
+        if (!groupPanelIsEditable && !inputGroupPanel.equals(editableInputGroupPanel)) {
+            writeGroupToDB(inputGroupPanel.getTextFieldValues());
+        }
+        else{
+            groupDAO.editGroupData(previousGroupNumberOfEditable, inputGroupPanel.getTextFieldValues()[0],
+                    Integer.parseInt(inputGroupPanel.getTextFieldValues()[1]),
+                    inputGroupPanel.getTextFieldValues()[2]);
+            groupPanelIsEditable = false;
+            editableInputGroupPanel = null;
+            previousGroupNumberOfEditable = "";
+        }
+
         if (!isEditMode) {
             JPanel utilitiesPanel = getGroupsUtilitiesPanel(inputGroupPanel);
             utilitiesPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
@@ -332,10 +347,20 @@ public class StartFrameController {
         jLabelEditGroupData.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (groupPanelIsEditable) {
+                    JOptionPane.showMessageDialog(formView, "Закончите редактирование предыдущей панели.");
+                    return;
+                }
+
                 int editablePanelIndex = groupsModel.getGroupPanels().indexOf(inputGroupPanel);
                 setStartLabelsForLayout();
                 for (int i = 0; i < groupsModel.getGroupPanels().size(); i++){
                     if (i == editablePanelIndex){
+
+                        groupPanelIsEditable = true;
+                        editableInputGroupPanel = groupsModel.getGroupPanels().get(i);
+                        previousGroupNumberOfEditable = editableInputGroupPanel.getTextFieldValues()[0];
+
                         formView.addComponent(groupsModel.getGroupPanels().get(i),false, true);
                         groupsModel.getGroupPanels().get(i).setPanelEditableStandardValues();
                         HighResolutionImagePanel highResolutionImagePanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Tick-Circle.png", 35, 35), 640, 45);

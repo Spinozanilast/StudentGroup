@@ -13,9 +13,9 @@ public class ThreeActionLabelsPanel extends JPanel {
     private JLabel leftLabel;
     private JLabel centerLabel;
     private JLabel rightLabel;
-    private boolean isLeftArrowDown = true;
-    private boolean isCenterArrowDown = true;
-    private boolean isRightArrowDown = true;
+    private boolean isLeftArrowDown = false;
+    private boolean isCenterArrowDown = false;
+    private boolean isRightArrowDown = false;
 
     public ThreeActionLabelsPanel(Color foregroundColor, Color backgroundColor, String leftLabelText, String centerLabelText, String rightLabelText){
         standardSize = new Dimension(640,45);
