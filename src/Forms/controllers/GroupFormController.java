@@ -6,6 +6,7 @@ import Forms.models.StudentsModel;
 import Forms.views.GroupFrame;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -63,6 +64,7 @@ public class GroupFormController {
         jbtListStudents = groupFrame.getJbtShowStudentsList();
         jbtShowStatistics = groupFrame.getJbtShowStatistics();
         studentsTable = new JTable();
+        initButtonsListeners();
     }
 
     /**
@@ -72,7 +74,9 @@ public class GroupFormController {
         ActionListener actionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Handle button click event
+                DefaultTableModel tableModel = studentsModel.getRepresentationalTableModel();
+                JTable jtblStudents = new JTable(tableModel);
+                contentLayoutPanel.add(jtblStudents);
             }
         };
         jbtListStudents.addActionListener(actionListener);

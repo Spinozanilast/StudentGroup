@@ -9,8 +9,7 @@ import Forms.models.StudentsModel;
 import Forms.views.StartFrame;
 
 import javax.swing.*;
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -323,13 +322,17 @@ public class StartFrameController {
      * @return панель утилит группы
      */
     private JPanel getGroupsUtilitiesPanel(InputGroupPanel inputGroupPanel) {
+        Dimension imageLabelSize = new Dimension(27,27);
         JPanel groupPanel = new JPanel();
         groupPanel.setOpaque(false);
-        groupPanel.setLayout(new BoxLayout(groupPanel, BoxLayout.X_AXIS));
+        groupPanel.setLayout(new GridLayout(1,3));
 
-        JLabel jLabelOpenGroupForm = new JLabel(new ImageIcon("assets/Open-Form-Icon.png"));
-        JLabel jLabelDeleteGroup = new JLabel(new ImageIcon("assets/Delete-Icon.png"));
-        JLabel jLabelEditGroupData = new JLabel(new ImageIcon("assets/Edit-Icon.png"));
+        HighResolutionImageLabel jLabelOpenGroupForm = new HighResolutionImageLabel("UtilitiesIcons/Open-Form-Icon.png", 25, 25);
+        jLabelOpenGroupForm.setPreferredSize(imageLabelSize);
+        HighResolutionImageLabel jLabelDeleteGroup = new HighResolutionImageLabel("UtilitiesIcons/Delete-Icon.png", 25, 25);
+        jLabelDeleteGroup.setPreferredSize(imageLabelSize);
+        HighResolutionImageLabel jLabelEditGroupData = new HighResolutionImageLabel("UtilitiesIcons/Edit-Icon.png", 25, 25);
+        jLabelEditGroupData.setPreferredSize(imageLabelSize);
         jLabelDeleteGroup.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -379,11 +382,8 @@ public class StartFrameController {
             }
         });
         groupPanel.add(jLabelOpenGroupForm);
-        groupPanel.add(Box.createHorizontalGlue());
         groupPanel.add(jLabelEditGroupData);
-        groupPanel.add(Box.createHorizontalGlue());
         groupPanel.add(jLabelDeleteGroup);
-        groupPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
         groupPanel.setMaximumSize(new Dimension(630, 45));
         return groupPanel;
     }
