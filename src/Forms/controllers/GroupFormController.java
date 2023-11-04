@@ -2,6 +2,7 @@ package Forms.controllers;
 
 import Database.DAOS.StudentDAO;
 import Database.Managers.SQLiteConnectionProvider;
+import Database.Managers.SQLiteDBManager;
 import Forms.models.StudentsModel;
 import Forms.views.GroupFrame;
 
@@ -29,6 +30,7 @@ public class GroupFormController {
     private JButton jbtListStudents;
     private JButton jbtShowStatistics;
     private JTable studentsTable;
+    private Connection connection;
 
     /**
      * Конструктор контроллера формы группы.
@@ -39,7 +41,7 @@ public class GroupFormController {
      */
     public GroupFormController(StudentsModel studentsModel, String[] groupData, String studentNumber) {
         SQLiteConnectionProvider sqLiteConnectionProvider = new SQLiteConnectionProvider();
-        Connection connection = sqLiteConnectionProvider.getConnection();
+        connection = sqLiteConnectionProvider.getConnection();
         studentDAO = new StudentDAO(connection);
         this.studentsModel = studentsModel;
         groupFrame = new GroupFrame(groupData, studentNumber);
@@ -63,7 +65,6 @@ public class GroupFormController {
         contentLayoutPanel = groupFrame.getContentLayoutPanel();
         jbtListStudents = groupFrame.getJbtShowStudentsList();
         jbtShowStatistics = groupFrame.getJbtShowStatistics();
-        studentsTable = new JTable();
         initButtonsListeners();
     }
 
@@ -74,9 +75,10 @@ public class GroupFormController {
         ActionListener actionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DefaultTableModel tableModel = studentsModel.getRepresentationalTableModel();
-                JTable jtblStudents = new JTable(tableModel);
-                contentLayoutPanel.add(jtblStudents);
+                DefaultTableModel studentsTableModel = SQLiteDBManager.
+                        getStudentsTableModel(studentDAO.getAllStudents(), connection);
+                JTable studentsTable = new JTable(studentsTableModel);
+
             }
         };
         jbtListStudents.addActionListener(actionListener);

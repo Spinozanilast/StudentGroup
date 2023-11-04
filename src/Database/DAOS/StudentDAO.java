@@ -28,28 +28,29 @@ public class StudentDAO {
     }
 
     /**
-     * Метод для получения списка всех студентов из базы данных.
+     * Метод для получения списка всех студентов из конкретной группы из базы данных.
      *
      * @return список объектов StudentModel, представляющих студентов
      */
-    public List<StudentModel> getAllStudents() {
+    public List<StudentModel> getAllGroupStudents(String groupNumber) {
         List<StudentModel> students = new ArrayList<>();
-        String query = "SELECT * FROM Students";
-        try (PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
-            while (resultSet.next()) {
-                int studentID = resultSet.getInt("studentID");
-                String groupNumber = resultSet.getString("groupNumber");
-                String firstName = resultSet.getString("firstname");
-                String surname = resultSet.getString("surname");
-                String middleName = resultSet.getString("middleName");
-                boolean isPayer = resultSet.getBoolean("isPayer");
-                String currentAddress = resultSet.getString("currentAddress");
-                String homeAddress = resultSet.getString("homeAddress");
-                boolean isLocal = resultSet.getBoolean("isLocal");
-                StudentModel student = new StudentModel(studentID, groupNumber, firstName, surname, middleName, isPayer,
-                        currentAddress, homeAddress, isLocal);
-                students.add(student);
+        String query = "SELECT * FROM Students WHERE groupNumber = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, groupNumber);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int studentID = resultSet.getInt("studentID");
+                    String firstName = resultSet.getString("firstname");
+                    String surname = resultSet.getString("surname");
+                    String middleName = resultSet.getString("middleName");
+                    boolean isPayer = resultSet.getBoolean("isPayer");
+                    String currentAddress = resultSet.getString("currentAddress");
+                    String homeAddress = resultSet.getString("homeAddress");
+                    boolean isLocal = resultSet.getBoolean("isLocal");
+                    StudentModel student = new StudentModel(studentID, groupNumber, firstName, surname, middleName, isPayer,
+                            currentAddress, homeAddress, isLocal);
+                    students.add(student);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

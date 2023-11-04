@@ -11,7 +11,7 @@ import java.util.List;
  * @author Будчанин В.А.
  * @version 1.0
  */
-public class StudentsModel implements TableModelRepresentation {
+public class StudentsModel{
     private List<StudentModel> studentsData = new ArrayList<>();
 
     /**
@@ -48,11 +48,9 @@ public class StudentsModel implements TableModelRepresentation {
      *
      * @return DefaultTableModel, представляющая таблицу.
      */
-    @Override
-    public DefaultTableModel getRepresentationalTableModel() {
+    public static DefaultTableModel getRepresentationalTableModelWithoutGroup() {
         return new DefaultTableModel(new Object[]{
                 "Номер студента",
-                "Группа",
                 "Имя",
                 "Фамилия",
                 "Отчество",
