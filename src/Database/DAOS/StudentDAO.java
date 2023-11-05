@@ -1,6 +1,6 @@
 package Database.DAOS;
 
-import Database.Models.StudentModel;
+import Database.Models.StudentDatabaseModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,8 +12,8 @@ import java.util.List;
 /**
  * Класс StudentDAO предоставляет методы для взаимодействия с таблицей студентов в базе данных.
  * <p>
- * Автор: Будчанин В.А.
- * Версия: 1.0
+ * @author Будчанин В.А.
+ * @version  1.0
  */
 public class StudentDAO {
     private Connection connection;
@@ -30,10 +30,10 @@ public class StudentDAO {
     /**
      * Метод для получения списка всех студентов из конкретной группы из базы данных.
      *
-     * @return список объектов StudentModel, представляющих студентов
+     * @return список объектов StudentDatabaseModel, представляющих студентов
      */
-    public List<StudentModel> getAllGroupStudents(String groupNumber) {
-        List<StudentModel> students = new ArrayList<>();
+    public List<StudentDatabaseModel> getAllGroupStudents(String groupNumber) {
+        List<StudentDatabaseModel> students = new ArrayList<>();
         String query = "SELECT * FROM Students WHERE groupNumber = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, groupNumber);
@@ -47,7 +47,7 @@ public class StudentDAO {
                     String currentAddress = resultSet.getString("currentAddress");
                     String homeAddress = resultSet.getString("homeAddress");
                     boolean isLocal = resultSet.getBoolean("isLocal");
-                    StudentModel student = new StudentModel(studentID, groupNumber, firstName, surname, middleName, isPayer,
+                    StudentDatabaseModel student = new StudentDatabaseModel(studentID, groupNumber, firstName, surname, middleName, isPayer,
                             currentAddress, homeAddress, isLocal);
                     students.add(student);
                 }

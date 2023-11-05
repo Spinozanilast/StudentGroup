@@ -3,7 +3,7 @@ package Forms.controllers;
 import CustomComponents.*;
 import Database.DAOS.GroupDAO;
 import Database.Managers.SQLiteConnectionProvider;
-import Database.Models.GroupModel;
+import Database.Models.GroupDatabaseModel;
 import Forms.models.GroupsModel;
 import Forms.models.StudentsModel;
 import Forms.views.StartFrame;
@@ -19,8 +19,8 @@ import java.util.List;
  * Контроллер для формы старта, отвечающий за обработку событий и взаимодействие с моделями и представлениями.
  * Реализует ActionListener и MouseAdapter для обработки событий кнопок и меток.
  * <p>
- * Автор: Будчанин В.А.
- * Версия: 1.2
+ * @author Будчанин В.А.
+ * @version  1.2
  */
 public class StartFrameController {
     private final ThreeActionLabelsPanel threeActionLabelsPanel;
@@ -433,12 +433,12 @@ public class StartFrameController {
      */
     private void createGroupsFromDB() {
         if (groupDAO.isTableEmpty()) return;
-        List<Database.Models.GroupModel> groupModelList;
-        groupModelList = groupDAO.getAllGroups();
-        for (GroupModel groupModel : groupModelList) {
+        List<GroupDatabaseModel> groupDatabaseModelList;
+        groupDatabaseModelList = groupDAO.getAllGroups();
+        for (GroupDatabaseModel groupDatabaseModel : groupDatabaseModelList) {
             InputGroupPanel inputGroupPanel = new InputGroupPanel(Color.BLACK, StartFrame.GROUP_PANEL_BACKGROUND_COLOR,
                     StartFrame.TEXT_BOXES_BACKGROUND_COLOR, "№ группы", "Курс", "ФИО старосты");
-            inputGroupPanel.setTextFieldsLeftToRightStrings(groupModel.getGroupNumber(), String.valueOf(groupModel.getCourseNumber()), groupModel.getHeadmanFullName());
+            inputGroupPanel.setTextFieldsLeftToRightStrings(groupDatabaseModel.getGroupNumber(), String.valueOf(groupDatabaseModel.getCourseNumber()), groupDatabaseModel.getHeadmanFullName());
             inputGroupPanel.setTextFieldsValid();
             inputGroupPanel.setPanelNonEditableCustom(StartFrame.GROUP_PANEL_BACKGROUND_COLOR, StartFrame.GROUP_NON_EDITABLE_FOREGROUND, StartFrame.FONT_NON_EDITABLE);
             inputGroupPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);

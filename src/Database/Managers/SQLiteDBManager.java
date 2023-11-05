@@ -1,33 +1,30 @@
 package Database.Managers;
 
 import Database.DAOS.StudentDAO;
-import Database.Models.StudentModel;
-import Forms.models.StudentsModel;
+import Database.Models.StudentDatabaseModel;
 
-import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.util.List;
 
 public class SQLiteDBManager {
-    public static DefaultTableModel getStudentsTableModel(Connection connection, String groupNumber) {
-        DefaultTableModel studentsTableModel = StudentsModel.getRepresentationalTableModelWithoutGroup();
+    public static Object[][] getStudentsTableData(Connection connection, String groupNumber, int columnsNum) {
         StudentDAO studentDAO = new StudentDAO(connection);
-        List<StudentModel> studentModelList = studentDAO.getAllGroupStudents(groupNumber);
-        int columnsNumber = studentsTableModel.getColumnCount();
-
-        for(StudentModel studentModel: studentModelList){
-            Object[] rowElements = new Object[columnsNumber];
-            rowElements[0] = studentModel.getStudentID();
-            rowElements[1] = studentModel.getFirstName();
-            rowElements[2] = studentModel.getSurname();
-            rowElements[3] = studentModel.getMiddleName();
-            rowElements[4] = studentModel.getIsPayer();
-            rowElements[5] = studentModel.getHomaAddress();
-            rowElements[6] = studentModel.getCurrentAddress();
-            rowElements[7] = studentModel.getIsLocal();
-            studentsTableModel.addRow(rowElements);
+        List<StudentDatabaseModel> studentDatabaseModelList = studentDAO.getAllGroupStudents(groupNumber);
+        Object[][] tableData = new Object[studentDatabaseModelList.size()][columnsNum];
+        int rowIndex = 0;
+        for (StudentDatabaseModel studentDatabaseModel : studentDatabaseModelList) {
+            Object[] rowElements = new Object[columnsNum];
+            rowElements[0] = studentDatabaseModel.getStudentID();
+            rowElements[1] = studentDatabaseModel.getFirstName();
+            rowElements[2] = studentDatabaseModel.getSurname();
+            rowElements[3] = studentDatabaseModel.getMiddleName();
+            rowElements[4] = studentDatabaseModel.getIsPayer();
+            rowElements[5] = studentDatabaseModel.getHomaAddress();
+            rowElements[6] = studentDatabaseModel.getCurrentAddress();
+            rowElements[7] = studentDatabaseModel.getIsLocal();
+            tableData[rowIndex] = rowElements;
+            rowIndex++;
         }
-
-        return studentsTableModel;
+        return tableData;
     }
 }

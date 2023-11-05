@@ -1,6 +1,6 @@
 package Forms.models;
-import Database.Models.StudentModel;
-import javax.swing.table.DefaultTableModel;
+import Database.Models.StudentDatabaseModel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,15 +12,15 @@ import java.util.List;
  * @version 1.0
  */
 public class StudentsModel{
-    private List<StudentModel> studentsData = new ArrayList<>();
+    private List<StudentDatabaseModel> studentsData = new ArrayList<>();
 
     /**
      * Добавляет студента в список студентов.
      *
-     * @param studentModel модель студента, которую необходимо добавить.
+     * @param studentDatabaseModel модель студента, которую необходимо добавить.
      */
-    private void AddStudentsList(StudentModel studentModel){
-        studentsData.add(studentModel);
+    private void AddStudentsList(StudentDatabaseModel studentDatabaseModel){
+        studentsData.add(studentDatabaseModel);
     }
 
     /**
@@ -28,7 +28,7 @@ public class StudentsModel{
      *
      * @param studentsData список студентов.
      */
-    public void setStudentsData(List<StudentModel> studentsData) {
+    public void setStudentsData(List<StudentDatabaseModel> studentsData) {
         this.studentsData = studentsData;
     }
 
@@ -38,7 +38,7 @@ public class StudentsModel{
      * @param index индекс студента.
      * @return модель студента или null, если индекс недействителен.
      */
-    public StudentModel getStudentByIndex(int index){
+    public StudentDatabaseModel getStudentByIndex(int index){
         if (index < 0 || index >= studentsData.size()) return null;
         return studentsData.get(index);
     }
@@ -48,8 +48,8 @@ public class StudentsModel{
      *
      * @return DefaultTableModel, представляющая таблицу.
      */
-    public static DefaultTableModel getRepresentationalTableModelWithoutGroup() {
-        return new DefaultTableModel(new Object[]{
+    public static String[] getTableColumnsNamesWithoutGroup() {
+        return new String[]{
                 "Номер студента",
                 "Имя",
                 "Фамилия",
@@ -58,6 +58,12 @@ public class StudentsModel{
                 "Домашний адрес",
                 "Текущий адрес",
                 "Местный ли"
-        }, 0);
+        };
+    }
+
+    public static int[] getBooleanColumnsIndexes(){
+        int isPayerColumnNumber = 4;
+        int isLocalColumnNumber = 7;
+        return new int[] {isPayerColumnNumber, isLocalColumnNumber};
     }
 }

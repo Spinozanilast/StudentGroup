@@ -3,10 +3,10 @@ package Database.Models;
 /**
  * Модель группы.
  * <p>
- * Автор: Будчанин В.А.
- * Версия: 1.0
+ * @author Будчанин В.А.
+ * @version 1.0
  */
-public class GroupModel {
+public class GroupDatabaseModel {
     private String groupNumber;
     private int courseNumber;
     private String headmanFullName;
@@ -18,7 +18,7 @@ public class GroupModel {
      * @param courseNumber     номер курса
      * @param headmanFullName  полное имя старосты
      */
-    public GroupModel(String groupNumber, int courseNumber, String headmanFullName) {
+    public GroupDatabaseModel(String groupNumber, int courseNumber, String headmanFullName) {
         this.groupNumber = groupNumber;
         this.courseNumber = courseNumber;
         this.headmanFullName = headmanFullName;

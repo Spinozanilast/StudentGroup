@@ -7,8 +7,7 @@ import Forms.models.StudentsModel;
 import Forms.views.GroupFrame;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -19,8 +18,8 @@ import java.sql.SQLException;
  * Контроллер формы группы, отвечающий за обработку событий и взаимодействие с моделью и представлением.
  * Реализует ActionListener для обработки событий кнопок.
  * <p>
- * Автор: Будчанин В.А.
- * Версия: 1.0
+ * @author Будчанин В.А.
+ * @version  1.0
  */
 public class GroupFormController {
     private StudentDAO studentDAO;
@@ -72,19 +71,41 @@ public class GroupFormController {
      * Инициализирует слушателей событий для кнопок.
      */
     private void initButtonsListeners() {
-        ActionListener actionListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DefaultTableModel studentsTableModel = SQLiteDBManager.
-                        getStudentsTableModel(studentDAO.getAllStudents(), connection);
-                JTable studentsTable = new JTable(studentsTableModel);
-
-            }
+        ActionListener actionListener = e -> {
+            Object[] columnsNames = StudentsModel.getTableColumnsNamesWithoutGroup();
+            int columnsNumber = columnsNames.length;
+            Object[][] studentsTableModel = SQLiteDBManager.getStudentsTableData(connection, groupFrame.getGroupNumber(), columnsNumber);
+            JTable studentsTable = new JTable(studentsTableModel, columnsNames);
+            setTableCustomCellsRenderers(studentsTable);
+            JScrollPane tableScrollPane = new JScrollPane(studentsTable);
+            contentLayoutPanel.add(tableScrollPane);
+            groupFrame.repaint();
         };
         jbtListStudents.addActionListener(actionListener);
     }
 
+    private void setTableCustomCellsRenderers(JTable studentsTable) {
+        int[] columnsIndexesToCustomize = StudentsModel.getBooleanColumnsIndexes();
+        for(int columnIndex: columnsIndexesToCustomize){
+            studentsTable.getColumnModel().getColumn(columnIndex).setCellRenderer(new CustomBooleanRenderer());
+        }
+    }
+
     public void showGroupFrame() {
         groupFrame.setVisible(true);
+    }
+
+    static class CustomBooleanRenderer extends DefaultTableCellRenderer {
+        @Override
+        protected void setValue(Object value) {
+            if (value instanceof Boolean) {
+                Boolean boolValue = (Boolean) value;
+                if (boolValue) {
+                    setText("Действительно");
+                } else {
+                    setText("Нет");
+                }
+            }
+        }
     }
 }
