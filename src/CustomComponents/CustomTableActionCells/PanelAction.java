@@ -1,5 +1,6 @@
 package CustomComponents.CustomTableActionCells;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,23 +18,23 @@ public class PanelAction extends javax.swing.JPanel {
         initComponents();
     }
 
-    public void initEvent(TableActionEvent event, int row) {
+    public void initEvent(TableActionEvent event, int row, JTable jTable) {
         cmdEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                event.onEdit(row);
+                event.onEdit(row, jTable);
             }
         });
         cmdDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                event.onDelete(row);
+                event.onDelete(row, jTable);
             }
         });
         cmdView.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                event.onView(row);
+                event.onView(row, jTable);
             }
         });
     }
@@ -44,11 +45,11 @@ public class PanelAction extends javax.swing.JPanel {
         cmdDelete = new ActionButton();
         cmdView = new ActionButton();
 
-        cmdEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("edit.png")));
+        cmdEdit.setIcon(new ImageIcon(getClass().getResource("/CustomComponents/CustomTableActionCells/EditRowIcon.png")));
 
-        cmdDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("delete.png")));
+        cmdDelete.setIcon(new ImageIcon(getClass().getResource("/CustomComponents/CustomTableActionCells/DeleteRowIcon.png")));
 
-        cmdView.setIcon(new javax.swing.ImageIcon(getClass().getResource("view.png")));
+        cmdView.setIcon(new ImageIcon(getClass().getResource("/CustomComponents/CustomTableActionCells/BlockRowIcon.png")));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -73,5 +74,6 @@ public class PanelAction extends javax.swing.JPanel {
                     .addComponent(cmdEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+        setOpaque(true);
     }
 }

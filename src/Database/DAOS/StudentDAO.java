@@ -59,12 +59,35 @@ public class StudentDAO {
     }
 
     /**
+     * Возвращает количество студентов в определенной группе.
+     *
+     * @param groupNumber номер группы, для которой нужно получить количество студентов
+     * @return количество студентов в группе
+     */
+    public int getCountOfGroupStudents(String groupNumber) {
+        int count = 0;
+        String query = "SELECT COUNT(*) as count FROM Students WHERE groupNumber = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, groupNumber);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    count = resultSet.getInt("count");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+
+    /**
      * Метод для удаления студента из базы данных.
      *
      * @param studentID идентификатор студента
      */
     public void deleteStudent(String studentID) {
-        String query = "DELETE FROM students WHERE studentID = ?";
+        String query = "DELETE FROM Students WHERE studentID = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, studentID);
             statement.executeUpdate();

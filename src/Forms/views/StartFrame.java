@@ -37,7 +37,7 @@ public class StartFrame extends JFrame {
      * Инициализирует состояние формы.
      */
     private void initFormState(){
-        setTitle("Студенческая группа");
+        setTitle("Студенческие группа");
         ImageIcon icon = new ImageIcon("assets/GroupIcon.png");
         setIconImage(icon.getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

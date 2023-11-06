@@ -21,7 +21,7 @@ public class TableActionCellEditor extends DefaultCellEditor {
     @Override
     public Component getTableCellEditorComponent(JTable jtable, Object o, boolean bln, int row, int column) {
         PanelAction action = new PanelAction();
-        action.initEvent(event, row);
+        action.initEvent(event, row, jtable);
         action.setBackground(jtable.getSelectionBackground());
         return action;
     }

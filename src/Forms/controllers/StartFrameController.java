@@ -344,7 +344,7 @@ public class StartFrameController {
         jLabelOpenGroupForm.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                GroupFormController groupFormController = new GroupFormController(new StudentsModel(), inputGroupPanel.getTextFieldValues(), "0");
+                GroupFormController groupFormController = new GroupFormController(new StudentsModel(), inputGroupPanel.getTextFieldValues());
                 groupFormController.showGroupFrame();
             }
         });
