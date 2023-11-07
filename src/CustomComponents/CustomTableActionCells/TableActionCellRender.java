@@ -5,6 +5,8 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import static CustomComponents.CustomLightJTableWithActionColumn.*;
+
 /**
  *
  * @author Будчанин Вадим
@@ -20,12 +22,11 @@ public class TableActionCellRender extends DefaultTableCellRenderer {
         Color oddRowColor;
 
         if (isSelected) {
-            jtable.setSelectionForeground(Color.WHITE);
-            selectedColor = row % 2 == 0 ? new Color(174, 174, 204, 139) : new Color(114, 118, 116);
+            selectedColor = row % 2 == 0 ? SELECTED_EVEN_COLOR : SELECTED_ODD_COLOR;
             panelAction.setBackground(selectedColor);
         } else {
-            evenRowColor = Color.WHITE;
-            oddRowColor = new Color(244, 247, 252);
+            evenRowColor = EVEN_COLOR;
+            oddRowColor = ODD_COLOR;
             panelAction.setBackground(row % 2 == 0 ? evenRowColor : oddRowColor);
         }
 

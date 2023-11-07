@@ -8,9 +8,9 @@ import javax.swing.*;
  */
 public interface TableActionEvent {
 
-    public void onEdit(int rowIndex, JTable jTable);
+    public void onAddRow(int rowIndex, JTable jTable);
 
     public void onDelete(int rowIndex, JTable jTable);
 
-    public void onView(int rowIndex, JTable jTable);
+    public void onUpdateDB(int rowIndex, JTable jTable);
 }
