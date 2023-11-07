@@ -50,11 +50,11 @@ public class StudentsModel{
      */
     public static String[] getTableColumnsNamesWithoutGroup() {
         return new String[]{
-                "НОМЕР СТУДЕНТА",
-                "ИМЯ",
-                "ФАМИЛИЯ",
-                "ОТЧЕСТВО",
-                "ЯВЛЯЕТСЯ ПЛАТНИКОМ",
+                "НОМЕР СТУДЕНТА*",
+                "ИМЯ*",
+                "ФАМИЛИЯ*",
+                "ОТЧЕСТВО*",
+                "ЯВЛЯЕТСЯ ПЛАТНИКОМ*",
                 "ДОМАШНИЙ АДРЕС",
                 "ТЕКУЩИЙ АДРЕС",
                 "МЕСТНЫЙ ЛИ"
@@ -65,5 +65,9 @@ public class StudentsModel{
         int isPayerColumnNumber = 4;
         int isLocalColumnNumber = 7;
         return new int[] {isPayerColumnNumber, isLocalColumnNumber};
+    }
+
+    public static int[] getIntegerColumnsIndexes(){
+        return new int[] { 0 };
     }
 }

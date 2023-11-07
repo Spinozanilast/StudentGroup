@@ -80,6 +80,7 @@ public class StartFrameController {
         formView.addComponent(threeActionLabelsPanel, false, false);
         createGroupsFromDB();
         addGroupPanel = new AddGroupPanel(Color.BLACK, StartFrame.GROUP_PANEL_BACKGROUND_COLOR);
+        addGroupPanel.setToolTipText("Добавить новую группу");
         addGroupPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
         formView.addComponentMouseListener(addGroupPanel, getAddGroupPanelMouseListener());
     }
@@ -327,13 +328,16 @@ public class StartFrameController {
         groupPanel.setOpaque(false);
         groupPanel.setLayout(new GridLayout(1,3));
 
-        HighResolutionImageLabel jLabelOpenGroupForm = new HighResolutionImageLabel("UtilitiesIcons/Open-Form-Icon.png", 25, 25);
-        jLabelOpenGroupForm.setPreferredSize(imageLabelSize);
-        HighResolutionImageLabel jLabelDeleteGroup = new HighResolutionImageLabel("UtilitiesIcons/Delete-Icon.png", 25, 25);
-        jLabelDeleteGroup.setPreferredSize(imageLabelSize);
-        HighResolutionImageLabel jLabelEditGroupData = new HighResolutionImageLabel("UtilitiesIcons/Edit-Icon.png", 25, 25);
-        jLabelEditGroupData.setPreferredSize(imageLabelSize);
-        jLabelDeleteGroup.addMouseListener(new MouseAdapter() {
+        HighResolutionImageLabel jlblOpenGroupForm = new HighResolutionImageLabel("UtilitiesIcons/Open-Form-Icon.png", 25, 25);
+        jlblOpenGroupForm.setToolTipText("Открывает форму редактирования группы");
+        jlblOpenGroupForm.setPreferredSize(imageLabelSize);
+        HighResolutionImageLabel jlblDeleteGroup = new HighResolutionImageLabel("UtilitiesIcons/Delete-Icon.png", 25, 25);
+        jlblDeleteGroup.setToolTipText("Удалить все данные, связанные с данной группой");
+        jlblDeleteGroup.setPreferredSize(imageLabelSize);
+        HighResolutionImageLabel jlblEditGroupData = new HighResolutionImageLabel("UtilitiesIcons/Edit-Icon.png", 25, 25);
+        jlblDeleteGroup.setToolTipText("Редактировать обложку данной группы");
+        jlblEditGroupData.setPreferredSize(imageLabelSize);
+        jlblDeleteGroup.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 groupDAO.deleteGroup(inputGroupPanel.getTextFieldValues()[0]);
@@ -341,14 +345,14 @@ public class StartFrameController {
                 addAllGroupPanels(true);
             }
         });
-        jLabelOpenGroupForm.addMouseListener(new MouseAdapter() {
+        jlblOpenGroupForm.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 GroupFormController groupFormController = new GroupFormController(new StudentsModel(), inputGroupPanel.getTextFieldValues());
                 groupFormController.showGroupFrame();
             }
         });
-        jLabelEditGroupData.addMouseListener(new MouseAdapter() {
+        jlblEditGroupData.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (groupPanelIsEditable) {
@@ -381,9 +385,9 @@ public class StartFrameController {
                 formView.addComponent(addGroupPanel, false, true);
             }
         });
-        groupPanel.add(jLabelOpenGroupForm);
-        groupPanel.add(jLabelEditGroupData);
-        groupPanel.add(jLabelDeleteGroup);
+        groupPanel.add(jlblOpenGroupForm);
+        groupPanel.add(jlblEditGroupData);
+        groupPanel.add(jlblDeleteGroup);
         groupPanel.setMaximumSize(new Dimension(630, 45));
         return groupPanel;
     }

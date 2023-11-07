@@ -7,6 +7,7 @@ import CustomComponents.CustomTableActionCells.TableActionEvent;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 
@@ -20,6 +21,10 @@ import java.awt.*;
 public class CustomLightJTableWithActionColumn extends JTable {
 
     private Dimension PREFFERED_HEADER_SIZE = new Dimension(0, 35);
+    public static final Color SELECTED_EVEN_COLOR = new Color(151, 151, 234, 139);
+    public static final Color SELECTED_ODD_COLOR = new Color(83, 134, 128, 139);
+    public static final Color EVEN_COLOR = Color.WHITE;
+    public static final Color ODD_COLOR = new Color(244, 247, 252);;
 
     /**
      * Конструктор CustomLightJTableWithActionColumn с указанными данными таблицы и именами столбцов.
@@ -47,31 +52,66 @@ public class CustomLightJTableWithActionColumn extends JTable {
      *
      * @param booleanColumnsIndexes индексы столбцов с логическими значениями
      */
-    public void setCustomBooleanColumnRenderer(int[] booleanColumnsIndexes) {
+    public void setCustomBooleanIntegerRenderers(int[] booleanColumnsIndexes, int[] integerColumnsIndexes) {
         for (int columnIndex : booleanColumnsIndexes) {
-            getColumnModel().getColumn(columnIndex).setCellRenderer(new CustomBooleanRenderer());
+            getColumnModel().getColumn(columnIndex).setCellRenderer(new CheckBoxRenderer());
+        }
+
+        for (int columnIndex : integerColumnsIndexes) {
+            getColumnModel().getColumn(columnIndex).setCellRenderer(new IntegerRenderer());
         }
     }
 
-    /**
-     * CustomBooleanRenderer - это отрисовщик ячеек для логических значений в таблице.
-     */
-    private static class CustomBooleanRenderer extends DefaultTableCellRenderer {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            return  getCustomTableComponent(isSelected, row, component);
+    public static class IntegerRenderer extends DefaultTableCellRenderer {
+        IntegerRenderer() {
+            setHorizontalAlignment(JLabel.CENTER);
         }
 
         @Override
-        protected void setValue(Object value) {
-            if (value instanceof Boolean boolValue) {
-                if (boolValue) {
-                    setText("Действительно");
-                } else {
-                    setText("Нет");
-                }
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus, int row, int column) {
+            super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column).
+                    setFont(new Font("Montserrat", Font.ITALIC, 12));
+            Color selectedColor;
+            Color evenRowColor;
+            Color oddRowColor;
+            if (isSelected) {
+                selectedColor = row % 2 == 0 ? SELECTED_EVEN_COLOR : SELECTED_ODD_COLOR;
+                setBackground(selectedColor);
+            } else {
+                evenRowColor = EVEN_COLOR;
+                oddRowColor = ODD_COLOR;
+                setBackground(row % 2 == 0 ? evenRowColor : oddRowColor);
             }
+
+            setText(value != null ? value.toString() : "");
+            return this;
+        }
+    }
+
+    public static class CheckBoxRenderer extends JCheckBox implements TableCellRenderer {
+        CheckBoxRenderer() {
+            setHorizontalAlignment(JLabel.CENTER);
+        }
+
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus, int row, int column) {
+
+            Color selectedColor;
+            Color evenRowColor;
+            Color oddRowColor;
+
+            if (isSelected) {
+                selectedColor = row % 2 == 0 ? SELECTED_EVEN_COLOR : SELECTED_ODD_COLOR;
+                setBackground(selectedColor);
+            } else {
+                evenRowColor = EVEN_COLOR;
+                oddRowColor = ODD_COLOR;
+                setBackground(row % 2 == 0 ? evenRowColor : oddRowColor);
+            }
+
+            setSelected((value != null && (Boolean) value));
+            return this;
         }
     }
 
@@ -105,14 +145,15 @@ public class CustomLightJTableWithActionColumn extends JTable {
         Color oddRowColor;
 
         if (isSelected) {
-            selectedColor = row % 2 == 0 ? new Color(174, 174, 204, 139) : new Color(114, 118, 116);
+            selectedColor = row % 2 == 0 ? SELECTED_EVEN_COLOR : SELECTED_ODD_COLOR;
             component.setBackground(selectedColor);
         } else {
-            evenRowColor = Color.WHITE;
-            oddRowColor = new Color(244, 247, 252);
+            evenRowColor = EVEN_COLOR;
+            oddRowColor = ODD_COLOR;
             component.setBackground(row % 2 == 0 ? evenRowColor : oddRowColor);
         }
 
         return component;
     }
+
 }

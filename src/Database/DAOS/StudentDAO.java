@@ -59,6 +59,70 @@ public class StudentDAO {
     }
 
     /**
+     * Метод для добавления студента в таблицу.
+     *
+     * @param student модель студента, содержащая данные для добавления
+     */
+    public void addStudentToDB(StudentDatabaseModel student) {
+        String query = "INSERT INTO Students (studentID, groupNumber, firstname, surname, middleName, isPayer, homeAddress, currentAddress, isLocal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, student.getStudentID());
+            statement.setString(2, student.getGroupNumber());
+            statement.setString(3, student.getFirstName());
+            statement.setString(4, student.getSurname());
+            statement.setString(5, student.getMiddleName());
+            statement.setBoolean(6, student.getIsPayer());
+            statement.setString(7, student.getCurrentAddress());
+            statement.setString(8, student.getHomeAddress());
+            statement.setBoolean(9, student.getIsLocal());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateStudentInDB(StudentDatabaseModel student) {
+        String query = "UPDATE Students SET groupNumber = ?, firstname = ?, surname = ?, middleName = ?, isPayer = ?, currentAddress = ?, homeAddress = ?, isLocal = ? WHERE studentID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, student.getGroupNumber());
+            statement.setString(2, student.getFirstName());
+            statement.setString(3, student.getSurname());
+            statement.setString(4, student.getMiddleName());
+            statement.setBoolean(5, student.getIsPayer());
+            statement.setString(6, student.getCurrentAddress());
+            statement.setString(7, student.getHomeAddress());
+            statement.setBoolean(8, student.getIsLocal());
+            statement.setInt(9, student.getStudentID());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Проверяет наличие студента с указанным идентификатором.
+     *
+     * @param studentID идентификатор студента для проверки
+     * @return true, если студент с указанным идентификатором существует; в противном случае - false
+     */
+    public boolean isStudentExists(String studentID, String groupNumber) {
+        String query = "SELECT COUNT(*) AS count FROM Students WHERE studentID = ? AND groupNumber = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, studentID);
+            statement.setString(2, groupNumber);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int count = resultSet.getInt("count");
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
      * Возвращает количество студентов в определенной группе.
      *
      * @param groupNumber номер группы, для которой нужно получить количество студентов

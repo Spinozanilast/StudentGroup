@@ -3,6 +3,8 @@ package Forms.views;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Класс GroupFrame представляет форму для отображения информации о студенческой группе.
@@ -68,7 +70,8 @@ public class GroupFrame extends JFrame {
         innerMenuPanel.setLayout(new BoxLayout(innerMenuPanel, BoxLayout.X_AXIS));
         innerUpPanel.setLayout(new BoxLayout(innerUpPanel, BoxLayout.X_AXIS));
         contentLayoutPanel.setLayout(new BoxLayout(contentLayoutPanel, BoxLayout.Y_AXIS));
-        mainPanel.add(innerUpPanel);
+        JScrollPane scrollPane = new JScrollPane(innerUpPanel);
+        mainPanel.add(scrollPane);
         mainPanel.add(innerMenuPanel);
         mainPanel.add(contentLayoutPanel);
         add(mainPanel);
@@ -103,19 +106,31 @@ public class GroupFrame extends JFrame {
         innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
         innerUpPanel.add(courseValueLabel);
 
+        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
         innerUpPanel.add(Box.createHorizontalGlue());
         innerUpPanel.add(studentsNumLabel);
 
         innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
         innerUpPanel.add(lblStudentsNumValue);
 
+        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
         innerUpPanel.add(Box.createHorizontalGlue());
         innerUpPanel.add(headmanFullNameLabel);
 
         innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
         innerUpPanel.add(headmanValueLabel);
+        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
 
         innerUpPanel.setBackground(PANEL_BACKGROUND);
+    }
+
+    public JButton getExitButton(){
+        JButton jbtExit = new JButton("Закрыть окно");
+        jbtExit.addActionListener(e -> {
+            JFrame jFrame = (JFrame) jbtExit.getTopLevelAncestor();
+            jFrame.dispose();
+        });
+        return jbtExit;
     }
 
     /**
@@ -123,11 +138,17 @@ public class GroupFrame extends JFrame {
      */
     private void setUpButtonsPanel(){
         jbtShowStudentsList = new JButton("Список студентов");
+        jbtShowStudentsList.setToolTipText("Вывести список всех студентов для данной группы");
         jbtShowStatistics = new JButton("Статистика");
+        jbtShowStatistics.setToolTipText("Вывести статистику посещений для студентов данной группы");
+        JButton jbtExit = getExitButton();
+        jbtExit.setToolTipText("Закрывает окно редактирования данной группы");
         stylizeButtons(Color.WHITE, BUTTON_BACKGROUND, jbtShowStudentsList, jbtShowStatistics);
+        stylizeButtons(Color.WHITE, Color.RED, jbtExit);
         innerMenuPanel.setBackground(PANEL_BACKGROUND);
         addButton(jbtShowStudentsList, false);
-        addButton(jbtShowStatistics, true);
+        addButton(jbtShowStatistics, false);
+        addButton(jbtExit, true);
     }
 
     /**
@@ -275,6 +296,6 @@ public class GroupFrame extends JFrame {
      * @param studentsNum   Количество студентов.
      */
     public void setStudentsNum(String studentsNum) {
-        this.studentsNum = studentsNum;
+        lblStudentsNumValue.setText(studentsNum);
     }
 }

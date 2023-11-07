@@ -52,7 +52,7 @@ public class StudentDatabaseModel {
      * @param currentAddress        текущий адрес студента
      * @param isLocal               является ли студент местным
      */
-    public StudentDatabaseModel(int magazineStudentNumber, String groupNumber, String surname, String middleName, String firstName, boolean isPayer, String homaAddress, String currentAddress, boolean isLocal) {
+    public StudentDatabaseModel(int magazineStudentNumber, String groupNumber, String firstName, String surname, String middleName, boolean isPayer, String homaAddress, String currentAddress, boolean isLocal) {
         this(magazineStudentNumber, groupNumber, surname, middleName, firstName, isPayer);
         this.homaAddress = homaAddress;
         this.currentAddress = currentAddress;
@@ -172,7 +172,7 @@ public class StudentDatabaseModel {
      *
      * @return домашний адрес студента
      */
-    public String getHomaAddress() {
+    public String getHomeAddress() {
         return homaAddress;
     }
 
