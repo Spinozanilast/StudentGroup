@@ -3,14 +3,14 @@ package CustomComponents.CustomTableActionCells;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 /**
  * Панель с кнопками действий.
  *
  * <p>Панель, содержащая кнопки действий для добавления, удаления и обновления данных в таблице.</p>
  *
- * @version 1.0
- * @since 2022-10-01
+ * @version 1.1
  * @author Будчанин В.А.
  */
 public class PanelAction extends javax.swing.JPanel {
@@ -32,7 +32,7 @@ public class PanelAction extends javax.swing.JPanel {
      * @param row    индекс строки таблицы
      * @param jTable таблица студентов
      */
-    public void initEvent(TableActionEvent event, int row, JTable jTable) {
+    public void initEvent(TableActionCellEvent event, int row, JTable jTable) {
         actionButtonNewStudent.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -55,18 +55,24 @@ public class PanelAction extends javax.swing.JPanel {
         });
     }
 
+    /**
+     * Инициализирует компоненты пользовательского интерфейса.
+     */
     private void initComponents() {
         actionButtonNewStudent = new ActionButton();
         actionButtonDeleteStudent = new ActionButton();
         actionButtonUpdateDB = new ActionButton();
 
-        actionButtonNewStudent.setIcon(new ImageIcon(getClass().getResource("/CustomComponents/CustomTableActionCells/AddStudentIcon.png")));
+        actionButtonNewStudent.setIcon(new ImageIcon(Objects.requireNonNull(getClass().
+                getResource("/CustomComponents/CustomTableActionCells/AddStudentIcon.png"))));
         actionButtonNewStudent.setToolTipText("Добавить запись студента после этой строки");
 
-        actionButtonDeleteStudent.setIcon(new ImageIcon(getClass().getResource("/CustomComponents/CustomTableActionCells/DeleteRowIcon.png")));
+        actionButtonDeleteStudent.setIcon(new ImageIcon(Objects.requireNonNull(getClass().
+                getResource("/CustomComponents/CustomTableActionCells/DeleteRowIcon.png"))));
         actionButtonDeleteStudent.setToolTipText("Удалить текущую запись студента");
 
-        actionButtonUpdateDB.setIcon(new ImageIcon(getClass().getResource("/CustomComponents/CustomTableActionCells/AddToDBIcon.png")));
+        actionButtonUpdateDB.setIcon(new ImageIcon(Objects.requireNonNull(getClass().
+                getResource("/CustomComponents/CustomTableActionCells/AddToDBIcon.png"))));
         actionButtonUpdateDB.setToolTipText("Обновить сведения о текущем студенте в базе данных");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

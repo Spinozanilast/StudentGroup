@@ -10,8 +10,8 @@ import java.awt.event.MouseAdapter;
 /**
  * Класс StartFrame представляет собой начальную форму создания учебной группы.
  * <p>
- * Автор: Будчанин В.А.
- * Версия: 1.4
+ * @author Будчанин В.А.
+ * @version  1.4
  */
 public class StartFrame extends JFrame {
     public static final Dimension STANDARD_ELEMENT_PREFFERED_SIZE = new Dimension(640,45);
@@ -23,7 +23,7 @@ public class StartFrame extends JFrame {
     private static final Dimension STANDARD_FRAME_SIZE = new Dimension(1500,750);
     private final ThreeActionLabelsPanel threeActionLabelsPanel = new ThreeActionLabelsPanel(Color.BLACK,
             StartFrame.BACKGROUND_COLOR, "Номер группы", "Номер курса", "ФИО старосты");
-    private JPanel layoutGroupsPanel;
+    private JPanel pnlLayoutGroups;
 
     /**
      * Конструктор класса StartForm.
@@ -44,7 +44,7 @@ public class StartFrame extends JFrame {
         setSize(STANDARD_FRAME_SIZE);
         setPreferredSize(STANDARD_FRAME_SIZE);
         setLocationRelativeTo(null);
-        layoutGroupsPanel = new JPanel();
+        pnlLayoutGroups = new JPanel();
     }
 
     /**
@@ -52,9 +52,9 @@ public class StartFrame extends JFrame {
      */
     private void initLayoutPanel(){
         setLayout(new BorderLayout());
-        layoutGroupsPanel.setBackground(BACKGROUND_COLOR);
-        layoutGroupsPanel.setLayout(new BoxLayout(layoutGroupsPanel, BoxLayout.Y_AXIS));
-        JScrollPane scrollPane = new JScrollPane(layoutGroupsPanel);
+        pnlLayoutGroups.setBackground(BACKGROUND_COLOR);
+        pnlLayoutGroups.setLayout(new BoxLayout(pnlLayoutGroups, BoxLayout.Y_AXIS));
+        JScrollPane scrollPane = new JScrollPane(pnlLayoutGroups);
         scrollPane.createVerticalScrollBar();
         scrollPane.setBorder(null);
         add(scrollPane, BorderLayout.CENTER);
@@ -69,11 +69,11 @@ public class StartFrame extends JFrame {
      */
     public void addComponent(Component component, boolean hasVerticalStrutBefore, boolean hasVerticalStrutAfter) {
         if (hasVerticalStrutBefore) {
-            layoutGroupsPanel.add(Box.createVerticalStrut(15));
+            pnlLayoutGroups.add(Box.createVerticalStrut(15));
         }
-        layoutGroupsPanel.add(component);
+        pnlLayoutGroups.add(component);
         if (hasVerticalStrutAfter) {
-            layoutGroupsPanel.add(Box.createVerticalStrut(15));
+            pnlLayoutGroups.add(Box.createVerticalStrut(15));
         }
     }
 
@@ -95,13 +95,13 @@ public class StartFrame extends JFrame {
      * @param component компонент
      */
     public void safelyDeleteComponent(Component component){
-        layoutGroupsPanel.remove(component);
-        layoutGroupsPanel.revalidate();
-        layoutGroupsPanel.repaint();
+        pnlLayoutGroups.remove(component);
+        pnlLayoutGroups.revalidate();
+        pnlLayoutGroups.repaint();
     }
 
-    public JPanel getLayoutGroupsPanel() {
-        return layoutGroupsPanel;
+    public JPanel getPnlLayoutGroups() {
+        return pnlLayoutGroups;
     }
 
     public ThreeActionLabelsPanel getThreeActionLabelsPanel() {

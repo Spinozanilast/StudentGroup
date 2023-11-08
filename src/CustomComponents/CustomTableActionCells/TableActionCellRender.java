@@ -8,15 +8,28 @@ import javax.swing.table.DefaultTableCellRenderer;
 import static CustomComponents.CustomLightJTableWithActionColumn.*;
 
 /**
+ * Класс TableActionCellRender представляет собой рендерер ячеек таблицы,
+ * который отображает действия в виде панели.
  *
- * @author Будчанин Вадим
+ * @author Будчанин В.А.
+ * @version  1.0
  */
 public class TableActionCellRender extends DefaultTableCellRenderer {
 
+    /**
+     * Метод получает компонент, который будет использоваться для отображения ячейки таблицы.
+     *
+     * @param jtable таблица, для которой выполняется рендеринг
+     * @param o значение ячейки
+     * @param isSelected флаг, указывающий, является ли ячейка выбранной
+     * @param bln1 флаг, не используется
+     * @param row индекс строки ячейки
+     * @param column индекс столбца ячейки
+     * @return компонент, используемый для отображения ячейки
+     */
     @Override
     public Component getTableCellRendererComponent(JTable jtable, Object o, boolean isSelected, boolean bln1, int row, int column) {
         PanelAction panelAction = new PanelAction();
-
         Color selectedColor;
         Color evenRowColor;
         Color oddRowColor;

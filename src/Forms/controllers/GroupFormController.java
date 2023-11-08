@@ -1,7 +1,7 @@
 package Forms.controllers;
 
 import CustomComponents.CustomLightJTableWithActionColumn;
-import CustomComponents.CustomTableActionCells.TableActionEvent;
+import CustomComponents.CustomTableActionCells.TableActionCellEvent;
 import Database.DAOS.StudentDAO;
 import Database.Managers.SQLiteConnectionProvider;
 import Database.Managers.SQLiteDBManager;
@@ -65,7 +65,7 @@ public class GroupFormController {
                 }
             }
         });
-        contentLayoutPanel = groupFrame.getContentLayoutPanel();
+        contentLayoutPanel = groupFrame.getPnlContentLayout();
         jbtListStudents = groupFrame.getJbtShowStudentsList();
         jbtShowStatistics = groupFrame.getJbtShowStatistics();
         initButtonsListeners();
@@ -231,8 +231,8 @@ public class GroupFormController {
      *
      * @return события действий таблицы
      */
-    private TableActionEvent getTableActionEvents() {
-        return new TableActionEvent() {
+    private TableActionCellEvent getTableActionEvents() {
+        return new TableActionCellEvent() {
             @Override
             public void onAddRow(int rowIndex, JTable jTable) {
                 DefaultTableModel tableModel = (DefaultTableModel) jTable.getModel();

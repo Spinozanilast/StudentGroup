@@ -3,8 +3,6 @@ package Forms.views;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Класс GroupFrame представляет форму для отображения информации о студенческой группе.
@@ -13,15 +11,15 @@ import java.awt.event.ActionListener;
  * @version 1.1 04.11.2023
  */
 public class GroupFrame extends JFrame {
-    private Dimension BUTTON_PREFFERED_SIZE = new Dimension(200,40);
-    private Color LABEL_FOREGROUND = new Color(29,105,200);
-    private Color PANEL_BACKGROUND = new Color(242,250,255);
-    private Color BUTTON_BACKGROUND = new Color(0,95,184);
-    private final JPanel mainPanel = new JPanel();
-    private JPanel innerMenuPanel = new JPanel();
-    private JPanel innerAttributesPanel = new JPanel();
-    private JPanel innerUpPanel = new JPanel();
-    private JPanel contentLayoutPanel = new JPanel();
+    private final Dimension BUTTON_PREFFERED_SIZE = new Dimension(200,40);
+    private final Color LABEL_FOREGROUND = new Color(29,105,200);
+    private final Color PANEL_BACKGROUND = new Color(242,250,255);
+    private final Color BUTTON_BACKGROUND = new Color(0,95,184);
+    private final JPanel pnlMain = new JPanel();
+    private final JPanel pnlInnerMenu = new JPanel();
+    private final JPanel pnlInnerAttributes = new JPanel();
+    private final JPanel pnlInnerUp = new JPanel();
+    private final JPanel pnlContentLayout = new JPanel();
     private JLabel lblStudentsNumValue;
     private JButton jbtShowStudentsList;
     private  JButton jbtShowStatistics;
@@ -66,16 +64,16 @@ public class GroupFrame extends JFrame {
      * Метод setLayouts устанавливает компоновки для панелей.
      */
     private void setLayouts() {
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        innerMenuPanel.setLayout(new BoxLayout(innerMenuPanel, BoxLayout.X_AXIS));
-        innerUpPanel.setLayout(new BoxLayout(innerUpPanel, BoxLayout.X_AXIS));
-        contentLayoutPanel.setLayout(new BoxLayout(contentLayoutPanel, BoxLayout.Y_AXIS));
-        JScrollPane scrollPane = new JScrollPane(innerUpPanel);
-        mainPanel.add(scrollPane);
-        mainPanel.add(innerMenuPanel);
-        mainPanel.add(contentLayoutPanel);
-        add(mainPanel);
-        setContentPane(mainPanel);
+        pnlMain.setLayout(new BoxLayout(pnlMain, BoxLayout.Y_AXIS));
+        pnlInnerMenu.setLayout(new BoxLayout(pnlInnerMenu, BoxLayout.X_AXIS));
+        pnlInnerUp.setLayout(new BoxLayout(pnlInnerUp, BoxLayout.X_AXIS));
+        pnlContentLayout.setLayout(new BoxLayout(pnlContentLayout, BoxLayout.Y_AXIS));
+        JScrollPane scrollPane = new JScrollPane(pnlInnerUp);
+        pnlMain.add(scrollPane);
+        pnlMain.add(pnlInnerMenu);
+        pnlMain.add(pnlContentLayout);
+        add(pnlMain);
+        setContentPane(pnlMain);
     }
 
     /**
@@ -88,40 +86,40 @@ public class GroupFrame extends JFrame {
     private void setUpPanelViewComponents(String course, String studentsCount, String headmanFullName){
         int strutWidth = 17;
 
-        JLabel courseLabel = new JLabel("Курс: ");
-        JLabel studentsNumLabel = new JLabel("Количество студентов: ");
-        JLabel headmanFullNameLabel = new JLabel("Староста: ");
-        JLabel courseValueLabel = new JLabel(course);
-        JLabel headmanValueLabel = new JLabel(headmanFullName);
+        JLabel lblCourse = new JLabel("Курс: ");
+        JLabel lblStudentsNum = new JLabel("Количество студентов: ");
+        JLabel lblHeadmanFullName = new JLabel("Староста: ");
+        JLabel lblCourseValue = new JLabel(course);
+        JLabel lblHeadmanValue = new JLabel(headmanFullName);
         lblStudentsNumValue = new JLabel(studentsCount);
 
-        innerUpPanel.setLayout(new BoxLayout(innerUpPanel, BoxLayout.X_AXIS));
+        pnlInnerUp.setLayout(new BoxLayout(pnlInnerUp, BoxLayout.X_AXIS));
 
-        stylizeLabels(LABEL_FOREGROUND, courseLabel, studentsNumLabel, headmanFullNameLabel);
-        stylizeLabels(Color.BLACK, courseValueLabel, lblStudentsNumValue, headmanValueLabel);
+        stylizeLabels(LABEL_FOREGROUND, lblCourse, lblStudentsNum, lblHeadmanFullName);
+        stylizeLabels(Color.BLACK, lblCourseValue, lblStudentsNumValue, lblHeadmanValue);
 
-        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
-        innerUpPanel.add(courseLabel);
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
+        pnlInnerUp.add(lblCourse);
 
-        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
-        innerUpPanel.add(courseValueLabel);
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
+        pnlInnerUp.add(lblCourseValue);
 
-        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
-        innerUpPanel.add(Box.createHorizontalGlue());
-        innerUpPanel.add(studentsNumLabel);
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
+        pnlInnerUp.add(Box.createHorizontalGlue());
+        pnlInnerUp.add(lblStudentsNum);
 
-        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
-        innerUpPanel.add(lblStudentsNumValue);
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
+        pnlInnerUp.add(lblStudentsNumValue);
 
-        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
-        innerUpPanel.add(Box.createHorizontalGlue());
-        innerUpPanel.add(headmanFullNameLabel);
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
+        pnlInnerUp.add(Box.createHorizontalGlue());
+        pnlInnerUp.add(lblHeadmanFullName);
 
-        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
-        innerUpPanel.add(headmanValueLabel);
-        innerUpPanel.add(Box.createHorizontalStrut(strutWidth));
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
+        pnlInnerUp.add(lblHeadmanValue);
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
 
-        innerUpPanel.setBackground(PANEL_BACKGROUND);
+        pnlInnerUp.setBackground(PANEL_BACKGROUND);
     }
 
     public JButton getExitButton(){
@@ -145,7 +143,7 @@ public class GroupFrame extends JFrame {
         jbtExit.setToolTipText("Закрывает окно редактирования данной группы");
         stylizeButtons(Color.WHITE, BUTTON_BACKGROUND, jbtShowStudentsList, jbtShowStatistics);
         stylizeButtons(Color.WHITE, Color.RED, jbtExit);
-        innerMenuPanel.setBackground(PANEL_BACKGROUND);
+        pnlInnerMenu.setBackground(PANEL_BACKGROUND);
         addButton(jbtShowStudentsList, false);
         addButton(jbtShowStatistics, false);
         addButton(jbtExit, true);
@@ -158,9 +156,9 @@ public class GroupFrame extends JFrame {
      * @param isEndButton   Флаг, указывающий, является ли кнопка последней на панели.
      */
     private void addButton(JButton button, boolean isEndButton){
-        innerMenuPanel.add(button);
+        pnlInnerMenu.add(button);
         if (isEndButton) return;
-        innerMenuPanel.add(Box.createHorizontalGlue());
+        pnlInnerMenu.add(Box.createHorizontalGlue());
     }
 
     /**
@@ -191,16 +189,6 @@ public class GroupFrame extends JFrame {
             jButton.setFont(new Font("Montserrat", Font.TRUETYPE_FONT, 18));
             jButton.setBorder(null);
             jButton.setBorder(new EmptyBorder(10,10,10,10));
-        }
-    }
-
-    /**
-     * Метод stylizeButtons задает стиль для кнопок.
-     *
-     * @param jButtons      Кнопки.
-     */
-    private void stylizeButtons(JButton ...jButtons){
-        for(JButton jButton: jButtons){
         }
     }
 
@@ -241,8 +229,8 @@ public class GroupFrame extends JFrame {
      *
      * @return Панель содержимого.
      */
-    public JPanel getContentLayoutPanel() {
-        return contentLayoutPanel;
+    public JPanel getPnlContentLayout() {
+        return pnlContentLayout;
     }
 
     /**

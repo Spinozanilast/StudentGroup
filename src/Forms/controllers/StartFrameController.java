@@ -64,7 +64,7 @@ public class StartFrameController {
             }
         });
 
-        layoutGroupsPanel = formView.getLayoutGroupsPanel();
+        layoutGroupsPanel = formView.getPnlLayoutGroups();
         threeActionLabelsPanel = formView.getThreeActionLabelsPanel();
         initializeListenersForView();
     }

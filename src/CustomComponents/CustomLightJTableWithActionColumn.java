@@ -2,7 +2,7 @@ package CustomComponents;
 
 import CustomComponents.CustomTableActionCells.TableActionCellEditor;
 import CustomComponents.CustomTableActionCells.TableActionCellRender;
-import CustomComponents.CustomTableActionCells.TableActionEvent;
+import CustomComponents.CustomTableActionCells.TableActionCellEvent;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -39,10 +39,10 @@ public class CustomLightJTableWithActionColumn extends JTable {
         setRowHeight(40);
     }
 
-    public void addActionColumn(TableActionEvent tableActionEvents) {
+    public void addActionColumn(TableActionCellEvent tableActionCellEvents) {
         TableColumn actionColumn = new TableColumn();
         actionColumn.setCellRenderer(new TableActionCellRender());
-        actionColumn.setCellEditor(new TableActionCellEditor(tableActionEvents));
+        actionColumn.setCellEditor(new TableActionCellEditor(tableActionCellEvents));
         actionColumn.setHeaderValue("ДЕЙСТВИЯ");
         addColumn(actionColumn);
     }
