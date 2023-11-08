@@ -47,8 +47,9 @@ public class StudentDAO {
                     String currentAddress = resultSet.getString("currentAddress");
                     String homeAddress = resultSet.getString("homeAddress");
                     boolean isLocal = resultSet.getBoolean("isLocal");
+                    String phoneNumber = resultSet.getString("phoneNumber");
                     StudentDatabaseModel student = new StudentDatabaseModel(studentID, groupNumber, firstName, surname, middleName, isPayer,
-                            homeAddress, currentAddress, isLocal);
+                            homeAddress, currentAddress, isLocal, phoneNumber);
                     students.add(student);
                 }
             }
@@ -64,7 +65,7 @@ public class StudentDAO {
      * @param student модель студента, содержащая данные для добавления
      */
     public void addStudentToDB(StudentDatabaseModel student) {
-        String query = "INSERT INTO Students (studentID, groupNumber, firstname, surname, middleName, isPayer, homeAddress, currentAddress, isLocal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Students (studentID, groupNumber, firstname, surname, middleName, isPayer, homeAddress, currentAddress, isLocal, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, student.getStudentID());
             statement.setString(2, student.getGroupNumber());
@@ -75,6 +76,7 @@ public class StudentDAO {
             statement.setString(7, student.getCurrentAddress());
             statement.setString(8, student.getHomeAddress());
             statement.setBoolean(9, student.getIsLocal());
+            statement.setString(10, student.getPhoneNumber());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,7 +84,7 @@ public class StudentDAO {
     }
 
     public void updateStudentInDB(StudentDatabaseModel student) {
-        String query = "UPDATE Students SET groupNumber = ?, firstname = ?, surname = ?, middleName = ?, isPayer = ?, currentAddress = ?, homeAddress = ?, isLocal = ? WHERE studentID = ?";
+        String query = "UPDATE Students SET groupNumber = ?, firstname = ?, surname = ?, middleName = ?, isPayer = ?, currentAddress = ?, homeAddress = ?, isLocal = ?, phoneNumber = ? WHERE studentID = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, student.getGroupNumber());
             statement.setString(2, student.getFirstName());
@@ -92,7 +94,8 @@ public class StudentDAO {
             statement.setString(6, student.getCurrentAddress());
             statement.setString(7, student.getHomeAddress());
             statement.setBoolean(8, student.getIsLocal());
-            statement.setInt(9, student.getStudentID());
+            statement.setString(9, student.getPhoneNumber());
+            statement.setInt(10, student.getStudentID());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

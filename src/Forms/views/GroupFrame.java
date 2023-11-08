@@ -22,7 +22,6 @@ public class GroupFrame extends JFrame {
     private final JPanel pnlContentLayout = new JPanel();
     private JLabel lblStudentsNumValue;
     private JButton jbtShowStudentsList;
-    private  JButton jbtShowStatistics;
     private String groupNumber;
     private String studentsNum;
 
@@ -137,15 +136,12 @@ public class GroupFrame extends JFrame {
     private void setUpButtonsPanel(){
         jbtShowStudentsList = new JButton("Список студентов");
         jbtShowStudentsList.setToolTipText("Вывести список всех студентов для данной группы");
-        jbtShowStatistics = new JButton("Статистика");
-        jbtShowStatistics.setToolTipText("Вывести статистику посещений для студентов данной группы");
         JButton jbtExit = getExitButton();
         jbtExit.setToolTipText("Закрывает окно редактирования данной группы");
-        stylizeButtons(Color.WHITE, BUTTON_BACKGROUND, jbtShowStudentsList, jbtShowStatistics);
+        stylizeButtons(Color.WHITE, BUTTON_BACKGROUND, jbtShowStudentsList);
         stylizeButtons(Color.WHITE, Color.RED, jbtExit);
         pnlInnerMenu.setBackground(PANEL_BACKGROUND);
         addButton(jbtShowStudentsList, false);
-        addButton(jbtShowStatistics, false);
         addButton(jbtExit, true);
     }
 
@@ -240,15 +236,6 @@ public class GroupFrame extends JFrame {
      */
     public JButton getJbtShowStudentsList() {
         return jbtShowStudentsList;
-    }
-
-    /**
-     * Метод getJbtShowStatistics возвращает кнопку "Статистика".
-     *
-     * @return Кнопка "Статистика".
-     */
-    public JButton getJbtShowStatistics() {
-        return jbtShowStatistics;
     }
 
     /**

@@ -99,13 +99,22 @@ public class GroupDAO {
      * @param groupNumber номер группы
      */
     public void deleteGroup(String groupNumber) {
-        String query = "DELETE FROM StudentGroups WHERE groupNumber = ?";
-        try (PreparedStatement statement = connectionDB.prepareStatement(query)) {
+        String deleteGroup = "PRAGMA foreign_keys = ON;" +
+                "DELETE FROM StudentGroups WHERE groupNumber = ?;";
+        try (PreparedStatement statement = connectionDB.prepareStatement(deleteGroup)) {
             statement.setString(1, groupNumber);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+//        String deleteStudentsOfGroup = "DELETE FROM Students WHERE groupNumber = ?";
+//        try (PreparedStatement statement = connectionDB.prepareStatement(deleteStudentsOfGroup)) {
+//            statement.setString(1, groupNumber);
+//            statement.executeUpdate();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**

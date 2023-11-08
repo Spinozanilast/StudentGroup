@@ -7,8 +7,8 @@ import java.sql.SQLException;
 /**
  * Провайдер подключения к базе данных SQLite.
  * <p>
- * Автор: Будчанин В.А.
- * Версия: 1.0
+ * @author Будчанин В.А.
+ * @version  1.0
  */
 public class SQLiteConnectionProvider {
     private static final String DB_URL = "jdbc:sqlite:D:\\3КУРС\\Java\\CourseWork\\src\\Database\\DatabaseFiles\\StudentGroupDB.sqlite";

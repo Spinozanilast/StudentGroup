@@ -16,6 +16,7 @@ public class StudentDatabaseModel {
     private String homaAddress;
     private String currentAddress;
     private boolean isLocal;
+    private String phoneNumber;
 
     /**
      * Конструктор класса StudentDatabaseModel
@@ -52,11 +53,12 @@ public class StudentDatabaseModel {
      * @param currentAddress        текущий адрес студента
      * @param isLocal               является ли студент местным
      */
-    public StudentDatabaseModel(int magazineStudentNumber, String groupNumber, String firstName, String surname, String middleName, boolean isPayer, String homaAddress, String currentAddress, boolean isLocal) {
+    public StudentDatabaseModel(int magazineStudentNumber, String groupNumber, String firstName, String surname, String middleName, boolean isPayer, String homaAddress, String currentAddress, boolean isLocal, String phoneNumber) {
         this(magazineStudentNumber, groupNumber, surname, middleName, firstName, isPayer);
         this.homaAddress = homaAddress;
         this.currentAddress = currentAddress;
         this.isLocal = isLocal;
+        this.phoneNumber = phoneNumber;
     }
 
     /**
@@ -219,5 +221,13 @@ public class StudentDatabaseModel {
      */
     public void setIsLocal(boolean isLocal) {
         this.isLocal = isLocal;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

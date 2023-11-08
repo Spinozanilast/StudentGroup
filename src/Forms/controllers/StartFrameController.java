@@ -198,6 +198,16 @@ public class StartFrameController {
                 addGroupPanel.repaint();
                 layoutGroupsPanel.revalidate();
                 HighResolutionImagePanel highResolutionImagePanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Tick-Circle.png", 35, 35), 640, 45);
+                Action doComponentsReload = new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        addAllGroupPanels(true);
+                    }
+                };
+                highResolutionImagePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "escape");
+                highResolutionImagePanel.getActionMap().put("escape", doComponentsReload);
+
+                highResolutionImagePanel.getInputMap().put(KeyStroke.getKeyStroke("ESC"), doComponentsReload);
                 formView.addComponent(highResolutionImagePanel, false, false);
                 formView.safelyDeleteComponent(addGroupPanel);
                 highResolutionImagePanel.setFocusable(true);
@@ -340,6 +350,10 @@ public class StartFrameController {
         jlblDeleteGroup.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                int choice = JOptionPane.showOptionDialog(null, "Вы действительно хотите удалить все данные о группе?",
+                        "Проверка", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[]{"Да", "Нет"}, "Да");
+                if (choice != 0) return;
+
                 groupDAO.deleteGroup(inputGroupPanel.getTextFieldValues()[0]);
                 groupsModel.getGroupPanels().remove(inputGroupPanel);
                 addAllGroupPanels(true);
@@ -359,7 +373,6 @@ public class StartFrameController {
                     JOptionPane.showMessageDialog(formView, "Закончите редактирование предыдущей панели.");
                     return;
                 }
-
                 int editablePanelIndex = groupsModel.getGroupPanels().indexOf(inputGroupPanel);
                 setStartLabelsForLayout();
                 for (int i = 0; i < groupsModel.getGroupPanels().size(); i++){

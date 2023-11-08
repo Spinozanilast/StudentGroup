@@ -31,7 +31,6 @@ public class GroupFormController {
     private final GroupFrame groupFrame;
     private final JPanel contentLayoutPanel;
     private static JButton jbtListStudents;
-    private final JButton jbtShowStatistics;
     private JTable studentsTable;
     private final Connection connection;
     private static JPopupMenu popupMenu;
@@ -67,7 +66,6 @@ public class GroupFormController {
         });
         contentLayoutPanel = groupFrame.getPnlContentLayout();
         jbtListStudents = groupFrame.getJbtShowStudentsList();
-        jbtShowStatistics = groupFrame.getJbtShowStatistics();
         initButtonsListeners();
     }
 
@@ -84,7 +82,6 @@ public class GroupFormController {
                 studentsTable.setCustomBooleanIntegerRenderers(StudentsModel.getBooleanColumnsIndexes(),
                         StudentsModel.getIntegerColumnsIndexes());
                 studentsTable.addActionColumn(getTableActionEvents());
-                studentsTable.setPreferredSize(new Dimension(500,500));
                 if (studentsData.length == 0) {
                     initJTableInput(studentsTable);
                 }
@@ -104,7 +101,7 @@ public class GroupFormController {
      *
      * @param studentsTable  таблица студентов
      */
-    private static void initTablePopupMenu(CustomLightJTableWithActionColumn studentsTable) {
+    private void initTablePopupMenu(CustomLightJTableWithActionColumn studentsTable) {
         popupMenu = new JPopupMenu();
 
         JMenuItem addMenuItem = new JMenuItem("Добавить строку");
@@ -130,7 +127,7 @@ public class GroupFormController {
      * @param deleteMenuItem   элемент меню "Удалить студента"
      * @param updateMenuItem   элемент меню "Обновить таблицу"
      */
-    private static void addPopupMenuItems(CustomLightJTableWithActionColumn studentsTable, JMenuItem addMenuItem, JMenuItem deleteMenuItem, JMenuItem updateMenuItem) {
+    private void addPopupMenuItems(CustomLightJTableWithActionColumn studentsTable, JMenuItem addMenuItem, JMenuItem deleteMenuItem, JMenuItem updateMenuItem) {
         addMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int rowIndex = studentsTable.getSelectedRow();
@@ -147,22 +144,25 @@ public class GroupFormController {
                 Object previousStudentID = 0;
                 previousStudentID = tableModel.getValueAt(rowIndex, 0);
                 addRowToStudentsTable(rowIndex, (int) previousStudentID + 1, tableModel, false);
+                groupFrame.setStudentsNum(String.valueOf((Integer.parseInt(groupFrame.getStudentsNum()) + 1)));
+
             }
         });
 
         deleteMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (isEmptyTable(studentsTable)) return;
-                int[] rowIndexes = studentsTable.getSelectedRows();
-                if (rowIndexes.length == 0) {
+                int[] selectedRowsIndexes = studentsTable.getSelectedRows();
+                if (selectedRowsIndexes.length == 0) {
                     JOptionPane.showMessageDialog(null, "Выберите студента, которого необходимо удалить");
                     return;
                 }
                 DefaultTableModel tableModel = (DefaultTableModel) studentsTable.getModel();
-                for (int rowIndex: rowIndexes){
+                for (int rowIndex: selectedRowsIndexes){
                     String studentID = tableModel.getValueAt(rowIndex, 0).toString();
                     studentDAO.deleteStudent(studentID);
                     tableModel.removeRow(rowIndex);
+                    groupFrame.setStudentsNum(String.valueOf((Integer.parseInt(groupFrame.getStudentsNum()) - 1)));
                 }
             }
         });
@@ -216,7 +216,7 @@ public class GroupFormController {
             public Class<?> getColumnClass(int column) {
                 return switch (column) {
                     case 0 -> Integer.class;
-                    case 1, 2, 3, 5, 6 -> String.class;
+                    case 1, 2, 3, 5, 6, 8 -> String.class;
                     default -> Boolean.class;
                 };
             }
@@ -235,9 +235,15 @@ public class GroupFormController {
         return new TableActionCellEvent() {
             @Override
             public void onAddRow(int rowIndex, JTable jTable) {
-                DefaultTableModel tableModel = (DefaultTableModel) jTable.getModel();
-                Object newRowStudentID = (int) tableModel.getValueAt(rowIndex, 0) + 1;
-                addRowToStudentsTable(rowIndex, newRowStudentID, tableModel, false);
+                try {
+                    DefaultTableModel tableModel = (DefaultTableModel) jTable.getModel();
+                    Object newRowStudentID = (int) tableModel.getValueAt(rowIndex, 0) + 1;
+                    addRowToStudentsTable(rowIndex, newRowStudentID, tableModel, false);
+                    groupFrame.setStudentsNum(String.valueOf((Integer.parseInt(groupFrame.getStudentsNum()) + 1)));
+                }
+                catch (ClassCastException e) {
+                    JOptionPane.showMessageDialog(null, "Извините, что-то пошло не так");
+                }
             }
 
             @Override
@@ -245,12 +251,9 @@ public class GroupFormController {
                 DefaultTableModel tableModel = (DefaultTableModel) jTable.getModel();
                 String studentID = tableModel.getValueAt(rowIndex, 0).toString();
                 studentDAO.deleteStudent(studentID);
-                groupFrame.setStudentsNum(String.valueOf(studentDAO.getCountOfGroupStudents(groupFrame.getGroupNumber())));
                 int rowCount = tableModel.getRowCount();
                 if (rowIndex >= 0 && rowIndex < rowCount) {
                     tableModel.removeRow(rowIndex);
-                } else {
-                    System.out.println("Invalid row index");
                 }
             }
 
@@ -286,7 +289,7 @@ public class GroupFormController {
      * @param isFirstRow        флаг, указывающий, является ли это первой строкой
      */
     private static void addRowToStudentsTable(int rowIndex, Object newRowStudentID, DefaultTableModel tableModel, boolean isFirstRow) {
-        Object[] rowData = {newRowStudentID, "", "", "", false, "", "", false};
+        Object[] rowData = {newRowStudentID, "", "", "", false, "", "", false, ""};
         int newStudentIndex = isFirstRow ? 0 : rowIndex + 1;
         tableModel.insertRow(newStudentIndex, rowData);
         tableModel.fireTableRowsInserted(newStudentIndex, newStudentIndex);
@@ -306,9 +309,10 @@ public class GroupFormController {
                 rowData[2].toString(),
                 rowData[3].toString(),
                 (boolean) rowData[4],
-                rowData[5].toString(),
-                rowData[6].toString(),
-                (boolean) rowData[7]
+                rowData[5].toString() == null ? "" : rowData[5].toString(),
+                rowData[6].toString() == null ? "" : rowData[6].toString(),
+                (boolean) rowData[7],
+                rowData[8].toString()
         );
     }
 
@@ -317,9 +321,10 @@ public class GroupFormController {
      *
      * @param jTableStudentsList  таблица студентов
      */
-    private static void initJTableInput(JTable jTableStudentsList) {
+    private void initJTableInput(JTable jTableStudentsList) {
         DefaultTableModel defaultTableModel = (DefaultTableModel) jTableStudentsList.getModel();
         addRowToStudentsTable(0, 0, defaultTableModel, true);
+        groupFrame.setStudentsNum("1");
     }
 
     /**

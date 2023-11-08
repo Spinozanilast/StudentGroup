@@ -38,6 +38,7 @@ public class SQLiteDBManager {
             rowElements[5] = studentDatabaseModel.getHomeAddress();
             rowElements[6] = studentDatabaseModel.getCurrentAddress();
             rowElements[7] = studentDatabaseModel.getIsLocal();
+            rowElements[8] = studentDatabaseModel.getPhoneNumber();
             tableData[rowIndex] = rowElements;
             rowIndex++;
         }

@@ -5,6 +5,7 @@ import CustomComponents.ThreeActionLabelsPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 
 /**
