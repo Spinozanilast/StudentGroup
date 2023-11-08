@@ -48,7 +48,7 @@ public class StudentDAO {
                     String homeAddress = resultSet.getString("homeAddress");
                     boolean isLocal = resultSet.getBoolean("isLocal");
                     StudentDatabaseModel student = new StudentDatabaseModel(studentID, groupNumber, firstName, surname, middleName, isPayer,
-                            currentAddress, homeAddress, isLocal);
+                            homeAddress, currentAddress, isLocal);
                     students.add(student);
                 }
             }
