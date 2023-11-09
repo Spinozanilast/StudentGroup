@@ -21,6 +21,7 @@ import java.awt.*;
 public class CustomLightJTableWithActionColumn extends JTable {
 
     private Dimension PREFFERED_HEADER_SIZE = new Dimension(0, 35);
+    private static Color HEADER_GRID_COLOR = new Color(69, 83, 93, 47);
     public static final Color SELECTED_EVEN_COLOR = new Color(151, 151, 234, 139);
     public static final Color SELECTED_ODD_COLOR = new Color(83, 134, 128, 139);
     public static final Color EVEN_COLOR = Color.WHITE;
@@ -33,7 +34,11 @@ public class CustomLightJTableWithActionColumn extends JTable {
      */
     public CustomLightJTableWithActionColumn(DefaultTableModel tableModel) {
         super(tableModel);
+        setShowGrid(true);
+        super.setAutoResizeMode(AUTO_RESIZE_ALL_COLUMNS);
+        setGridColor(HEADER_GRID_COLOR);
         getTableHeader().setDefaultRenderer(new TableLightHeader());
+        getTableHeader().setReorderingAllowed(false);
         setDefaultRenderer(Object.class, new TableLightCell());
         getTableHeader().setPreferredSize(PREFFERED_HEADER_SIZE);
         setRowHeight(40);
@@ -121,10 +126,12 @@ public class CustomLightJTableWithActionColumn extends JTable {
     private static class TableLightHeader extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable jtable, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component component = super.getTableCellRendererComponent(jtable, value, isSelected, hasFocus, row, column);
+            JLabel component = (JLabel) super.getTableCellRendererComponent(jtable, value, isSelected, hasFocus, row, column);
             component.setBackground(new Color(244, 247, 252));
             component.setForeground(new Color(108, 121, 146));
             component.setFont(new Font("Montserrat", Font.BOLD, 12));
+            component.setBorder(BorderFactory.createMatteBorder(0,0,0, 1, HEADER_GRID_COLOR));
+            component.setHorizontalAlignment(JLabel.CENTER);
             return  component;
         }
     }

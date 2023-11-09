@@ -1,8 +1,11 @@
 package Forms.views;
 
+import CustomComponents.PillButton;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * Класс GroupFrame представляет форму для отображения информации о студенческой группе.
@@ -11,7 +14,8 @@ import java.awt.*;
  * @version 1.1 04.11.2023
  */
 public class GroupFrame extends JFrame {
-    private final Dimension BUTTON_PREFFERED_SIZE = new Dimension(200,40);
+    public static final Dimension BUTTON_PREFFERED_SIZE = new Dimension(200,40);
+    public static final Dimension PILLS_PREFFERED_SIZE = new Dimension(100,30);
     private final Color LABEL_FOREGROUND = new Color(29,105,200);
     private final Color PANEL_BACKGROUND = new Color(242,250,255);
     private final Color BUTTON_BACKGROUND = new Color(0,95,184);
@@ -24,6 +28,8 @@ public class GroupFrame extends JFrame {
     private JButton jbtShowStudentsList;
     private String groupNumber;
     private String studentsNum;
+    private JButton jbtToWordExport;
+    private JButton jbtToExcelExport;
 
     /**
      * Создает новый экземпляр класса GroupFrame с указанными номером группы, номером курса и ФИО старосты вместе с
@@ -65,11 +71,12 @@ public class GroupFrame extends JFrame {
     private void setLayouts() {
         pnlMain.setLayout(new BoxLayout(pnlMain, BoxLayout.Y_AXIS));
         pnlInnerMenu.setLayout(new BoxLayout(pnlInnerMenu, BoxLayout.X_AXIS));
+        pnlInnerAttributes.setLayout(new BoxLayout(pnlInnerAttributes, BoxLayout.X_AXIS));
         pnlInnerUp.setLayout(new BoxLayout(pnlInnerUp, BoxLayout.X_AXIS));
         pnlContentLayout.setLayout(new BoxLayout(pnlContentLayout, BoxLayout.Y_AXIS));
-        JScrollPane scrollPane = new JScrollPane(pnlInnerUp);
-        pnlMain.add(scrollPane);
+        pnlMain.add(pnlInnerUp);
         pnlMain.add(pnlInnerMenu);
+        pnlMain.add(pnlInnerAttributes);
         pnlMain.add(pnlContentLayout);
         add(pnlMain);
         setContentPane(pnlMain);
@@ -136,11 +143,25 @@ public class GroupFrame extends JFrame {
     private void setUpButtonsPanel(){
         jbtShowStudentsList = new JButton("Список студентов");
         jbtShowStudentsList.setToolTipText("Вывести список всех студентов для данной группы");
+
         JButton jbtExit = getExitButton();
         jbtExit.setToolTipText("Закрывает окно редактирования данной группы");
+
+//        jbtToWordExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().
+//                getResource("/CustomComponents/Icons/WordIcon.png"))));
+//        jbtToWordExport.setToolTipText("Экспортирует таблицу со студентами в Word");
+//
+//        jbtToExcelExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().
+//                getResource("/CustomComponents/Icons/ExcelIcon.png"))));
+//        jbtToExcelExport.setToolTipText("Экспортирует таблицу со студентами в Excel");
+
         stylizeButtons(Color.WHITE, BUTTON_BACKGROUND, jbtShowStudentsList);
         stylizeButtons(Color.WHITE, Color.RED, jbtExit);
+//        stylizeButtons(Color.WHITE, new Color(24, 90, 189), jbtToWordExport);
+//        stylizeButtons(Color.WHITE, new Color(16, 124, 65), jbtToExcelExport);
+
         pnlInnerMenu.setBackground(PANEL_BACKGROUND);
+        pnlInnerAttributes.setBackground(PANEL_BACKGROUND);
         addButton(jbtShowStudentsList, false);
         addButton(jbtExit, true);
     }
@@ -182,7 +203,7 @@ public class GroupFrame extends JFrame {
             jButton.setPreferredSize(BUTTON_PREFFERED_SIZE);
             jButton.setForeground(foreground);
             jButton.setBackground(background);
-            jButton.setFont(new Font("Montserrat", Font.TRUETYPE_FONT, 18));
+            jButton.setFont(new Font("Montserrat", Font.BOLD | Font.ITALIC, 14));
             jButton.setBorder(null);
             jButton.setBorder(new EmptyBorder(10,10,10,10));
         }
@@ -272,5 +293,9 @@ public class GroupFrame extends JFrame {
      */
     public void setStudentsNum(String studentsNum) {
         lblStudentsNumValue.setText(studentsNum);
+    }
+
+    public JPanel getPnlInnerAttributes() {
+        return pnlInnerAttributes;
     }
 }

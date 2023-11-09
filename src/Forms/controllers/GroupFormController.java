@@ -2,6 +2,7 @@ package Forms.controllers;
 
 import CustomComponents.CustomLightJTableWithActionColumn;
 import CustomComponents.CustomTableActionCells.TableActionCellEvent;
+import CustomComponents.PillButton;
 import Database.DAOS.StudentDAO;
 import Database.Managers.SQLiteConnectionProvider;
 import Database.Managers.SQLiteDBManager;
@@ -12,6 +13,8 @@ import Forms.views.GroupFrame;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
@@ -81,6 +84,7 @@ public class GroupFormController {
                 CustomLightJTableWithActionColumn studentsTable = getCustomLightJTableWithActionColumn(studentsData, columnsNames);
                 studentsTable.setCustomBooleanIntegerRenderers(StudentsModel.getBooleanColumnsIndexes(),
                         StudentsModel.getIntegerColumnsIndexes());
+                initAttributesPanel(columnsNames, studentsTable.getColumnModel());
                 studentsTable.addActionColumn(getTableActionEvents());
                 if (studentsData.length == 0) {
                     initJTableInput(studentsTable);
@@ -94,6 +98,59 @@ public class GroupFormController {
             }
         };
         jbtListStudents.addActionListener(actionListener);
+    }
+
+    /**
+     * Инициализирует панель атрибутов.
+     *
+     * @param columnNames      имена столбцов
+     * @param tableColumnModel модель столбцов таблицы
+     */
+    private void initAttributesPanel(Object[] columnNames, TableColumnModel tableColumnModel) {
+        if (groupFrame.getPnlInnerAttributes().getComponentCount() != 0)  return;
+        for (int i = 0, columnNamesLength = columnNames.length; i < columnNamesLength; i++) {
+            PillButton columnPillButton = getPillButton(columnNames[i]);
+            columnPillButton.setLblFont(new Font("Montserrat", Font.ITALIC, 10));
+            columnPillButton.setPreferredSize(GroupFrame.PILLS_PREFFERED_SIZE);
+            columnPillButton.setMaximumSize(GroupFrame.PILLS_PREFFERED_SIZE);
+            groupFrame.getPnlInnerAttributes().add(columnPillButton);
+            int columnIndexToHide = i;
+            TableColumn columnToHide = tableColumnModel.getColumn(columnIndexToHide);
+            columnPillButton.addMouseListener(new MouseAdapter() {
+                /**
+                 * Вызывается при щелчке мыши на кнопке.
+                 *
+                 * @param e экземпляр MouseEvent
+                 */
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    int normalWidth = groupFrame.getWidth() / columnNames.length;
+                    int widthToSet = columnPillButton.getPillActivated() ? normalWidth : 0;
+                    columnToHide.setMinWidth(widthToSet);
+                    columnToHide.setMaxWidth(widthToSet);
+                    columnToHide.setWidth(widthToSet);
+                    columnToHide.setPreferredWidth(widthToSet);
+                }
+            });
+        }
+    }
+
+    /**
+     * Возвращает кнопку-пилюлю.
+     *
+     * @param columnNames имена столбцов
+     * @return кнопка-пилюля
+     */
+    private static PillButton getPillButton(Object columnNames) {
+        Object columnNameObject = columnNames;
+        String columnName = columnNameObject.toString();
+        Color activatedBackground = new Color(0, 95, 184);
+        Color notActivatedBackground = new Color(243, 245, 246);
+        Color activatedForeground = Color.WHITE;
+        Color notActivatedForeground = Color.BLACK;
+        PillButton columnPillButton = new PillButton(columnName, activatedBackground, notActivatedBackground,
+                activatedForeground, notActivatedForeground);
+        return columnPillButton;
     }
 
     /**
@@ -111,6 +168,7 @@ public class GroupFormController {
         deleteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
 
         JMenuItem updateMenuItem = new JMenuItem("Обновить таблицу");
+        updateMenuItem.setFocusable(true);
         updateMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_DOWN_MASK));
 
         addPopupMenuItems(studentsTable, addMenuItem, deleteMenuItem, updateMenuItem);
@@ -184,16 +242,36 @@ public class GroupFormController {
         return ((DefaultTableModel) studentsTable.getModel()).getRowCount() == 0;
     }
 
+    /**
+     * Добавляет всплывающее контекстное меню к таблице.
+     *
+     * @param studentsTable таблица студентов
+     */
     private static void addTablePopupMenu(CustomLightJTableWithActionColumn studentsTable) {
         studentsTable.addMouseListener(new MouseAdapter() {
+            /**
+             * Вызывается при нажатии кнопки мыши.
+             *
+             * @param e экземпляр MouseEvent
+             */
             public void mousePressed(MouseEvent e) {
                 showPopupMenu(e);
             }
 
+            /**
+             * Вызывается при отпускании кнопки мыши.
+             *
+             * @param e экземпляр MouseEvent
+             */
             public void mouseReleased(MouseEvent e) {
                 showPopupMenu(e);
             }
 
+            /**
+             * Отображает всплывающее контекстное меню.
+             *
+             * @param e экземпляр MouseEvent
+             */
             private void showPopupMenu(MouseEvent e) {
                 if (e.isPopupTrigger()) {
                     popupMenu.show(e.getComponent(), e.getX(), e.getY());
@@ -331,7 +409,6 @@ public class GroupFormController {
      * Отображает окно группы.
      */
     public void showGroupFrame() {
-
         groupFrame.setVisible(true);
     }
 }

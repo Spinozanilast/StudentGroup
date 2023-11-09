@@ -1,7 +1,9 @@
 package Database.DAOS;
 
 import Database.Models.StudentDatabaseModel;
+import org.sqlite.SQLiteErrorCode;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -79,7 +81,15 @@ public class StudentDAO {
             statement.setString(10, student.getPhoneNumber());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            String message;
+            if (e.getErrorCode() == SQLiteErrorCode.SQLITE_CONSTRAINT.code){
+                message = "Вероятно, уже есть студент с таким номером" +
+                        ", удалите данного студента или перепроверьте номер.";
+            }
+            else {
+                message = "Произошли непредвиденные проблемы при добавлении записи в базу данных";
+            }
+            JOptionPane.showMessageDialog(null, message);
         }
     }
 
