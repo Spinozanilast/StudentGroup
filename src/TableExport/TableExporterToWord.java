@@ -49,7 +49,14 @@ public class TableExporterToWord implements TableExporter {
         }
     }
 
-    private static void openFileChooseResult(String filePath, int dialogResult) {
+    /**
+     * Метод, производящий открытие созданного или перезаписанного файла
+     *
+     * @param filePath путь к файлу
+     * @param dialogResult целочисленный результат выбора опции диалога
+     */
+    @Override
+    public void openFileChooseResult(String filePath, int dialogResult) {
         if(dialogResult == JOptionPane.YES_OPTION){
             try {
                 File wordFile = new File(filePath);

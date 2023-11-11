@@ -16,4 +16,14 @@ public interface TableExporter {
      * @param filePath путь к файлу, в который нужно экспортировать данные
      */
     void export(JTable table, String filePath);
+
+    // Common code for opening file
+
+    /**
+     * Метод, производящий открытие созданного или перезаписанного файла
+     *
+     * @param filePath путь к файлу
+     * @param dialogResult целочисленный результат выбора опции диалога
+     */
+    public void openFileChooseResult(String filePath, int dialogResult);
 }
