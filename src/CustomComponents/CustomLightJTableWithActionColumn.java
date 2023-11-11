@@ -34,9 +34,7 @@ public class CustomLightJTableWithActionColumn extends JTable {
      */
     public CustomLightJTableWithActionColumn(DefaultTableModel tableModel) {
         super(tableModel);
-        setShowGrid(true);
         super.setAutoResizeMode(AUTO_RESIZE_ALL_COLUMNS);
-        setGridColor(HEADER_GRID_COLOR);
         getTableHeader().setDefaultRenderer(new TableLightHeader());
         getTableHeader().setReorderingAllowed(false);
         setDefaultRenderer(Object.class, new TableLightCell());
@@ -77,6 +75,7 @@ public class CustomLightJTableWithActionColumn extends JTable {
                                                        boolean isSelected, boolean hasFocus, int row, int column) {
             super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column).
                     setFont(new Font("Montserrat", Font.ITALIC, 12));
+            super.setBorder(BorderFactory.createLineBorder(HEADER_GRID_COLOR));
             Color selectedColor;
             Color evenRowColor;
             Color oddRowColor;
@@ -97,11 +96,11 @@ public class CustomLightJTableWithActionColumn extends JTable {
     public static class CheckBoxRenderer extends JCheckBox implements TableCellRenderer {
         CheckBoxRenderer() {
             setHorizontalAlignment(JLabel.CENTER);
+            setOpaque(true);
         }
 
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus, int row, int column) {
-
             Color selectedColor;
             Color evenRowColor;
             Color oddRowColor;
@@ -114,9 +113,18 @@ public class CustomLightJTableWithActionColumn extends JTable {
                 oddRowColor = ODD_COLOR;
                 setBackground(row % 2 == 0 ? evenRowColor : oddRowColor);
             }
-
+            setBorder(BorderFactory.createLineBorder(HEADER_GRID_COLOR));
             setSelected((value != null && (Boolean) value));
             return this;
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setColor(HEADER_GRID_COLOR);
+            g2.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+            g2.dispose();
         }
     }
 
@@ -132,6 +140,7 @@ public class CustomLightJTableWithActionColumn extends JTable {
             component.setFont(new Font("Montserrat", Font.BOLD, 12));
             component.setBorder(BorderFactory.createMatteBorder(0,0,0, 1, HEADER_GRID_COLOR));
             component.setHorizontalAlignment(JLabel.CENTER);
+            component.setBorder(BorderFactory.createLineBorder(HEADER_GRID_COLOR));
             return  component;
         }
     }
@@ -140,12 +149,15 @@ public class CustomLightJTableWithActionColumn extends JTable {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
             return CustomLightJTableWithActionColumn.getCustomTableComponent(isSelected, row, component);
         }
     }
 
     private static Component getCustomTableComponent(boolean isSelected, int row, Component component) {
-        component.setFont(new Font("Montserrat", Font.ITALIC, 12));
+        JLabel resultComponent = (JLabel) component;
+        resultComponent.setHorizontalAlignment(JLabel.CENTER);
+        resultComponent.setFont(new Font("Montserrat", Font.ITALIC, 12));
 
         Color selectedColor;
         Color evenRowColor;
@@ -153,14 +165,14 @@ public class CustomLightJTableWithActionColumn extends JTable {
 
         if (isSelected) {
             selectedColor = row % 2 == 0 ? SELECTED_EVEN_COLOR : SELECTED_ODD_COLOR;
-            component.setBackground(selectedColor);
+            resultComponent.setBackground(selectedColor);
         } else {
             evenRowColor = EVEN_COLOR;
             oddRowColor = ODD_COLOR;
-            component.setBackground(row % 2 == 0 ? evenRowColor : oddRowColor);
+            resultComponent.setBackground(row % 2 == 0 ? evenRowColor : oddRowColor);
         }
-
-        return component;
+        resultComponent.setBorder(BorderFactory.createLineBorder(HEADER_GRID_COLOR));
+        return resultComponent;
     }
 
 }

@@ -1,7 +1,5 @@
 package Forms.views;
 
-import CustomComponents.PillButton;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -15,10 +13,10 @@ import java.util.Objects;
  */
 public class GroupFrame extends JFrame {
     public static final Dimension BUTTON_PREFFERED_SIZE = new Dimension(200,40);
-    public static final Dimension PILLS_PREFFERED_SIZE = new Dimension(100,30);
-    private final Color LABEL_FOREGROUND = new Color(29,105,200);
-    private final Color PANEL_BACKGROUND = new Color(242,250,255);
-    private final Color BUTTON_BACKGROUND = new Color(0,95,184);
+    public static final Dimension PILLS_PREFFERED_SIZE = new Dimension(150,30);
+    public static final Color LABEL_FOREGROUND = new Color(29,105,200);
+    public static final Color PANEL_BACKGROUND = new Color(242,250,255);
+    public static final Color BUTTON_BACKGROUND = new Color(0,95,184);
     private final JPanel pnlMain = new JPanel();
     private final JPanel pnlInnerMenu = new JPanel();
     private final JPanel pnlInnerAttributes = new JPanel();
@@ -76,8 +74,10 @@ public class GroupFrame extends JFrame {
         pnlContentLayout.setLayout(new BoxLayout(pnlContentLayout, BoxLayout.Y_AXIS));
         pnlMain.add(pnlInnerUp);
         pnlMain.add(pnlInnerMenu);
+        pnlMain.add(Box.createVerticalStrut(10));
         pnlMain.add(pnlInnerAttributes);
         pnlMain.add(pnlContentLayout);
+        pnlMain.setBackground(PANEL_BACKGROUND);
         add(pnlMain);
         setContentPane(pnlMain);
     }
@@ -147,22 +147,25 @@ public class GroupFrame extends JFrame {
         JButton jbtExit = getExitButton();
         jbtExit.setToolTipText("Закрывает окно редактирования данной группы");
 
-//        jbtToWordExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().
-//                getResource("/CustomComponents/Icons/WordIcon.png"))));
-//        jbtToWordExport.setToolTipText("Экспортирует таблицу со студентами в Word");
-//
-//        jbtToExcelExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().
-//                getResource("/CustomComponents/Icons/ExcelIcon.png"))));
-//        jbtToExcelExport.setToolTipText("Экспортирует таблицу со студентами в Excel");
+        jbtToWordExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().
+                getResource("/CustomComponents/Icons/WordIcon.png"))));
+        jbtToWordExport.setToolTipText("Экспортирует таблицу со студентами в Word");
+
+        jbtToExcelExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().
+                getResource("/CustomComponents/Icons/ExcelIcon.png"))));
+        jbtToExcelExport.setToolTipText("Экспортирует таблицу со студентами в Excel");
 
         stylizeButtons(Color.WHITE, BUTTON_BACKGROUND, jbtShowStudentsList);
         stylizeButtons(Color.WHITE, Color.RED, jbtExit);
-//        stylizeButtons(Color.WHITE, new Color(24, 90, 189), jbtToWordExport);
-//        stylizeButtons(Color.WHITE, new Color(16, 124, 65), jbtToExcelExport);
+        stylizeButtons(Color.WHITE, new Color(24, 90, 189), jbtToWordExport);
+        stylizeButtons(Color.WHITE, new Color(16, 124, 65), jbtToExcelExport);
 
         pnlInnerMenu.setBackground(PANEL_BACKGROUND);
         pnlInnerAttributes.setBackground(PANEL_BACKGROUND);
+        pnlContentLayout.setBackground(PANEL_BACKGROUND);
         addButton(jbtShowStudentsList, false);
+        addButton(jbtToWordExport, false);
+        addButton(jbtToExcelExport, false);
         addButton(jbtExit, true);
     }
 
@@ -295,7 +298,27 @@ public class GroupFrame extends JFrame {
         lblStudentsNumValue.setText(studentsNum);
     }
 
+    /**
+     * Возвращает панель pnlInnerAttributes.
+     * @return панель pnlInnerAttributes
+     */
     public JPanel getPnlInnerAttributes() {
         return pnlInnerAttributes;
+    }
+
+    /**
+     * Возвращает кнопку jbtToWordExport.
+     * @return кнопка jbtToWordExport
+     */
+    public JButton getJbtToWordExport() {
+        return jbtToWordExport;
+    }
+
+    /**
+     * Возвращает кнопку jbtToExcelExport.
+     * @return кнопка jbtToExcelExport
+     */
+    public JButton getJbtToExcelExport() {
+        return jbtToExcelExport;
     }
 }

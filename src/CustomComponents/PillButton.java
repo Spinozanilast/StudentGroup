@@ -1,23 +1,21 @@
 package CustomComponents;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class PillButton extends RoundedPanel {
+public class PillButton extends JPanel {
     private Color activatedBackgroundColor;
     private Color notActivatedBackgroundColor;
     private Color activatedforeground;
-    private Color notActivatedforeground;
+    private final Color notActivatedforeground;
     private String text;
     JLabel jlbPillText;
     boolean isActivated = true;
 
     public PillButton(String text, Color activatedBackgroundColor, Color notActivatedBackgroundColor,
                       Color isActivatedforeground, Color notActivatedforeground){
-        setShady(false);
         this.text = text;
         this.activatedBackgroundColor = activatedBackgroundColor;
         this.notActivatedBackgroundColor = notActivatedBackgroundColor;
@@ -84,5 +82,9 @@ public class PillButton extends RoundedPanel {
     @Override
     public void setForeground(Color foreground) {
         this.activatedforeground = foreground;
+    }
+
+    public Color getNotActivatedforeground() {
+        return notActivatedforeground;
     }
 }

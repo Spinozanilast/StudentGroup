@@ -2,7 +2,7 @@ package CustomComponents.CustomTableActionCells;
 
 import java.awt.Color;
 import java.awt.Component;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import static CustomComponents.CustomLightJTableWithActionColumn.*;
@@ -15,7 +15,7 @@ import static CustomComponents.CustomLightJTableWithActionColumn.*;
  * @version  1.0
  */
 public class TableActionCellRender extends DefaultTableCellRenderer {
-
+    private static Color GRID_COLOR = new Color(69, 83, 93, 47);
     /**
      * Метод получает компонент, который будет использоваться для отображения ячейки таблицы.
      *
@@ -43,6 +43,7 @@ public class TableActionCellRender extends DefaultTableCellRenderer {
             panelAction.setBackground(row % 2 == 0 ? evenRowColor : oddRowColor);
         }
 
+        panelAction.setBorder(BorderFactory.createLineBorder(GRID_COLOR));
         return panelAction;
     }
 }

@@ -10,6 +10,10 @@ import Database.Managers.SQLiteDBManager.StudentsDataValidator.ValidityConstants
 import Database.Models.StudentDatabaseModel;
 import Forms.models.StudentsModel;
 import Forms.views.GroupFrame;
+import TableExport.FilePathChooserDialog;
+import TableExport.TableExporter;
+import TableExport.TableExporterToExcel;
+import TableExport.TableExporterToWord;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -34,7 +38,7 @@ public class GroupFormController {
     private final GroupFrame groupFrame;
     private final JPanel contentLayoutPanel;
     private static JButton jbtListStudents;
-    private JTable studentsTable;
+    private CustomLightJTableWithActionColumn studentsTable = null;
     private final Connection connection;
     private static JPopupMenu popupMenu;
 
@@ -73,31 +77,44 @@ public class GroupFormController {
     }
 
     /**
-     * Инициализирует слушателей событий для кнопок.
+     * Инициализирует слушателей событий для кнопок на View.
      */
     private void initButtonsListeners() {
-        ActionListener actionListener = e -> {
-            if (contentLayoutPanel.getComponentCount() == 0) {
-                Object[] columnsNames = StudentsModel.getTableColumnsNamesWithoutGroup();
-                int columnsNumber = columnsNames.length;
-                Object[][] studentsData = SQLiteDBManager.getStudentsTableData(connection, groupFrame.getGroupNumber(), columnsNumber);
-                CustomLightJTableWithActionColumn studentsTable = getCustomLightJTableWithActionColumn(studentsData, columnsNames);
-                studentsTable.setCustomBooleanIntegerRenderers(StudentsModel.getBooleanColumnsIndexes(),
-                        StudentsModel.getIntegerColumnsIndexes());
-                initAttributesPanel(columnsNames, studentsTable.getColumnModel());
-                studentsTable.addActionColumn(getTableActionEvents());
-                if (studentsData.length == 0) {
-                    initJTableInput(studentsTable);
-                }
-                JScrollPane tableScrollPane = new JScrollPane(studentsTable);
-                contentLayoutPanel.add(tableScrollPane);
-                addTablePopupMenu(studentsTable);
-                groupFrame.revalidate();
-                groupFrame.repaint();
-                initTablePopupMenu(studentsTable);
+        ActionListener actionListenerShowStudentsTable = this::actionShowStudentsTablePerformed;
+        ActionListener actionListenerExportToWord = this::actionExportToWordPerformed;
+        ActionListener actionListenerExportToExcel = this::actionExportToExcelPerformed;
+        jbtListStudents.addActionListener(actionListenerShowStudentsTable);
+        groupFrame.getJbtToWordExport().addActionListener(actionListenerExportToWord);
+        groupFrame.getJbtToExcelExport().addActionListener(actionListenerExportToExcel);
+
+    }
+
+    /**
+     * Метод, содержащий логику добавления таблицы,
+     * осуществляемое соответствующей кнопкой.
+     *
+     * @param event Экземпляр сообщения о произошедшем событии
+     */
+    private void actionShowStudentsTablePerformed(ActionEvent event) {
+        if (contentLayoutPanel.getComponentCount() == 0) {
+            Object[] columnsNames = StudentsModel.getTableColumnsNamesWithoutGroup();
+            int columnsNumber = columnsNames.length;
+            Object[][] studentsData = SQLiteDBManager.getStudentsTableData(connection, groupFrame.getGroupNumber(), columnsNumber);
+            studentsTable = getCustomLightJTableWithActionColumn(studentsData, columnsNames);
+            studentsTable.setCustomBooleanIntegerRenderers(StudentsModel.getBooleanColumnsIndexes(),
+                    StudentsModel.getIntegerColumnsIndexes());
+            initAttributesPanel(columnsNames, studentsTable.getColumnModel());
+            studentsTable.addActionColumn(getTableActionEvents());
+            if (studentsData.length == 0) {
+                initJTableInput(studentsTable);
             }
-        };
-        jbtListStudents.addActionListener(actionListener);
+            JScrollPane tableScrollPane = new JScrollPane(studentsTable);
+            contentLayoutPanel.add(tableScrollPane);
+            addTablePopupMenu(studentsTable);
+            groupFrame.revalidate();
+            groupFrame.repaint();
+            initTablePopupMenu(studentsTable);
+        }
     }
 
     /**
@@ -113,9 +130,22 @@ public class GroupFormController {
             columnPillButton.setLblFont(new Font("Montserrat", Font.ITALIC, 10));
             columnPillButton.setPreferredSize(GroupFrame.PILLS_PREFFERED_SIZE);
             columnPillButton.setMaximumSize(GroupFrame.PILLS_PREFFERED_SIZE);
-            groupFrame.getPnlInnerAttributes().add(columnPillButton);
-            int columnIndexToHide = i;
-            TableColumn columnToHide = tableColumnModel.getColumn(columnIndexToHide);
+            JPanel pnlAttributes = groupFrame.getPnlInnerAttributes();
+            pnlAttributes.add(columnPillButton);
+
+            int rightBorderWidth = 5;
+            int leftBorderWidth = 0;
+
+            if (i == columnNamesLength - 1) {
+                rightBorderWidth = 0;
+            }
+            if (i == 0){
+                leftBorderWidth = 5;
+            }
+
+            columnPillButton.setBorder(BorderFactory.createMatteBorder(0, leftBorderWidth,0,
+                    rightBorderWidth, GroupFrame.PANEL_BACKGROUND));;
+            TableColumn columnToHide = tableColumnModel.getColumn(i);
             columnPillButton.addMouseListener(new MouseAdapter() {
                 /**
                  * Вызывается при щелчке мыши на кнопке.
@@ -410,5 +440,53 @@ public class GroupFormController {
      */
     public void showGroupFrame() {
         groupFrame.setVisible(true);
+    }
+
+    /**
+     * Метод для выполнения экспорта в файл.
+     *
+     * @param event    событие, вызывающее экспорт
+     * @param fileType тип файла для экспорта (WORD или EXCEL)
+     */
+    private void actionExportPerformed(ActionEvent event, FilePathChooserDialog.FileType fileType) {
+        TableExporter exporter;
+        if (fileType == FilePathChooserDialog.FileType.WORD) {
+            exporter = new TableExporterToWord();
+        } else if (fileType == FilePathChooserDialog.FileType.EXCEL) {
+            exporter = new TableExporterToExcel();
+        } else {
+            throw new IllegalArgumentException("Неподдерживаемый тип файла");
+        }
+
+        String filepath = FilePathChooserDialog.createFile(fileType);
+        exporter.export(studentsTable, filepath);
+    }
+
+    /**
+     * Метод для выполнения экспорта в файл Word.
+     *
+     * @param event событие, вызывающее экспорт в Word
+     */
+    private void actionExportToWordPerformed(ActionEvent event) {
+        if (studentsTable != null) {
+            actionExportPerformed(event, FilePathChooserDialog.FileType.WORD);
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Отобразите таблицу, которую необходимо вывести.");
+        }
+    }
+
+    /**
+     * Метод для выполнения экспорта в файл Excel.
+     *
+     * @param event событие, вызывающее экспорт в Excel
+     */
+    private void actionExportToExcelPerformed(ActionEvent event) {
+        if (studentsTable != null) {
+            actionExportPerformed(event, FilePathChooserDialog.FileType.EXCEL);
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Отобразите таблицу, которую необходимо вывести.");
+        }
     }
 }
