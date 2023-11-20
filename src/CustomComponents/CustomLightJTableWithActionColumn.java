@@ -14,18 +14,41 @@ import java.awt.*;
 /**
  * CustomLightJTableWithActionColumn - это подкласс JTable, который предоставляет возможности для настройки внешнего вида таблицы.
  * Он расширяет JTable и реализует пользовательскую отрисовку для столбцов с логическими значениями в заголовке и ячейках данных таблицы.
- * <p>
+ *
  * @author Будчанин В.А.
  * @version 1.0
  */
 public class CustomLightJTableWithActionColumn extends JTable {
 
+    /**
+     * Предпочтительный размер заголовка.
+     */
     private Dimension PREFFERED_HEADER_SIZE = new Dimension(0, 35);
+
+    /**
+     * Цвет сетки заголовка.
+     */
     private static Color HEADER_GRID_COLOR = new Color(69, 83, 93, 47);
+
+    /**
+     * Цвет выбранной четной строки.
+     */
     public static final Color SELECTED_EVEN_COLOR = new Color(151, 151, 234, 139);
+
+    /**
+     * Цвет выбранной нечетной строки.
+     */
     public static final Color SELECTED_ODD_COLOR = new Color(83, 134, 128, 139);
+
+    /**
+     * Цвет четной строки.
+     */
     public static final Color EVEN_COLOR = Color.WHITE;
-    public static final Color ODD_COLOR = new Color(244, 247, 252);;
+
+    /**
+     * Цвет нечетной строки.
+     */
+    public static final Color ODD_COLOR = new Color(244, 247, 252);
 
     /**
      * Конструктор CustomLightJTableWithActionColumn с указанными данными таблицы и именами столбцов.
@@ -42,6 +65,11 @@ public class CustomLightJTableWithActionColumn extends JTable {
         setRowHeight(40);
     }
 
+    /**
+     * Добавляет столбец действий в таблицу.
+     *
+     * @param tableActionCellEvents Объект, содержащий события для ячеек действий.
+     */
     public void addActionColumn(TableActionCellEvent tableActionCellEvents) {
         TableColumn actionColumn = new TableColumn();
         actionColumn.setCellRenderer(new TableActionCellRender());
@@ -51,9 +79,10 @@ public class CustomLightJTableWithActionColumn extends JTable {
     }
 
     /**
-     * Устанавливает пользовательский отрисовщик для столбцов с логическими значениями.
+     * Устанавливает пользовательский отрисовщик для столбцов с логическими и целочисленными значениями.
      *
-     * @param booleanColumnsIndexes индексы столбцов с логическими значениями
+     * @param booleanColumnsIndexes Индексы столбцов с логическими значениями.
+     * @param integerColumnsIndexes Индексы столбцов с целочисленными значениями.
      */
     public void setCustomBooleanIntegerRenderers(int[] booleanColumnsIndexes, int[] integerColumnsIndexes) {
         for (int columnIndex : booleanColumnsIndexes) {
@@ -65,6 +94,12 @@ public class CustomLightJTableWithActionColumn extends JTable {
         }
     }
 
+    /**
+     * IntegerRenderer - это пользовательский отрисовщик ячеек таблицы для целочисленных значений.
+     *
+     *  @author Будчанин В.А.
+     *  @version 1.0
+     */
     public static class IntegerRenderer extends DefaultTableCellRenderer {
         IntegerRenderer() {
             setHorizontalAlignment(JLabel.CENTER);
@@ -93,6 +128,12 @@ public class CustomLightJTableWithActionColumn extends JTable {
         }
     }
 
+    /**
+     * CheckBoxRenderer - это пользовательский отрисовщик ячеек таблицы для логических значений.
+     *
+     * @author Будчанин В.А.
+     * @version 1.0
+     */
     public static class CheckBoxRenderer extends JCheckBox implements TableCellRenderer {
         CheckBoxRenderer() {
             setHorizontalAlignment(JLabel.CENTER);
@@ -130,6 +171,9 @@ public class CustomLightJTableWithActionColumn extends JTable {
 
     /**
      * TableLightHeader - это пользовательский отрисовщик заголовка таблицы.
+     *
+     * @author Будчанин В.А.
+     * @version 1.0
      */
     private static class TableLightHeader extends DefaultTableCellRenderer {
         @Override
@@ -145,6 +189,13 @@ public class CustomLightJTableWithActionColumn extends JTable {
         }
     }
 
+
+    /**
+     * TableLightCell - это пользовательский отрисовщик ячеек таблицы.
+     *
+     * @author Будчанин В.А.
+     * @version 1.0
+     */
     private static class TableLightCell extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -154,6 +205,14 @@ public class CustomLightJTableWithActionColumn extends JTable {
         }
     }
 
+    /**
+     * Возвращает пользовательский компонент таблицы на основе заданных параметров.
+     *
+     * @param isSelected Определяет, выбрана ли ячейка.
+     * @param row Номер строки ячейки.
+     * @param component Компонент, который нужно настроить.
+     * @return Настроенный компонент.
+     */
     private static Component getCustomTableComponent(boolean isSelected, int row, Component component) {
         JLabel resultComponent = (JLabel) component;
         resultComponent.setHorizontalAlignment(JLabel.CENTER);

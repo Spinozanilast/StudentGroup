@@ -52,6 +52,7 @@ public class StudentDatabaseModel {
      * @param homaAddress           домашний адрес студента
      * @param currentAddress        текущий адрес студента
      * @param isLocal               является ли студент местным
+     * @param phoneNumber           номер телефона студента
      */
     public StudentDatabaseModel(int magazineStudentNumber, String groupNumber, String firstName, String surname, String middleName, boolean isPayer, String homaAddress, String currentAddress, boolean isLocal, String phoneNumber) {
         this(magazineStudentNumber, groupNumber, surname, middleName, firstName, isPayer);
@@ -223,11 +224,11 @@ public class StudentDatabaseModel {
         this.isLocal = isLocal;
     }
 
+    /**
+     * Получить номер телефона.
+     * @return номер телефона
+     */
     public String getPhoneNumber() {
         return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 }

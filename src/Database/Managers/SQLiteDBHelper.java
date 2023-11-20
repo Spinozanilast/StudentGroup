@@ -13,7 +13,7 @@ import java.util.List;
  * @author Будчанин В.А.
  * @version 1.1
  */
-public class SQLiteDBManager {
+public class SQLiteDBHelper {
 
     /**
      * Получает данные таблицы студентов.

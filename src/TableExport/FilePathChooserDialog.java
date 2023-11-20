@@ -10,6 +10,9 @@ public class FilePathChooserDialog {
 
     public static String createFile(FileType fileType) {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("C:\\"));
+        Action details = fileChooser.getActionMap().get("Go Up");
+        details.actionPerformed(null);
         fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
             public boolean accept(File f) {
                 return f.getName().toLowerCase().endsWith("." + getFileExtension(fileType)) || f.isDirectory();
@@ -29,7 +32,7 @@ public class FilePathChooserDialog {
                     out.print("Test text");
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                JOptionPane.showMessageDialog(null, "Случились непредвиденные проблемы, быть может файл используется чем-то.");
             }
             return file.getAbsolutePath();
         }

@@ -3,22 +3,81 @@ package CustomComponents;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * ThreeActionLabelsPanel - это пользовательский класс JPanel, который содержит три метки действий.
+ *
+ * @author Будчанин В.А.
+ * @version 1.0
+ */
 public class ThreeActionLabelsPanel extends JPanel {
+
+    /**
+     * Путь к иконке стрелки вниз.
+     */
     public static final String DOWN_ARROW_ICON = "assets/DownArrowIcon.png";
+
+    /**
+     * Путь к иконке стрелки вверх.
+     */
     public static final String UP_ARROW_ICON = "assets/UpArrowIcon.png";
 
+    /**
+     * Цвет переднего плана меток.
+     */
     private Color labelsForeground;
+
+    /**
+     * Цвет фона задней панели.
+     */
     private Color backPanelColor;
+
+    /**
+     * Стандартный размер.
+     */
     private Dimension standardSize;
+
+    /**
+     * Левая метка.
+     */
     private JLabel leftLabel;
+
+    /**
+     * Центральная метка.
+     */
     private JLabel centerLabel;
+
+    /**
+     * Правая метка.
+     */
     private JLabel rightLabel;
+
+    /**
+     * Флаг, указывающий, направлена ли вниз левая стрелка.
+     */
     private boolean isLeftArrowDown = false;
+
+    /**
+     * Флаг, указывающий, направлена ли вниз центральная стрелка.
+     */
     private boolean isCenterArrowDown = false;
+
+    /**
+     * Флаг, указывающий, направлена ли вниз правая стрелка.
+     */
     private boolean isRightArrowDown = false;
 
-    public ThreeActionLabelsPanel(Color foregroundColor, Color backgroundColor, String leftLabelText, String centerLabelText, String rightLabelText){
-        standardSize = new Dimension(640,45);
+
+    /**
+     * Конструктор класса ThreeActionLabelsPanel.
+     *
+     * @param foregroundColor Цвет переднего плана.
+     * @param backgroundColor Цвет фона.
+     * @param leftLabelText   Текст левой метки.
+     * @param centerLabelText Текст центральной метки.
+     * @param rightLabelText  Текст правой метки.
+     */
+    public ThreeActionLabelsPanel(Color foregroundColor, Color backgroundColor, String leftLabelText, String centerLabelText, String rightLabelText) {
+        standardSize = new Dimension(640, 45);
         labelsForeground = foregroundColor;
         backPanelColor = backgroundColor;
         setLabelsTexts(leftLabelText, centerLabelText, rightLabelText);
@@ -27,7 +86,15 @@ public class ThreeActionLabelsPanel extends JPanel {
         setPanelLayout();
         initLablesViews(leftLabel, centerLabel, rightLabel);
     }
-    public void setLabelsTexts(String leftLabelText, String centerLabelText, String rightLabelText){
+
+    /**
+     * Устанавливает тексты меток.
+     *
+     * @param leftLabelText   Текст левой метки.
+     * @param centerLabelText Текст центральной метки.
+     * @param rightLabelText  Текст правой метки.
+     */
+    public void setLabelsTexts(String leftLabelText, String centerLabelText, String rightLabelText) {
         leftLabel = new JLabel(leftLabelText);
         leftLabel.setHorizontalAlignment(SwingConstants.LEFT);
         centerLabel = new JLabel(centerLabelText);
@@ -36,15 +103,24 @@ public class ThreeActionLabelsPanel extends JPanel {
         rightLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     }
 
-    private void setPanelLayout(){
+    /**
+     * Устанавливает компоновку панели.
+     */
+    private void setPanelLayout() {
         setLayout(new BorderLayout());
-        add(leftLabel,BorderLayout.WEST);
+        add(leftLabel, BorderLayout.WEST);
         add(centerLabel, BorderLayout.CENTER);
         add(rightLabel, BorderLayout.EAST);
     }
 
-    private void initLablesViews(JLabel ... labels){
-        for (JLabel label: labels) {
+
+    /**
+     * Инициализирует представления меток.
+     *
+     * @param labels Метки для инициализации.
+     */
+    private void initLablesViews(JLabel... labels) {
+        for (JLabel label : labels) {
             label.setFont(new Font("Montserrat", Font.ITALIC, 16));
             setBackground(backPanelColor);
             label.setForeground(labelsForeground);
@@ -54,87 +130,102 @@ public class ThreeActionLabelsPanel extends JPanel {
         }
     }
 
-    public Color getLabelsForeground() {
-        return labelsForeground;
-    }
-
-    public void setLabelsForeground(Color labelsForeground) {
-        this.labelsForeground = labelsForeground;
-    }
-
-    public Color getBackPanelColor() {
-        return backPanelColor;
-    }
-
-    public void setBackPanelColor(Color backPanelColor) {
-        this.backPanelColor = backPanelColor;
-    }
-
-    public Dimension getStandardSize() {
-        return standardSize;
-    }
-
-    public void setStandardSize(Dimension standardSize) {
-        this.standardSize = standardSize;
-    }
-
+    /**
+     * Устанавливает иконку для левой метки.
+     *
+     * @param filename Имя файла иконки.
+     */
     public void setLeftLabelIcon(String filename) {
         isLeftArrowDown = !isLeftArrowDown;
         ImageIcon icon = new ImageIcon(filename);
         leftLabel.setIcon(icon);
     }
 
+    /**
+     * Устанавливает иконку для центральной метки.
+     *
+     * @param filename Имя файла иконки.
+     */
     public void setCenterLabelIcon(String filename) {
         isCenterArrowDown = !isCenterArrowDown;
         ImageIcon icon = new ImageIcon(filename);
         centerLabel.setIcon(icon);
     }
 
+    /**
+     * Устанавливает иконку для правой метки.
+     *
+     * @param filename Имя файла иконки.
+     */
     public void setRightLabelIcon(String filename) {
         isRightArrowDown = !isRightArrowDown;
         ImageIcon icon = new ImageIcon(filename);
         rightLabel.setIcon(icon);
     }
 
-    public void setLeftLabelText(String text) {
-        leftLabel.setText(text);
-    }
-
-    public void setCenterLabelText(String text) {
-        centerLabel.setText(text);
-    }
-
-    public void setRightLabelText(String text) {
-        rightLabel.setText(text);
-    }
-
+    /**
+     * Возвращает левую метку.
+     *
+     * @return Левая метка.
+     */
     public JLabel getLeftLabel() {
         return leftLabel;
     }
 
+    /**
+     * Возвращает центральную метку.
+     *
+     * @return Центральная метка.
+     */
     public JLabel getCenterLabel() {
         return centerLabel;
     }
 
+    /**
+     * Возвращает правую метку.
+     *
+     * @return Правая метка.
+     */
     public JLabel getRightLabel() {
         return rightLabel;
     }
 
+    /**
+     * Проверяет, направлена ли вниз левая стрелка.
+     *
+     * @return true, если левая стрелка направлена вниз, иначе false.
+     */
     public boolean isLeftArrowDown() {
         return isLeftArrowDown;
     }
 
+    /**
+     * Проверяет, направлена ли вниз центральная стрелка.
+     *
+     * @return true, если центральная стрелка направлена вниз, иначе false.
+     */
     public boolean isCenterArrowDown() {
         return isCenterArrowDown;
     }
 
+    /**
+     * Проверяет, направлена ли вниз правая стрелка.
+     *
+     * @return true, если правая стрелка направлена вниз, иначе false.
+     */
     public boolean isRightArrowDown() {
         return isRightArrowDown;
     }
 
+    /**
+     * Перечисление типов меток.
+     */
     public enum LabelType {
+        // Левая метка
         LEFT,
+        // Центральная метка
         CENTER,
+        // Правая метка
         RIGHT,
     }
 }

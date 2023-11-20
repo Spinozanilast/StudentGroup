@@ -5,8 +5,8 @@ import CustomComponents.CustomTableActionCells.TableActionCellEvent;
 import CustomComponents.PillButton;
 import Database.DAOS.StudentDAO;
 import Database.Managers.SQLiteConnectionProvider;
-import Database.Managers.SQLiteDBManager;
-import Database.Managers.SQLiteDBManager.StudentsDataValidator.ValidityConstants;
+import Database.Managers.SQLiteDBHelper;
+import Database.Managers.SQLiteDBHelper.StudentsDataValidator.ValidityConstants;
 import Database.Models.StudentDatabaseModel;
 import Forms.models.StudentsModel;
 import Forms.views.GroupFrame;
@@ -99,7 +99,7 @@ public class GroupFormController {
         if (contentLayoutPanel.getComponentCount() == 0) {
             Object[] columnsNames = StudentsModel.getTableColumnsNamesWithoutGroup();
             int columnsNumber = columnsNames.length;
-            Object[][] studentsData = SQLiteDBManager.getStudentsTableData(connection, groupFrame.getGroupNumber(), columnsNumber);
+            Object[][] studentsData = SQLiteDBHelper.getStudentsTableData(connection, groupFrame.getGroupNumber(), columnsNumber);
             studentsTable = getCustomLightJTableWithActionColumn(studentsData, columnsNames);
             studentsTable.setCustomBooleanIntegerRenderers(StudentsModel.getBooleanColumnsIndexes(),
                     StudentsModel.getIntegerColumnsIndexes());
@@ -143,8 +143,8 @@ public class GroupFormController {
                 leftBorderWidth = 5;
             }
 
-            columnPillButton.setBorder(BorderFactory.createMatteBorder(0, leftBorderWidth,0,
-                    rightBorderWidth, GroupFrame.PANEL_BACKGROUND));;
+//            columnPillButton.setBorder(BorderFactory.createMatteBorder(0, leftBorderWidth,0,
+//                    rightBorderWidth, GroupFrame.PANEL_BACKGROUND));
             TableColumn columnToHide = tableColumnModel.getColumn(i);
             columnPillButton.addMouseListener(new MouseAdapter() {
                 /**
@@ -208,7 +208,7 @@ public class GroupFormController {
     }
 
     /**
-     * Добавляет элементы во всплывающее меню.
+     * Добавляет элементы контекстного меню в таблицу студентов.
      *
      * @param studentsTable    таблица студентов
      * @param addMenuItem      элемент меню "Добавить строку"
@@ -251,6 +251,9 @@ public class GroupFormController {
                     studentDAO.deleteStudent(studentID);
                     tableModel.removeRow(rowIndex);
                     groupFrame.setStudentsNum(String.valueOf((Integer.parseInt(groupFrame.getStudentsNum()) - 1)));
+                }
+                if (studentsTable.getModel().getRowCount() == 0){
+                    addRowToStudentsTable(0, 1, (DefaultTableModel) studentsTable.getModel(), true);
                 }
             }
         });
@@ -363,6 +366,9 @@ public class GroupFormController {
                 if (rowIndex >= 0 && rowIndex < rowCount) {
                     tableModel.removeRow(rowIndex);
                 }
+                if (jTable.getModel().getRowCount() == 0){
+                    addRowToStudentsTable(0, 1, (DefaultTableModel) jTable.getModel(), true);
+                }
             }
 
             @Override
@@ -373,7 +379,7 @@ public class GroupFormController {
                 for (int i = 0; i < columnCount; i++) {
                     rowData[i] = tableModel.getValueAt(rowIndex, i);
                 }
-                ValidityConstants validityResult = SQLiteDBManager.StudentsDataValidator.isValidData(rowData, connection, groupFrame.getGroupNumber());
+                ValidityConstants validityResult = SQLiteDBHelper.StudentsDataValidator.isValidData(rowData, connection, groupFrame.getGroupNumber());
                 if (validityResult == ValidityConstants.NOT_VALID_VALUES) {
                     return;
                 } else if (validityResult == ValidityConstants.VALID_ROW) {

@@ -13,11 +13,14 @@ import java.util.List;
 
 /**
  * Класс StudentDAO предоставляет методы для взаимодействия с таблицей студентов в базе данных.
- * <p>
+ *
  * @author Будчанин В.А.
  * @version  1.0
  */
 public class StudentDAO {
+    /**
+     * Соединение с базой данных
+     */
     private Connection connection;
 
     /**
@@ -32,6 +35,7 @@ public class StudentDAO {
     /**
      * Метод для получения списка всех студентов из конкретной группы из базы данных.
      *
+     * @param groupNumber номер группы
      * @return список объектов StudentDatabaseModel, представляющих студентов
      */
     public List<StudentDatabaseModel> getAllGroupStudents(String groupNumber) {
@@ -75,15 +79,15 @@ public class StudentDAO {
             statement.setString(4, student.getSurname());
             statement.setString(5, student.getMiddleName());
             statement.setBoolean(6, student.getIsPayer());
-            statement.setString(7, student.getCurrentAddress());
-            statement.setString(8, student.getHomeAddress());
+            statement.setString(7, student.getHomeAddress());
+            statement.setString(8, student.getCurrentAddress());
             statement.setBoolean(9, student.getIsLocal());
             statement.setString(10, student.getPhoneNumber());
             statement.executeUpdate();
         } catch (SQLException e) {
             String message;
             if (e.getErrorCode() == SQLiteErrorCode.SQLITE_CONSTRAINT.code){
-                message = "Вероятно, уже есть студент с таким номером" +
+                message = "Вероятно, уже есть студент с таким номером (номером телефона или номером-идентификатором)" +
                         ", удалите данного студента или перепроверьте номер.";
             }
             else {
@@ -93,6 +97,11 @@ public class StudentDAO {
         }
     }
 
+    /**
+     * Обновляет информацию о студенте в базе данных.
+     *
+     * @param student Объект студента, содержащий обновленную информацию о студенте.
+     */
     public void updateStudentInDB(StudentDatabaseModel student) {
         String query = "UPDATE Students SET groupNumber = ?, firstname = ?, surname = ?, middleName = ?, isPayer = ?, currentAddress = ?, homeAddress = ?, isLocal = ?, phoneNumber = ? WHERE studentID = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -116,6 +125,7 @@ public class StudentDAO {
      * Проверяет наличие студента с указанным идентификатором.
      *
      * @param studentID идентификатор студента для проверки
+     * @param groupNumber номер группы
      * @return true, если студент с указанным идентификатором существует; в противном случае - false
      */
     public boolean isStudentExists(String studentID, String groupNumber) {

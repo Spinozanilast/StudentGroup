@@ -5,17 +5,60 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class PillButton extends JPanel {
+/**
+ *  Кнопка - фильтр с активированным или нет состоянием.
+ *
+ * @author Будчанин В.А.
+ * @version 1.0
+ */
+public class PillButton extends RoundedPanel {
+    /**
+     * Цвет фона при активации.
+     */
     private Color activatedBackgroundColor;
+
+    /**
+     * Цвет фона при неактивации.
+     */
     private Color notActivatedBackgroundColor;
+
+    /**
+     * Цвет переднего плана при активации.
+     */
     private Color activatedforeground;
+
+    /**
+     * Цвет переднего плана при неактивации.
+     */
     private final Color notActivatedforeground;
+
+    /**
+     * Текст.
+     */
     private String text;
+
+    /**
+     * Текстовая метка.
+     */
     JLabel jlbPillText;
+
+    /**
+     * Флаг, указывающий, активирован ли элемент.
+     */
     boolean isActivated = true;
 
+    /**
+     * Конструктор класса PillButton.
+     *
+     * @param text Текст кнопки.
+     * @param activatedBackgroundColor Цвет фона при активации.
+     * @param notActivatedBackgroundColor Цвет фона при деактивации.
+     * @param isActivatedforeground Цвет текста при активации.
+     * @param notActivatedforeground Цвет текста при деактивации.
+     */
     public PillButton(String text, Color activatedBackgroundColor, Color notActivatedBackgroundColor,
                       Color isActivatedforeground, Color notActivatedforeground){
+        setShady(false);
         this.text = text;
         this.activatedBackgroundColor = activatedBackgroundColor;
         this.notActivatedBackgroundColor = notActivatedBackgroundColor;
@@ -34,14 +77,29 @@ public class PillButton extends JPanel {
         initView(text);
     }
 
+    /**
+     * Метод для установки шрифта метки.
+     *
+     * @param font Шрифт для установки.
+     */
     public void setLblFont(Font font){
         jlbPillText.setFont(font);
     }
 
+    /**
+     * Метод для получения состояния активации кнопки.
+     *
+     * @return Состояние активации кнопки.
+     */
     public boolean getPillActivated(){
         return isActivated;
     }
 
+    /**
+     * Приватный метод для инициализации вида.
+     *
+     * @param text Текст для отображения.
+     */
     private void initView(String text) {
         setLayout(new BorderLayout());
         jlbPillText = new JLabel(text, JLabel.CENTER);
@@ -50,41 +108,23 @@ public class PillButton extends JPanel {
         add(jlbPillText, BorderLayout.CENTER);
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Color getActivatedBackgroundColor() {
-        return activatedBackgroundColor;
-    }
-
-    public void setActivatedBackgroundColor(Color activatedBackgroundColor) {
-        this.activatedBackgroundColor = activatedBackgroundColor;
-    }
-
-    public Color getNotActivatedBackgroundColor() {
-        return notActivatedBackgroundColor;
-    }
-
-    public void setNotActivatedBackgroundColor(Color notActivatedBackgroundColor) {
-        this.notActivatedBackgroundColor = notActivatedBackgroundColor;
-    }
-
+    /**
+     * Переопределенный метод для получения цвета текста.
+     *
+     * @return Цвет текста при активации.
+     */
     @Override
     public Color getForeground() {
         return activatedforeground;
     }
 
+    /**
+     * Переопределенный метод для установки цвета текста.
+     *
+     * @param foreground Цвет текста для установки.
+     */
     @Override
     public void setForeground(Color foreground) {
         this.activatedforeground = foreground;
-    }
-
-    public Color getNotActivatedforeground() {
-        return notActivatedforeground;
     }
 }

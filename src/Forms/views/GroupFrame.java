@@ -12,22 +12,86 @@ import java.util.Objects;
  * @version 1.1 04.11.2023
  */
 public class GroupFrame extends JFrame {
+    /**
+     * Предпочтительный размер кнопки.
+     */
     public static final Dimension BUTTON_PREFFERED_SIZE = new Dimension(200,40);
+
+    /**
+     * Предпочтительный размер элемента управления "Pills".
+     */
     public static final Dimension PILLS_PREFFERED_SIZE = new Dimension(150,30);
+
+    /**
+     * Цвет переднего плана метки.
+     */
     public static final Color LABEL_FOREGROUND = new Color(29,105,200);
+
+    /**
+     * Цвет фона панели.
+     */
     public static final Color PANEL_BACKGROUND = new Color(242,250,255);
+
+    /**
+     * Цвет фона кнопки.
+     */
     public static final Color BUTTON_BACKGROUND = new Color(0,95,184);
+
+    /**
+     * Главная панель.
+     */
     private final JPanel pnlMain = new JPanel();
+
+    /**
+     * Внутреннее меню панели.
+     */
     private final JPanel pnlInnerMenu = new JPanel();
+
+    /**
+     * Внутренние атрибуты панели.
+     */
     private final JPanel pnlInnerAttributes = new JPanel();
+
+    /**
+     * Внутренняя верхняя панель.
+     */
     private final JPanel pnlInnerUp = new JPanel();
+
+    /**
+     * Макет содержимого панели.
+     */
     private final JPanel pnlContentLayout = new JPanel();
+
+    /**
+     * Значение числа студентов.
+     */
     private JLabel lblStudentsNumValue;
+
+    /**
+     * Кнопка для отображения списка студентов.
+     */
     private JButton jbtShowStudentsList;
+
+    /**
+     * Номер группы.
+     */
     private String groupNumber;
+
+    /**
+     * Число студентов.
+     */
     private String studentsNum;
+
+    /**
+     * Кнопка для экспорта в Word.
+     */
     private JButton jbtToWordExport;
+
+    /**
+     * Кнопка для экспорта в Excel.
+     */
     private JButton jbtToExcelExport;
+
 
     /**
      * Создает новый экземпляр класса GroupFrame с указанными номером группы, номером курса и ФИО старосты вместе с

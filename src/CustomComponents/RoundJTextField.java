@@ -6,8 +6,14 @@ import java.awt.geom.RoundRectangle2D;
 
 /**
  * Класс RoundJTextField представляет текстовое поле с закругленными углами.
+ *
+ * @author Будчанин В.А.
+ * @version 1.0
  */
 public class RoundJTextField extends JTextField {
+    /**
+     * Форма для помещения на задний план
+     */
     private Shape shape;
 
     /**

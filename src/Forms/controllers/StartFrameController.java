@@ -18,20 +18,56 @@ import java.util.List;
 /**
  * Контроллер для формы старта, отвечающий за обработку событий и взаимодействие с моделями и представлениями.
  * Реализует ActionListener и MouseAdapter для обработки событий кнопок и меток.
- * <p>
+ *
  * @author Будчанин В.А.
  * @version  1.2
  */
 public class StartFrameController {
+    /**
+     * Панель с тремя метками действий.
+     */
     private final ThreeActionLabelsPanel threeActionLabelsPanel;
+
+    /**
+     * Представление начальной формы.
+     */
     private final StartFrame formView;
+
+    /**
+     * Модель групп.
+     */
     private final GroupsModel groupsModel;
-    private final JPanel layoutGroupsPanel;
+
+    /**
+     * Панель для размещения групп.
+     */
+    private final JPanel pnlLayoutGroups;
+
+    /**
+     * Панель для добавления группы.
+     */
     private AddGroupPanel addGroupPanel;
+
+    /**
+     * DAO группы.
+     */
     private static GroupDAO groupDAO;
+
+    /**
+     * Флаг, указывающий, является ли панель группы редактируемой.
+     */
     private boolean groupPanelIsEditable = false;
+
+    /**
+     * Редактируемая панель ввода группы.
+     */
     private InputGroupPanel editableInputGroupPanel = null;
+
+    /**
+     * Предыдущий номер группы для редактируемой панели.
+     */
     private String previousGroupNumberOfEditable;
+
 
     /**
      *  Создает новый контроллер начальной формы.
@@ -64,7 +100,7 @@ public class StartFrameController {
             }
         });
 
-        layoutGroupsPanel = formView.getPnlLayoutGroups();
+        pnlLayoutGroups = formView.getPnlLayoutGroups();
         threeActionLabelsPanel = formView.getThreeActionLabelsPanel();
         initializeListenersForView();
     }
@@ -121,8 +157,8 @@ public class StartFrameController {
                 }
 
                 addAllGroupPanels(false);
-                layoutGroupsPanel.revalidate();
-                layoutGroupsPanel.repaint();
+                pnlLayoutGroups.revalidate();
+                pnlLayoutGroups.repaint();
             }
         };
     }
@@ -131,7 +167,7 @@ public class StartFrameController {
      * Устанавливает начальные метки для макета.
      */
     private void setStartLabelsForLayout() {
-        layoutGroupsPanel.removeAll();
+        pnlLayoutGroups.removeAll();
         formView.addComponent(threeActionLabelsPanel, false, false);
     }
 
@@ -152,8 +188,8 @@ public class StartFrameController {
             formView.addComponent(utilitiesPanel, false, false);
             formView.addComponent(addGroupPanel, false, false);
         }
-        layoutGroupsPanel.revalidate();
-        layoutGroupsPanel.repaint();
+        pnlLayoutGroups.revalidate();
+        pnlLayoutGroups.repaint();
     }
 
     /**
@@ -196,7 +232,7 @@ public class StartFrameController {
                 inputGroupPanel.setPreferredSize(StartFrame.STANDARD_ELEMENT_PREFFERED_SIZE);
                 formView.addComponent(inputGroupPanel, false, false);
                 addGroupPanel.repaint();
-                layoutGroupsPanel.revalidate();
+                pnlLayoutGroups.revalidate();
                 HighResolutionImagePanel highResolutionImagePanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Tick-Circle.png", 35, 35), 640, 45);
                 Action doComponentsReload = new AbstractAction() {
                     @Override

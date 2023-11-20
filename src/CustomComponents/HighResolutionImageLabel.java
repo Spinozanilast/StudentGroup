@@ -9,10 +9,24 @@ import java.util.Objects;
 
 /**
  * Класс HighResolutionImageLabel представляет метку с высокоразрешенным изображением.
+ *
+ * @author Будчанин В.А.
+ * @version 1.0
  */
 public class HighResolutionImageLabel extends JLabel {
+    /**
+     * Изображение в формате BufferedImage.
+     */
     private BufferedImage image;
+
+    /**
+     * Ширина изображения.
+     */
     private int imageWidth;
+
+    /**
+     * Высота изображения.
+     */
     private int imageHeight;
 
     /**

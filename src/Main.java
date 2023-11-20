@@ -8,6 +8,5 @@ public class Main {
         FlatIntelliJLaf.setup();
         StartFrameController controller = new StartFrameController(new GroupsModel());
         controller.showStartForm();
-
     }
 }

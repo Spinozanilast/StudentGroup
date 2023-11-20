@@ -6,13 +6,24 @@ import java.sql.SQLException;
 
 /**
  * Провайдер подключения к базе данных SQLite.
- * <p>
+ *
  * @author Будчанин В.А.
  * @version  1.0
  */
 public class SQLiteConnectionProvider {
+    /**
+     * URL базы данных.
+     */
     private static final String DB_URL = "jdbc:sqlite:D:\\3КУРС\\Java\\CourseWork\\src\\Database\\DatabaseFiles\\StudentGroupDB.sqlite";
+
+    /**
+     * Флаг, указывающий, закрыто ли соединение с базой данных.
+     */
     private boolean isConnectionClosed = false;
+
+    /**
+     * Соединение с базой данных.
+     */
     private Connection connection;
 
     /**

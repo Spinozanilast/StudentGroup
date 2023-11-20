@@ -10,6 +10,9 @@ import javax.swing.*;
  * @version 1.1
  */
 public class TableActionCellEditor extends DefaultCellEditor {
+    /**
+     * Совокупность событий по нажатию трёх кнопок.
+     */
     private TableActionCellEvent event;
 
     /**

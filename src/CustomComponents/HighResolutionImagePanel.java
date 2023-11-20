@@ -5,10 +5,20 @@ import java.awt.*;
 
 /**
  * Класс HighResolutionImagePanel представляет панель с высокоразрешенным изображением.
+ *
+ * @author Будчанин В.А.
+ * @version 1.0
  */
 public class HighResolutionImagePanel extends JPanel {
-    HighResolutionImageLabel label;
-    Dimension panelSize;
+    /**
+     * Метка с изображением высокого разрешения.
+     */
+    private HighResolutionImageLabel label;
+
+    /**
+     * Размер панели.
+     */
+    private Dimension panelSize;
 
     /**
      * Создает новый экземпляр класса HighResolutionImagePanel с заданным высокоразрешенным изображением и размерами панели.

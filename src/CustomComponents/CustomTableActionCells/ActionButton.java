@@ -18,6 +18,9 @@ import java.awt.geom.Ellipse2D;
  * @author Будчанин В.А.
  */
 public class ActionButton extends JButton {
+    /**
+     * Нажата ли клавиша мыши.
+     */
     private boolean mousePressed;
 
     /**

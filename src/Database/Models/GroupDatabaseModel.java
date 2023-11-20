@@ -2,13 +2,24 @@ package Database.Models;
 
 /**
  * Модель группы.
- * <p>
+ *
  * @author Будчанин В.А.
  * @version 1.0
  */
 public class GroupDatabaseModel {
+    /**
+     * Номер группы.
+     */
     private String groupNumber;
+
+    /**
+     * Номер курса.
+     */
     private int courseNumber;
+
+    /**
+     * Полное имя старосты.
+     */
     private String headmanFullName;
 
     /**

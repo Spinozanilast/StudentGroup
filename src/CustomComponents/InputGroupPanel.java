@@ -10,19 +10,66 @@ import java.util.List;
 
 /**
  * Пользовательская панель, содержащая поля ввода для создания обложки группы.
+ *
+ * @author Будчанин В.А.
+ * @version 1.0
  */
 public class InputGroupPanel extends RoundedPanel implements Comparable<InputGroupPanel>{
+    /**
+     * Стандартный размер.
+     */
     private final Dimension STANDARD_SIZE = new Dimension(640, 45);
+
+    /**
+     * Панель для размещения элементов.
+     */
     private JPanel layoutPanel;
+
+    /**
+     * Цвет фона.
+     */
     private Color backgroundColor;
+
+    /**
+     * Цвет фона текстовых полей.
+     */
     private Color textBoxesBackground;
+
+    /**
+     * Цвет переднего плана.
+     */
     private Color foregroundColor;
+
+    /**
+     * Массив текстовых полей, расположенных слева направо.
+     */
     protected RoundJTextField[] textFieldsLeftToRight = new RoundJTextField[3];
+
+    /**
+     * Обводка левого текстового поля.
+     */
     private String leftTextBoxStroke;
+
+    /**
+     * Обводка центрального текстового поля.
+     */
     private String centerTextBoxStroke;
+
+    /**
+     * Обводка правого текстового поля.
+     */
     private String rightTextBoxStroke;
+
+    /**
+     * Флаг, указывающий, является ли ввод действительным.
+     */
     private boolean isInputValid = false;
+
+    /**
+     * Массив предыдущих строк текстовых полей.
+     */
     String[] previousTextBoxesStrings = null;
+
 
     /**
      * Создаёт панель InputGroupPanel с указанными цветами и текстовыми значениями полей для ввода.

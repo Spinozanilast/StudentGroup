@@ -9,12 +9,31 @@ import java.awt.event.MouseEvent;
  * Класс AddGroupPanel представляет панель для добавления группы.
  */
 public class AddGroupPanel extends RoundedPanel {
+    /**
+     * Цвет переднего плана меток.
+     */
     private Color labelsForeground;
+
+    /**
+     * Цвет фона задней панели.
+     */
     private Color backPanelColor;
+
+    /**
+     * Цвет при наведении мыши.
+     */
     private final Color MOUSE_OVER_COLOR = new Color(201,255,255);
-    private final Color NOT_ENABLED_BACK_COLOR = new Color(171, 171, 171);
+
+    /**
+     * Стандартный размер.
+     */
     private Dimension standardSize;
+
+    /**
+     * Метка с изображением высокого разрешения.
+     */
     private HighResolutionImageLabel highResolutionImageLabel;
+
 
     /**
      * Создает новый экземпляр класса AddGroupPanel с указанными цветами переднего плана и фона.
@@ -68,57 +87,4 @@ public class AddGroupPanel extends RoundedPanel {
         label.setForeground(labelsForeground);
     }
 
-    /**
-     * Возвращает цвет переднего плана.
-     *
-     * @return Цвет переднего плана.
-     */
-    public Color getLabelsForeground() {
-        return labelsForeground;
-    }
-
-    /**
-     * Устанавливает цвет переднего плана.
-     *
-     * @param labelsForeground Новый цвет переднего плана.
-     */
-    public void setLabelsForeground(Color labelsForeground) {
-        this.labelsForeground = labelsForeground;
-    }
-
-    /**
-     * Возвращает цвет фона.
-     *
-     * @return Цвет фона.
-     */
-    public Color getBackPanelColor() {
-        return backPanelColor;
-    }
-
-    /**
-     * Устанавливает цвет фона.
-     *
-     * @param backPanelColor Новый цвет фона.
-     */
-    public void setBackPanelColor(Color backPanelColor) {
-        this.backPanelColor = backPanelColor;
-    }
-
-    /**
-     * Возвращает стандартный размер панели.
-     *
-     * @return Размер панели.
-     */
-    public Dimension getStandardSize() {
-        return standardSize;
-    }
-
-    /**
-     * Устанавливает стандартный размер панели.
-     *
-     * @param standardSize Новый размер панели.
-     */
-    public void setStandardSize(Dimension standardSize) {
-        this.standardSize = standardSize;
-    }
 }

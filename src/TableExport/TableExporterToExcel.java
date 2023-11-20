@@ -9,6 +9,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.swing.*;
 
+/**
+ * Класс TableExporterToExcel, который реализует интерфейс TableExporter и выполняет экспорт таблицы в Excel.
+ *
+ * @author Будчанин В.А.
+ * @version 1.0
+ */
 public class TableExporterToExcel implements TableExporter {
     /**
      * Метод, выполняющий экспорт содержания JTable в Excel
@@ -22,8 +28,13 @@ public class TableExporterToExcel implements TableExporter {
             Sheet sheet = workbook.createSheet("Книга1");
 
             Row headerRow = sheet.createRow(0);
+            int rowColumnFilterIndex = 0;
             for (int i = 0; i < table.getColumnCount(); i++) {
-                Cell cell = headerRow.createCell(i);
+                if (table.getColumnModel().getColumn(i).getMaxWidth() == 0){
+                    continue;
+                }
+
+                Cell cell = headerRow.createCell(rowColumnFilterIndex);
                 cell.setCellValue(table.getColumnName(i));
                 cell.setCellStyle(workbook.createCellStyle());
 
@@ -40,14 +51,21 @@ public class TableExporterToExcel implements TableExporter {
                 else if (i == table.getColumnCount() - 1) {
                     headerCellStyle.setBorderRight(BorderStyle.MEDIUM);
                 }
+                rowColumnFilterIndex++;
             }
 
             for (int i = 0; i < table.getRowCount(); i++) {
                 Row dataRow = sheet.createRow(i + 1);
-                for (int j = 0; j < table.getColumnCount(); j++) {
-                    Cell cell = dataRow.createCell(j);
+                rowColumnFilterIndex = 0;
+                for (int j = 0; j < table.getColumnCount();j++) {
+                    if (table.getColumnModel().getColumn(j).getMaxWidth() == 0){
+                        continue;
+                    }
+
+                    Cell cell = dataRow.createCell(rowColumnFilterIndex);
                     String value = table.getValueAt(i, j).toString();
                     cell.setCellValue(value);
+                    rowColumnFilterIndex++;
                 }
             }
 

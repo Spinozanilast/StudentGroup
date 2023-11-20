@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupsModel {
+    /**
+     * Список групп студентов-видов
+     */
     private List<InputGroupPanel> groupPanels;
 
     /**
@@ -34,10 +37,4 @@ public class GroupsModel {
         groupPanels.add(groupPanel);
     }
 
-    /**
-     * Очищает список панелей групп.
-     */
-    public void clearGroupPanels() {
-        groupPanels.clear();
-    }
 }

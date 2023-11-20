@@ -5,23 +5,42 @@ import java.awt.*;
 
 /**
  * Класс RoundedPanel представляет панель с закругленными углами.
+ *
+ * @author Будчанин В.А.
+ * @version 1.0
  */
 public class RoundedPanel extends JPanel {
-    /** Толщина границы */
+    /**
+     * Толщина границы
+     */
     protected int strokeSize = 1;
-    /** Цвет тени */
+    /**
+     * Цвет тени
+     */
     protected Color shadowColor = Color.black;
-    /** Устанавливается в true, если отбрасывает тень */
+    /**
+     * Устанавливается в true, если отбрасывает тень
+     */
     protected boolean shady = true;
-    /** Устанавливается в true, если отображается в высоком качестве */
+    /**
+     Устанавливается в true, если отображается в высоком качестве
+     */
     protected boolean highQuality = true;
-    /** Устанавливается размеры закруглений */
+    /**
+     * Устанавливается размеры закруглений
+     */
     protected Dimension arcs = new Dimension(20, 20);
-    /** Расстояние между границей тени и границы панели */
+    /**
+     * Расстояние между границей тени и границы панели
+     */
     protected int shadowGap = 5;
-    /** Выступ тени.  */
+    /**
+     * Выступ тени.
+     */
     protected int shadowOffset = 4;
-    /** Значение прозрачности для тени (0 - 255) */
+    /**
+     * Значение прозрачности для тени (0 - 255)
+     */
     protected int shadowAlpha = 150;
 
     /**

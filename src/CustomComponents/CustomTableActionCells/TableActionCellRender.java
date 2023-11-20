@@ -15,6 +15,9 @@ import static CustomComponents.CustomLightJTableWithActionColumn.*;
  * @version  1.0
  */
 public class TableActionCellRender extends DefaultTableCellRenderer {
+    /**
+     * Цвет сетки.
+     */
     private static Color GRID_COLOR = new Color(69, 83, 93, 47);
     /**
      * Метод получает компонент, который будет использоваться для отображения ячейки таблицы.

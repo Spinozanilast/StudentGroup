@@ -13,6 +13,9 @@ import java.util.List;
  * Версия: 1.1
  */
 public class GroupDAO {
+    /**
+     * Соединение с базой данных
+     */
     private Connection connectionDB;
 
     /**
@@ -107,22 +110,12 @@ public class GroupDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-//        String deleteStudentsOfGroup = "DELETE FROM Students WHERE groupNumber = ?";
-//        try (PreparedStatement statement = connectionDB.prepareStatement(deleteStudentsOfGroup)) {
-//            statement.setString(1, groupNumber);
-//            statement.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
     }
 
     /**
      * Метод для проверки, пуста ли таблица "StudentGroups" в базе данных.
      *
      * @return true, если таблица пуста, иначе false.
-     *
-     * @throws SQLException если возникает ошибка при выполнении запроса к базе данных.
      */
     public boolean isTableEmpty() {
         boolean isEmpty = false;

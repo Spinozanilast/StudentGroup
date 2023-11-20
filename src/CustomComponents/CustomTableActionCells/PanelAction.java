@@ -14,8 +14,19 @@ import java.util.Objects;
  * @author Будчанин В.А.
  */
 public class PanelAction extends javax.swing.JPanel {
+    /**
+     * Кнопка действия для удаления студента.
+     */
     private ActionButton actionButtonDeleteStudent;
+
+    /**
+     * Кнопка действия для добавления нового студента.
+     */
     private ActionButton actionButtonNewStudent;
+
+    /**
+     * Кнопка действия для обновления базы данных.
+     */
     private ActionButton actionButtonUpdateDB;
 
     /**

@@ -9,21 +9,57 @@ import java.awt.event.MouseAdapter;
 
 /**
  * Класс StartFrame представляет собой начальную форму создания учебной группы.
- * <p>
+ *
  * @author Будчанин В.А.
  * @version  1.4
  */
 public class StartFrame extends JFrame {
+    /**
+     * Предпочтительный размер стандартного элемента.
+     */
     public static final Dimension STANDARD_ELEMENT_PREFFERED_SIZE = new Dimension(640,45);
+
+    /**
+     * Цвет фона.
+     */
     public static final Color BACKGROUND_COLOR = new Color(243,243,243);
+
+    /**
+     * Цвет фона панели группы.
+     */
     public static final Color GROUP_PANEL_BACKGROUND_COLOR = new Color(239,255,255);
+
+    /**
+     * Цвет текста неизменяемых полей группы.
+     */
     public static final Color GROUP_NON_EDITABLE_FOREGROUND = new Color(29,105,200);
+
+    /**
+     * Цвет фона текстовых полей.
+     */
     public static final Color TEXT_BOXES_BACKGROUND_COLOR = new Color(193,228,228, 179);
+
+    /**
+     * Шрифт для неизменяемых полей.
+     */
     public static final Font FONT_NON_EDITABLE = new Font("Montserrat", Font.BOLD, 20);
+
+    /**
+     * Стандартный размер окна.
+     */
     private static final Dimension STANDARD_FRAME_SIZE = new Dimension(1500,750);
+
+    /**
+     * Панель с тремя метками действий.
+     */
     private final ThreeActionLabelsPanel threeActionLabelsPanel = new ThreeActionLabelsPanel(Color.BLACK,
             StartFrame.BACKGROUND_COLOR, "Номер группы", "Номер курса", "ФИО старосты");
+
+    /**
+     * Панель для размещения групп.
+     */
     private JPanel pnlLayoutGroups;
+
 
     /**
      * Конструктор класса StartForm.
@@ -100,10 +136,20 @@ public class StartFrame extends JFrame {
         pnlLayoutGroups.repaint();
     }
 
+    /**
+     * Метод для получения панели макета групп.
+     *
+     * @return Панель макета групп.
+     */
     public JPanel getPnlLayoutGroups() {
         return pnlLayoutGroups;
     }
 
+    /**
+     * Метод для получения панели с тремя действиями.
+     *
+     * @return Панель с тремя действиями.
+     */
     public ThreeActionLabelsPanel getThreeActionLabelsPanel() {
         return threeActionLabelsPanel;
     }

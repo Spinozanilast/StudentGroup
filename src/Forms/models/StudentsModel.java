@@ -62,12 +62,22 @@ public class StudentsModel{
         };
     }
 
+    /**
+     * Этот метод возвращает индексы столбцов, которые содержат булевы значения.
+     *
+     * @return Массив индексов столбцов, содержащих булевы значения.
+     */
     public static int[] getBooleanColumnsIndexes(){
         int isPayerColumnNumber = 4;
         int isLocalColumnNumber = 7;
         return new int[] {isPayerColumnNumber, isLocalColumnNumber};
     }
 
+    /**
+     * Этот метод возвращает индексы столбцов, которые содержат целочисленные значения.
+     *
+     * @return Массив индексов столбцов, содержащих целочисленные значения.
+     */
     public static int[] getIntegerColumnsIndexes(){
         return new int[] { 0 };
     }
