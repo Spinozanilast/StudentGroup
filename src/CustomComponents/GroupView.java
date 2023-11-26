@@ -14,7 +14,7 @@ import java.util.List;
  * @author Будчанин В.А.
  * @version 1.0
  */
-public class InputGroupPanel extends RoundedPanel implements Comparable<InputGroupPanel>{
+public class GroupView extends RoundedPanel implements Comparable<GroupView>{
     /**
      * Стандартный размер.
      */
@@ -72,7 +72,7 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
 
 
     /**
-     * Создаёт панель InputGroupPanel с указанными цветами и текстовыми значениями полей для ввода.
+     * Создаёт панель GroupView с указанными цветами и текстовыми значениями полей для ввода.
      *
      * @param foregroundColor     цвет переднего плана полей ввода.
      * @param backgroundColor     цвет фона панели.
@@ -81,8 +81,8 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
      * @param centerTextBoxStroke текст по умолчанию для центрального поля ввода.
      * @param rightTextBoxStroke  текст по умолчанию для правого поля ввода.
      */
-    public InputGroupPanel(Color foregroundColor, Color backgroundColor, Color textBoxesBackground,
-                           String leftTextBoxStroke, String centerTextBoxStroke, String rightTextBoxStroke) {
+    public GroupView(Color foregroundColor, Color backgroundColor, Color textBoxesBackground,
+                     String leftTextBoxStroke, String centerTextBoxStroke, String rightTextBoxStroke) {
         this.leftTextBoxStroke = leftTextBoxStroke;
         this.centerTextBoxStroke = centerTextBoxStroke;
         this.rightTextBoxStroke = rightTextBoxStroke;
@@ -384,7 +384,7 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
     }
 
     /**
-     * Сравнивает данный объект InputGroupPanel с указанным объектом InputGroupPanel для упорядочивания.
+     * Сравнивает данный объект GroupView с указанным объектом GroupView для упорядочивания.
      *
      * @param otherGroupPanel объект, с которым сравнивается данный объект.
      * @return отрицательное целое число, ноль или положительное целое число, если этот объект
@@ -394,19 +394,19 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
      *                              с типом этого объекта.
      */
     @Override
-    public int compareTo(InputGroupPanel otherGroupPanel) {
+    public int compareTo(GroupView otherGroupPanel) {
         var otherLeftLabelText = otherGroupPanel.textFieldsLeftToRight[0].getText();
         var thisLeftLabelText = this.textFieldsLeftToRight[0].getText();
         return otherLeftLabelText.compareTo(thisLeftLabelText);
     }
 
     /**
-     * Сортирует заданный список объектов InputGroupPanel по их левому текстовому полю в порядке возрастания или убывания.
+     * Сортирует заданный список объектов GroupView по их левому текстовому полю в порядке возрастания или убывания.
      *
-     * @param groupPanelList список объектов InputGroupPanel, которые нужно отсортировать.
+     * @param groupPanelList список объектов GroupView, которые нужно отсортировать.
      * @param ascending      true для сортировки в порядке возрастания, false для сортировки в порядке убывания.
      */
-    public static void sortGroupListByLeftText(List<InputGroupPanel> groupPanelList, boolean ascending){
+    public static void sortGroupListByLeftText(List<GroupView> groupPanelList, boolean ascending){
         if (ascending){
             Collections.sort(groupPanelList);
         }
@@ -416,13 +416,13 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
     }
 
     /**
-     * Сортирует заданный список объектов InputGroupPanel по текстовому полю с указанным индексом в порядке возрастания или убывания.
+     * Сортирует заданный список объектов GroupView по текстовому полю с указанным индексом в порядке возрастания или убывания.
      *
-     * @param groupPanelList список объектов InputGroupPanel, которые нужно отсортировать.
+     * @param groupPanelList список объектов GroupView, которые нужно отсортировать.
      * @param textFieldIndex индекс текстового поля, по которому нужно провести сортировку.
      * @param ascending      true для сортировки в порядке возрастания, false для сортировки в порядке убывания.
      */
-    public static void sortPanelListByLabelTextField(List<InputGroupPanel> groupPanelList, int textFieldIndex, boolean ascending) {
+    public static void sortPanelListByLabelTextField(List<GroupView> groupPanelList, int textFieldIndex, boolean ascending) {
         if (ascending) {
             Collections.sort(groupPanelList, Comparator.comparing(panel -> panel.textFieldsLeftToRight[textFieldIndex].getText()));
         }
@@ -432,22 +432,22 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
     }
 
     /**
-     * Сортирует заданный список объектов InputGroupPanel по центральному текстовому полю в порядке возрастания или убывания.
+     * Сортирует заданный список объектов GroupView по центральному текстовому полю в порядке возрастания или убывания.
      *
-     * @param groupPanelList список объектов InputGroupPanel, которые нужно отсортировать.
+     * @param groupPanelList список объектов GroupView, которые нужно отсортировать.
      * @param ascending      true для сортировки в порядке возрастания, false для сортировки в порядке убывания.
      */
-    public static void sortPanelListByCenterText(List<InputGroupPanel> groupPanelList, boolean ascending) {
+    public static void sortPanelListByCenterText(List<GroupView> groupPanelList, boolean ascending) {
         sortPanelListByLabelTextField(groupPanelList, 1, ascending);
     }
 
     /**
-     * Сортирует заданный список объектов InputGroupPanel по правому текстовому полю в порядке возрастания или убывания.
+     * Сортирует заданный список объектов GroupView по правому текстовому полю в порядке возрастания или убывания.
      *
-     * @param groupPanelList список объектов InputGroupPanel, которые нужно отсортировать.
+     * @param groupPanelList список объектов GroupView, которые нужно отсортировать.
      * @param ascending      true для сортировки в порядке возрастания, false для сортировки в порядке убывания.
      */
-    public static void sortPanelListByRightText(List<InputGroupPanel> groupPanelList, boolean ascending) {
+    public static void sortPanelListByRightText(List<GroupView> groupPanelList, boolean ascending) {
         sortPanelListByLabelTextField(groupPanelList, 2, ascending);
     }
 }

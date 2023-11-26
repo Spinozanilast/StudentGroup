@@ -45,30 +45,12 @@ public class GroupDatabaseModel {
     }
 
     /**
-     * Устанавливает номер группы.
-     *
-     * @param groupNumber номер группы
-     */
-    public void setGroupNumber(String groupNumber) {
-        this.groupNumber = groupNumber;
-    }
-
-    /**
      * Возвращает номер курса.
      *
      * @return номер курса
      */
     public int getCourseNumber() {
         return courseNumber;
-    }
-
-    /**
-     * Устанавливает номер курса.
-     *
-     * @param courseNumber номер курса
-     */
-    public void setCourseNumber(int courseNumber) {
-        this.courseNumber = courseNumber;
     }
 
     /**
@@ -80,12 +62,4 @@ public class GroupDatabaseModel {
         return headmanFullName;
     }
 
-    /**
-     * Устанавливает полное имя старосты.
-     *
-     * @param headmanFullName полное имя старосты
-     */
-    public void setHeadmanFullName(String headmanFullName) {
-        this.headmanFullName = headmanFullName;
-    }
 }

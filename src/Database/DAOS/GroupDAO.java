@@ -76,7 +76,7 @@ public class GroupDAO {
     /**
      * Метод для получения списка всех групп из базы данных
      *
-     * @return список объектов GroupsModel, представляющих группы
+     * @return список объектов GroupViews, представляющих группы
      */
     public List<GroupDatabaseModel> getAllGroups() {
         List<GroupDatabaseModel> groupDatabaseModelList = new ArrayList<>();

@@ -27,7 +27,6 @@ public class TableExporterToWord implements TableExporter {
     @Override
     public void export(JTable table, String filePath) {
         try (XWPFDocument document = new XWPFDocument()) {
-            XWPFParagraph paragraph = document.createParagraph();
 
             XWPFTable wordTable = document.createTable(table.getRowCount(), table.getColumnCount());
             int rowColumnFilterIndex = 0;

@@ -1,4 +1,4 @@
-package Forms.controllers;
+package Frames;
 
 import CustomComponents.CustomLightJTableWithActionColumn;
 import CustomComponents.CustomTableActionCells.TableActionCellEvent;
@@ -6,16 +6,15 @@ import CustomComponents.PillButton;
 import Database.DAOS.StudentDAO;
 import Database.Managers.SQLiteConnectionProvider;
 import Database.Managers.SQLiteDBHelper;
-import Database.Managers.SQLiteDBHelper.StudentsDataValidator.ValidityConstants;
 import Database.Models.StudentDatabaseModel;
-import Forms.models.StudentsModel;
-import Forms.views.GroupFrame;
+import Frames.models.StudentsJTableModelInfo;
 import TableExport.FilePathChooserDialog;
 import TableExport.TableExporter;
 import TableExport.TableExporterToExcel;
 import TableExport.TableExporterToWord;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -24,37 +23,305 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Objects;
 
 /**
- * Контроллер формы группы, отвечающий за обработку событий и взаимодействие с моделью и представлением.
- * Реализует ActionListener для обработки событий кнопок.
+ * Класс StudentsFrame представляет форму для отображения информации о студенческой группе.
  *
  * @author Будчанин В.А.
- * @version  1.0
+ * @version 1.1 04.11.2023
  */
-public class GroupFormController {
-    private static StudentDAO studentDAO;
-    private StudentsModel studentsModel;
-    private final GroupFrame groupFrame;
-    private final JPanel contentLayoutPanel;
-    private static JButton jbtListStudents;
+public class StudentsFrame extends JFrame {
+    /**
+     * Предпочтительный размер кнопки.
+     */
+    public static final Dimension BUTTON_PREFFERED_SIZE = new Dimension(200,40);
+
+    /**
+     * Предпочтительный размер элемента управления "Pills".
+     */
+    public static final Dimension PILLS_PREFFERED_SIZE = new Dimension(150,30);
+
+    /**
+     * Цвет переднего плана метки.
+     */
+    public static final Color LABEL_FOREGROUND = new Color(29,105,200);
+
+    /**
+     * Цвет фона панели.
+     */
+    public static final Color PANEL_BACKGROUND = new Color(242,250,255);
+
+    /**
+     * Цвет фона кнопки.
+     */
+    public static final Color BUTTON_BACKGROUND = new Color(0,95,184);
+
+    /**
+     * Главная панель.
+     */
+    private final JPanel pnlMain = new JPanel();
+
+    /**
+     * Внутреннее меню панели.
+     */
+    private final JPanel pnlInnerMenu = new JPanel();
+
+    /**
+     * Внутренние атрибуты панели.
+     */
+    private final JPanel pnlInnerAttributes = new JPanel();
+
+    /**
+     * Внутренняя верхняя панель.
+     */
+    private final JPanel pnlInnerUp = new JPanel();
+
+    /**
+     * Макет содержимого панели.
+     */
+    private final JPanel pnlContentLayout = new JPanel();
+
+    /**
+     * Значение числа студентов.
+     */
+    private JLabel lblStudentsNumValue;
+
+    /**
+     * Кнопка для отображения списка студентов.
+     */
+    private JButton jbtShowStudentsList;
+
+    /**
+     * Номер группы.
+     */
+    private String groupNumber;
+
+    /**
+     * Число студентов.
+     */
+    private String studentsNum;
+
+    /**
+     * Кнопка для экспорта в Word.
+     */
+    private JButton jbtToWordExport;
+
+    /**
+     * Кнопка для экспорта в Excel.
+     */
+    private JButton jbtToExcelExport;
+
     private CustomLightJTableWithActionColumn studentsTable = null;
-    private final Connection connection;
+    private Connection connection;
     private static JPopupMenu popupMenu;
+    private static StudentDAO studentDAO;
+    SQLiteConnectionProvider sqLiteConnectionProvider;
+
+
+    /**
+     * Создает новый экземпляр класса StudentsFrame с указанными номером группы, номером курса и ФИО старосты вместе с
+     * кол-вом студентов в группе.
+     *
+     * @param groupNumber       Номер группы.
+     * @param courseNumber      Номер курса.
+     * @param headmanFullName   ФИО старосты.
+     */
+    public StudentsFrame(String groupNumber, String courseNumber, String headmanFullName) {
+        sqLiteConnectionProvider = getSqLiteConnectionProvider();
+        setTitle("Данные группы " + groupNumber);
+        this.groupNumber = groupNumber;
+        this.studentsNum = String.valueOf(studentDAO.getCountOfGroupStudents(groupNumber));
+        ImageIcon icon = new ImageIcon("assets/AloneGroupIcon.png");
+        setIconImage(icon.getImage());
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(1000, 500);
+        setLocationRelativeTo(null);
+        setLayouts();
+        setUpPanelViewComponents(courseNumber, studentsNum, headmanFullName);
+        setUpButtonsPanel();
+        initDBConnection();
+    }
+
+    /**
+     * Создает новый экземпляр класса StudentsFrame с указанными данными о группе (группа, курс и ФИО старосты) вместе с
+     * кол-вом студентов в группе.
+     *
+     * @param groupData         Массив данных о группе (группа, курс и ФИО старосты).
+     */
+    public StudentsFrame(String[] groupData) {
+        this(groupData[0], groupData[1], groupData[2]);
+    }
+
+    /**
+     * Метод setLayouts устанавливает компоновки для панелей.
+     */
+    private void setLayouts() {
+        pnlMain.setLayout(new BoxLayout(pnlMain, BoxLayout.Y_AXIS));
+        pnlInnerMenu.setLayout(new BoxLayout(pnlInnerMenu, BoxLayout.X_AXIS));
+        pnlInnerAttributes.setLayout(new BoxLayout(pnlInnerAttributes, BoxLayout.X_AXIS));
+        pnlInnerUp.setLayout(new BoxLayout(pnlInnerUp, BoxLayout.X_AXIS));
+        pnlContentLayout.setLayout(new BoxLayout(pnlContentLayout, BoxLayout.Y_AXIS));
+        pnlMain.add(pnlInnerUp);
+        pnlMain.add(pnlInnerMenu);
+        pnlMain.add(Box.createVerticalStrut(10));
+        pnlMain.add(pnlInnerAttributes);
+        pnlMain.add(pnlContentLayout);
+        pnlMain.setBackground(PANEL_BACKGROUND);
+        add(pnlMain);
+        setContentPane(pnlMain);
+    }
+
+    /**
+     * Метод setUpPanelViewComponents устанавливает компоненты представления панели.
+     *
+     * @param course           Курс.
+     * @param studentsCount    Количество студентов.
+     * @param headmanFullName  ФИО старосты.
+     */
+    private void setUpPanelViewComponents(String course, String studentsCount, String headmanFullName){
+        int strutWidth = 17;
+
+        JLabel lblCourse = new JLabel("Курс: ");
+        JLabel lblStudentsNum = new JLabel("Количество студентов: ");
+        JLabel lblHeadmanFullName = new JLabel("Староста: ");
+        JLabel lblCourseValue = new JLabel(course);
+        JLabel lblHeadmanValue = new JLabel(headmanFullName);
+        lblStudentsNumValue = new JLabel(studentsCount);
+
+        pnlInnerUp.setLayout(new BoxLayout(pnlInnerUp, BoxLayout.X_AXIS));
+
+        stylizeLabels(LABEL_FOREGROUND, lblCourse, lblStudentsNum, lblHeadmanFullName);
+        stylizeLabels(Color.BLACK, lblCourseValue, lblStudentsNumValue, lblHeadmanValue);
+
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
+        pnlInnerUp.add(lblCourse);
+
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
+        pnlInnerUp.add(lblCourseValue);
+
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
+        pnlInnerUp.add(Box.createHorizontalGlue());
+        pnlInnerUp.add(lblStudentsNum);
+
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
+        pnlInnerUp.add(lblStudentsNumValue);
+
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
+        pnlInnerUp.add(Box.createHorizontalGlue());
+        pnlInnerUp.add(lblHeadmanFullName);
+
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
+        pnlInnerUp.add(lblHeadmanValue);
+        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
+
+        pnlInnerUp.setBackground(PANEL_BACKGROUND);
+    }
+
+    public JButton getExitButton(){
+        JButton jbtExit = new JButton("Закрыть окно");
+        jbtExit.addActionListener(e -> {
+            JFrame jFrame = (JFrame) jbtExit.getTopLevelAncestor();
+            jFrame.dispose();
+        });
+        return jbtExit;
+    }
+
+    /**
+     * Метод setUpButtonsPanel устанавливает панель кнопок.
+     */
+    private void setUpButtonsPanel(){
+        jbtShowStudentsList = new JButton("Список студентов");
+        jbtShowStudentsList.setToolTipText("Вывести список всех студентов для данной группы");
+
+        JButton jbtExit = getExitButton();
+        jbtExit.setToolTipText("Закрывает окно редактирования данной группы");
+
+        jbtToWordExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().
+                getResource("/CustomComponents/Icons/WordIcon.png"))));
+        jbtToWordExport.setToolTipText("Экспортирует таблицу со студентами в Word");
+
+        jbtToExcelExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().
+                getResource("/CustomComponents/Icons/ExcelIcon.png"))));
+        jbtToExcelExport.setToolTipText("Экспортирует таблицу со студентами в Excel");
+
+        stylizeButtons(Color.WHITE, BUTTON_BACKGROUND, jbtShowStudentsList);
+        stylizeButtons(Color.WHITE, Color.RED, jbtExit);
+        stylizeButtons(Color.WHITE, new Color(24, 90, 189), jbtToWordExport);
+        stylizeButtons(Color.WHITE, new Color(16, 124, 65), jbtToExcelExport);
+
+        pnlInnerMenu.setBackground(PANEL_BACKGROUND);
+        pnlInnerAttributes.setBackground(PANEL_BACKGROUND);
+        pnlContentLayout.setBackground(PANEL_BACKGROUND);
+        addButton(jbtShowStudentsList, false);
+        addButton(jbtToWordExport, false);
+        addButton(jbtToExcelExport, false);
+        addButton(jbtExit, true);
+    }
+
+    /**
+     * Метод addButton добавляет кнопку на панель.
+     *
+     * @param button        Кнопка.
+     * @param isEndButton   Флаг, указывающий, является ли кнопка последней на панели.
+     */
+    private void addButton(JButton button, boolean isEndButton){
+        pnlInnerMenu.add(button);
+        if (isEndButton) return;
+        pnlInnerMenu.add(Box.createHorizontalGlue());
+    }
+
+    /**
+     * Метод stylizeLabels задает стиль для надписей.
+     *
+     * @param foreground    Цвет переднего плана.
+     * @param labels        Надписи.
+     */
+    private void stylizeLabels(Color foreground, JLabel ...labels){
+        for(JLabel label: labels) {
+            label.setFont(new Font("Montserrat", Font.BOLD | Font.ITALIC, 24));
+            label.setForeground(foreground);
+        }
+    }
+
+    /**
+     * Метод stylizeButtons задает стиль для кнопок.
+     *
+     * @param foreground    Цвет переднего плана.
+     * @param background    Цвет заднего плана.
+     * @param jButtons      Кнопки.
+     */
+    private void stylizeButtons(Color foreground, Color background, JButton ...jButtons){
+        for (JButton jButton: jButtons){
+            jButton.setPreferredSize(BUTTON_PREFFERED_SIZE);
+            jButton.setForeground(foreground);
+            jButton.setBackground(background);
+            jButton.setFont(new Font("Montserrat", Font.BOLD | Font.ITALIC, 14));
+            jButton.setBorder(null);
+            jButton.setBorder(new EmptyBorder(10,10,10,10));
+        }
+    }
+
+    /**
+     * Метод clearLayout очищает компоновку контейнера.
+     *
+     * @param layoutComponent   Компонент компоновки.
+     * @param isRepaint         Флаг, указывающий, нужно ли перерисовать компонент после очистки.
+     */
+    private void clearLayout(Container layoutComponent, boolean isRepaint) {
+        layoutComponent.removeAll();
+        layoutComponent.revalidate();
+        if (isRepaint) {
+            layoutComponent.repaint();
+        }
+    }
 
     /**
      * Конструктор контроллера формы группы.
-     *
-     * @param studentsModel  модель студентов.
-     * @param groupData      данные группы.
      */
-    public GroupFormController(StudentsModel studentsModel, String[] groupData) {
-        SQLiteConnectionProvider sqLiteConnectionProvider = new SQLiteConnectionProvider();
-        connection = sqLiteConnectionProvider.getConnection();
-        studentDAO = new StudentDAO(connection);
-        this.studentsModel = studentsModel;
-        groupFrame = new GroupFrame(groupData, String.valueOf(studentDAO.getCountOfGroupStudents(groupData[0])));
-        groupFrame.addWindowListener(new WindowAdapter() {
+    public void initDBConnection() {
+//        groupFrame = new StudentsFrame(groupData, String.valueOf(studentDAO.getCountOfGroupStudents(groupData[0])));
+        addWindowListener(new WindowAdapter() {
             /**
              * Вызывается в процессе закрытия окна formView.
              *
@@ -71,9 +338,14 @@ public class GroupFormController {
                 }
             }
         });
-        contentLayoutPanel = groupFrame.getPnlContentLayout();
-        jbtListStudents = groupFrame.getJbtShowStudentsList();
         initButtonsListeners();
+    }
+
+    private SQLiteConnectionProvider getSqLiteConnectionProvider() {
+        SQLiteConnectionProvider sqLiteConnectionProvider = new SQLiteConnectionProvider();
+        connection = sqLiteConnectionProvider.getConnection();
+        studentDAO = new StudentDAO(connection);
+        return sqLiteConnectionProvider;
     }
 
     /**
@@ -83,10 +355,9 @@ public class GroupFormController {
         ActionListener actionListenerShowStudentsTable = this::actionShowStudentsTablePerformed;
         ActionListener actionListenerExportToWord = this::actionExportToWordPerformed;
         ActionListener actionListenerExportToExcel = this::actionExportToExcelPerformed;
-        jbtListStudents.addActionListener(actionListenerShowStudentsTable);
-        groupFrame.getJbtToWordExport().addActionListener(actionListenerExportToWord);
-        groupFrame.getJbtToExcelExport().addActionListener(actionListenerExportToExcel);
-
+        jbtShowStudentsList.addActionListener(actionListenerShowStudentsTable);
+        getJbtToWordExport().addActionListener(actionListenerExportToWord);
+        getJbtToExcelExport().addActionListener(actionListenerExportToExcel);
     }
 
     /**
@@ -96,23 +367,23 @@ public class GroupFormController {
      * @param event Экземпляр сообщения о произошедшем событии
      */
     private void actionShowStudentsTablePerformed(ActionEvent event) {
-        if (contentLayoutPanel.getComponentCount() == 0) {
-            Object[] columnsNames = StudentsModel.getTableColumnsNamesWithoutGroup();
+        if (pnlContentLayout.getComponentCount() == 0) {
+            Object[] columnsNames = StudentsJTableModelInfo.getTableColumnsNamesWithoutGroup();
             int columnsNumber = columnsNames.length;
-            Object[][] studentsData = SQLiteDBHelper.getStudentsTableData(connection, groupFrame.getGroupNumber(), columnsNumber);
+            Object[][] studentsData = SQLiteDBHelper.getStudentsTableData(connection, groupNumber, columnsNumber);
             studentsTable = getCustomLightJTableWithActionColumn(studentsData, columnsNames);
-            studentsTable.setCustomBooleanIntegerRenderers(StudentsModel.getBooleanColumnsIndexes(),
-                    StudentsModel.getIntegerColumnsIndexes());
+            studentsTable.setCustomBooleanIntegerRenderers(StudentsJTableModelInfo.getBooleanColumnsIndexes(),
+                    StudentsJTableModelInfo.getIntegerColumnsIndexes());
             initAttributesPanel(columnsNames, studentsTable.getColumnModel());
             studentsTable.addActionColumn(getTableActionEvents());
             if (studentsData.length == 0) {
                 initJTableInput(studentsTable);
             }
             JScrollPane tableScrollPane = new JScrollPane(studentsTable);
-            contentLayoutPanel.add(tableScrollPane);
+            pnlContentLayout.add(tableScrollPane);
             addTablePopupMenu(studentsTable);
-            groupFrame.revalidate();
-            groupFrame.repaint();
+            revalidate();
+            repaint();
             initTablePopupMenu(studentsTable);
         }
     }
@@ -124,14 +395,13 @@ public class GroupFormController {
      * @param tableColumnModel модель столбцов таблицы
      */
     private void initAttributesPanel(Object[] columnNames, TableColumnModel tableColumnModel) {
-        if (groupFrame.getPnlInnerAttributes().getComponentCount() != 0)  return;
+        if (pnlInnerAttributes.getComponentCount() != 0)  return;
         for (int i = 0, columnNamesLength = columnNames.length; i < columnNamesLength; i++) {
             PillButton columnPillButton = getPillButton(columnNames[i]);
             columnPillButton.setLblFont(new Font("Montserrat", Font.ITALIC, 10));
-            columnPillButton.setPreferredSize(GroupFrame.PILLS_PREFFERED_SIZE);
-            columnPillButton.setMaximumSize(GroupFrame.PILLS_PREFFERED_SIZE);
-            JPanel pnlAttributes = groupFrame.getPnlInnerAttributes();
-            pnlAttributes.add(columnPillButton);
+            columnPillButton.setPreferredSize(StudentsFrame.PILLS_PREFFERED_SIZE);
+            columnPillButton.setMaximumSize(StudentsFrame.PILLS_PREFFERED_SIZE);
+            pnlInnerAttributes.add(columnPillButton);
 
             int rightBorderWidth = 5;
             int leftBorderWidth = 0;
@@ -144,7 +414,7 @@ public class GroupFormController {
             }
 
 //            columnPillButton.setBorder(BorderFactory.createMatteBorder(0, leftBorderWidth,0,
-//                    rightBorderWidth, GroupFrame.PANEL_BACKGROUND));
+//                    rightBorderWidth, StudentsFrame.PANEL_BACKGROUND));
             TableColumn columnToHide = tableColumnModel.getColumn(i);
             columnPillButton.addMouseListener(new MouseAdapter() {
                 /**
@@ -154,7 +424,7 @@ public class GroupFormController {
                  */
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    int normalWidth = groupFrame.getWidth() / columnNames.length;
+                    int normalWidth = getWidth() / columnNames.length;
                     int widthToSet = columnPillButton.getPillActivated() ? normalWidth : 0;
                     columnToHide.setMinWidth(widthToSet);
                     columnToHide.setMaxWidth(widthToSet);
@@ -232,7 +502,7 @@ public class GroupFormController {
                 Object previousStudentID = 0;
                 previousStudentID = tableModel.getValueAt(rowIndex, 0);
                 addRowToStudentsTable(rowIndex, (int) previousStudentID + 1, tableModel, false);
-                groupFrame.setStudentsNum(String.valueOf((Integer.parseInt(groupFrame.getStudentsNum()) + 1)));
+                setStudentsNum(String.valueOf((Integer.parseInt(studentsNum) + 1)));
 
             }
         });
@@ -250,7 +520,7 @@ public class GroupFormController {
                     String studentID = tableModel.getValueAt(rowIndex, 0).toString();
                     studentDAO.deleteStudent(studentID);
                     tableModel.removeRow(rowIndex);
-                    groupFrame.setStudentsNum(String.valueOf((Integer.parseInt(groupFrame.getStudentsNum()) - 1)));
+                    setStudentsNum(String.valueOf((Integer.parseInt(studentsNum) - 1)));
                 }
                 if (studentsTable.getModel().getRowCount() == 0){
                     addRowToStudentsTable(0, 1, (DefaultTableModel) studentsTable.getModel(), true);
@@ -260,7 +530,7 @@ public class GroupFormController {
 
         updateMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                jbtListStudents.doClick();
+                jbtShowStudentsList.doClick();
             }
         });
     }
@@ -350,7 +620,7 @@ public class GroupFormController {
                     DefaultTableModel tableModel = (DefaultTableModel) jTable.getModel();
                     Object newRowStudentID = (int) tableModel.getValueAt(rowIndex, 0) + 1;
                     addRowToStudentsTable(rowIndex, newRowStudentID, tableModel, false);
-                    groupFrame.setStudentsNum(String.valueOf((Integer.parseInt(groupFrame.getStudentsNum()) + 1)));
+                    setStudentsNum(String.valueOf((Integer.parseInt(studentsNum) + 1)));
                 }
                 catch (ClassCastException e) {
                     JOptionPane.showMessageDialog(null, "Извините, что-то пошло не так");
@@ -379,17 +649,18 @@ public class GroupFormController {
                 for (int i = 0; i < columnCount; i++) {
                     rowData[i] = tableModel.getValueAt(rowIndex, i);
                 }
-                ValidityConstants validityResult = SQLiteDBHelper.StudentsDataValidator.isValidData(rowData, connection, groupFrame.getGroupNumber());
-                if (validityResult == ValidityConstants.NOT_VALID_VALUES) {
+                SQLiteDBHelper.StudentsDataValidator.ValidityConstants validityResult = SQLiteDBHelper
+                        .StudentsDataValidator.isValidData(rowData, connection, groupNumber);
+                if (validityResult == SQLiteDBHelper.StudentsDataValidator.ValidityConstants.NOT_VALID_VALUES) {
                     return;
-                } else if (validityResult == ValidityConstants.VALID_ROW) {
+                } else if (validityResult == SQLiteDBHelper.StudentsDataValidator.ValidityConstants.VALID_ROW) {
                     studentDAO.addStudentToDB(getStudentDBModelFromRow(rowData));
-                    groupFrame.setStudentsNum(String.valueOf(Integer.parseInt(groupFrame.getStudentsNum()) + 1));
-                } else if (validityResult == ValidityConstants.UPDATE_ROW) {
+                    setStudentsNum(String.valueOf(Integer.parseInt(studentsNum) + 1));
+                } else if (validityResult == SQLiteDBHelper.StudentsDataValidator.ValidityConstants.UPDATE_ROW) {
                     studentDAO.updateStudentInDB(getStudentDBModelFromRow(rowData));
                 }
-                contentLayoutPanel.removeAll();
-                jbtListStudents.doClick();
+                pnlContentLayout.removeAll();
+                jbtShowStudentsList.doClick();
             }
         };
     }
@@ -418,7 +689,7 @@ public class GroupFormController {
     private StudentDatabaseModel getStudentDBModelFromRow(Object[] rowData) {
         return new StudentDatabaseModel(
                 (int) rowData[0],
-                groupFrame.getGroupNumber(),
+                groupNumber,
                 rowData[1].toString(),
                 rowData[2].toString(),
                 rowData[3].toString(),
@@ -438,14 +709,7 @@ public class GroupFormController {
     private void initJTableInput(JTable jTableStudentsList) {
         DefaultTableModel defaultTableModel = (DefaultTableModel) jTableStudentsList.getModel();
         addRowToStudentsTable(0, 0, defaultTableModel, true);
-        groupFrame.setStudentsNum("1");
-    }
-
-    /**
-     * Отображает окно группы.
-     */
-    public void showGroupFrame() {
-        groupFrame.setVisible(true);
+        setStudentsNum("1");
     }
 
     /**
@@ -494,5 +758,101 @@ public class GroupFormController {
         else {
             JOptionPane.showMessageDialog(null, "Отобразите таблицу, которую необходимо вывести.");
         }
+    }
+
+    /**
+     * Метод getStudentsNumValueLabel возвращает метку с количеством студентов.
+     *
+     * @return Метка с количеством студентов.
+     */
+    public JLabel getLblStudentsNumValue() {
+        return lblStudentsNumValue;
+    }
+
+    /**
+     * Метод setStudentsNumValueLabel устанавливает метку с количеством студентов.
+     *
+     * @param lblStudentsNumValue    Метка с количеством студентов.
+     */
+    public void setLblStudentsNumValue(JLabel lblStudentsNumValue) {
+        this.lblStudentsNumValue = lblStudentsNumValue;
+    }
+
+    /**
+     * Метод getContentLayoutPanel возвращает панель содержимого.
+     *
+     * @return Панель содержимого.
+     */
+    public JPanel getPnlContentLayout() {
+        return pnlContentLayout;
+    }
+
+    /**
+     * Метод getJbtShowStudentsList возвращает кнопку "Список студентов".
+     *
+     * @return Кнопка "Список студентов".
+     */
+    public JButton getJbtShowStudentsList() {
+        return jbtShowStudentsList;
+    }
+
+    /**
+     * Метод getGroupNumber возвращает номер группы.
+     *
+     * @return Номер группы.
+     */
+    public String getGroupNumber() {
+        return groupNumber;
+    }
+
+    /**
+     * Метод setGroupNumber устанавливает номер группы.
+     *
+     * @param groupNumber   Номер группы.
+     */
+    public void setGroupNumber(String groupNumber) {
+        this.groupNumber = groupNumber;
+    }
+
+    /**
+     * Метод getStudentsNum возвращает количество студентов.
+     *
+     * @return Количество студентов.
+     */
+    public String getStudentsNum() {
+        return studentsNum;
+    }
+
+    /**
+     * Метод setStudentsNum устанавливает количество студентов.
+     *
+     * @param studentsNum   Количество студентов.
+     */
+    public void setStudentsNum(String studentsNum) {
+        lblStudentsNumValue.setText(studentsNum);
+    }
+
+    /**
+     * Возвращает панель pnlInnerAttributes.
+     * @return панель pnlInnerAttributes
+     */
+    public JPanel getPnlInnerAttributes() {
+        return pnlInnerAttributes;
+    }
+
+    /**
+     * Возвращает кнопку jbtToWordExport.
+     * @return кнопка jbtToWordExport
+     */
+    public JButton getJbtToWordExport() {
+        return jbtToWordExport;
+    }
+
+    /**
+     * Возвращает кнопку jbtToExcelExport.
+     * @return кнопка jbtToExcelExport
+     */
+    public JButton getJbtToExcelExport() {
+        return jbtToExcelExport;
     }
 }

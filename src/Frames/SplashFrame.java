@@ -1,7 +1,6 @@
-package Forms.views;
+package Frames;
 
-import Forms.controllers.StartFrameController;
-import Forms.models.GroupsModel;
+import Frames.models.GroupViews;
 
 import javax.swing.*;
 import java.awt.*;
@@ -102,8 +101,8 @@ public class SplashFrame extends JFrame {
 
         jbtNext.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                StartFrameController controller = new StartFrameController(new GroupsModel());
-                controller.showStartForm();
+                GroupsFrame groupsFrame = new GroupsFrame(new GroupViews());
+                groupsFrame.setVisible(true);
             }
         });
 

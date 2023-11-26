@@ -1,21 +1,21 @@
-package Forms.models;
+package Frames.models;
 
-import CustomComponents.InputGroupPanel;
+import CustomComponents.GroupView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupsModel {
+public class GroupViews {
     /**
      * Список групп студентов-видов
      */
-    private List<InputGroupPanel> groupPanels;
+    private List<GroupView> groupPanels;
 
     /**
-     * Конструктор класса GroupsModel.
-     * Создает новый экземпляр GroupsModel и инициализирует список groupPanels.
+     * Конструктор класса GroupViews.
+     * Создает новый экземпляр GroupViews и инициализирует список groupPanels.
      */
-    public GroupsModel() {
+    public GroupViews() {
         groupPanels = new ArrayList<>();
     }
 
@@ -24,7 +24,7 @@ public class GroupsModel {
      *
      * @return список панелей групп
      */
-    public List<InputGroupPanel> getGroupPanels() {
+    public List<GroupView> getGroupPanels() {
         return groupPanels;
     }
 
@@ -33,7 +33,7 @@ public class GroupsModel {
      *
      * @param groupPanel панель группы для добавления
      */
-    public void addGroupPanel(InputGroupPanel groupPanel) {
+    public void addGroupPanel(GroupView groupPanel) {
         groupPanels.add(groupPanel);
     }
 
