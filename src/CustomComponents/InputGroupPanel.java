@@ -392,11 +392,6 @@ public class InputGroupPanel extends RoundedPanel implements Comparable<InputGro
      * @throws NullPointerException если указанный объект равен null.
      * @throws ClassCastException   если тип указанного объекта несовместим
      *                              с типом этого объекта.
-     * @apiNote Сильно рекомендуется, но <i>не</i> строго обязательно, чтобы
-     * {@code (x.compareTo(y)==0) == (x.equals(y))}. В общем случае, любой класс,
-     * реализующий интерфейс {@code Comparable} и нарушающий это условие,
-     * должен явно указывать на это. Рекомендуемый язык: "Примечание: этот класс имеет
-     * естественный порядок, несовместимый с equals."
      */
     @Override
     public int compareTo(InputGroupPanel otherGroupPanel) {

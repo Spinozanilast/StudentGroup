@@ -2,12 +2,28 @@ package TableExport;
 
 import javax.swing.*;
 import java.io.*;
+
+/**
+ * Класс FilePathChooserDialog для выбора пути файла.
+ *
+ * @author Будчанин В.А.
+ * @version 1.0
+ */
 public class FilePathChooserDialog {
 
+    /**
+     * Перечисление FileType для типов файлов.
+     */
     public enum FileType {
         EXCEL, WORD
     }
 
+    /**
+     * Метод для создания файла.
+     *
+     * @param fileType Тип файла.
+     * @return Абсолютный путь к файлу.
+     */
     public static String createFile(FileType fileType) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("C:\\"));
@@ -39,6 +55,12 @@ public class FilePathChooserDialog {
         return null;
     }
 
+    /**
+     * Приватный метод для получения расширения файла.
+     *
+     * @param fileType Тип файла.
+     * @return Расширение файла.
+     */
     private static String getFileExtension(FileType fileType) {
         return switch (fileType) {
             case EXCEL -> "xlsx";
@@ -47,6 +69,12 @@ public class FilePathChooserDialog {
         };
     }
 
+    /**
+     * Приватный метод для получения описания файла.
+     *
+     * @param fileType Тип файла.
+     * @return Описание файла.
+     */
     private static String getFileDescription(FileType fileType) {
         return switch (fileType) {
             case EXCEL -> "Excel Files";
