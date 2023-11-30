@@ -1,45 +1,30 @@
 package Frames;
 
 import Frames.models.GroupViews;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
- * Класс SplashFrame, который наследуется от JFrame.
+ * Класс SplashFrame, представляющий титульный лист курсовой работы.
  *
  * @author Будчанин В.А.
  * @version 1.0
  */
 public class SplashFrame extends JFrame {
     /**
-     * Название министерства образования.
-     */
-    private final String EDUCATION_MINISTRY_NAME = "МИНИСТЕРСТВО ОБРАЗОВАНИЯ РЕСПУБЛИКИ БЕЛАРУСЬ";
-
-    /**
-     * Название университета.
-     */
-    private final String UNIVERSITY_NAME = "БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ";
-
-    /**
-     * Название факультета.
-     */
-    private final String FACULTY_NAME = "Факультет информационных технологий и робототехники";
-
-    /**
-     * Название кафедры.
-     */
-    private final String DEPARTMENT_NAME = "Кафедра программного обеспечения информационных систем и технологий";
-
-    /**
      * Конструктор класса SplashFrame.
      */
-    public SplashFrame(){
+    public SplashFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 500);
+        Dimension minimumSize = new Dimension(850, 730);
+        setMinimumSize(minimumSize);
+
+        Timer timer = new Timer(60000, e -> dispose());
+        timer.start();
+        setTitle("Титульный лист");
+        ImageIcon icon = new ImageIcon("assets/TitleFrameIcon.png");
+        setIconImage(icon.getImage());
+        setLocationRelativeTo(null);
         initView();
     }
 
@@ -47,82 +32,163 @@ public class SplashFrame extends JFrame {
      * Метод для инициализации интерфейса.
      */
     private void initView() {
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        setupLayout();
+        addNames();
+        addTexts();
+        addInfo();
+        addBottomPanel();
+    }
 
-        JLabel jlblMinistryName = new JLabel(EDUCATION_MINISTRY_NAME);
-        jlblMinistryName.setHorizontalAlignment(JLabel.CENTER);
-        JLabel jlblUniversityName = new JLabel(UNIVERSITY_NAME);
-        jlblUniversityName.setHorizontalAlignment(JLabel.CENTER);
-        JLabel jlblFacultyName = new JLabel(FACULTY_NAME);
-        jlblFacultyName.setHorizontalAlignment(JLabel.CENTER);
-        JLabel jlblDepartmentName = new JLabel(DEPARTMENT_NAME);
-        jlblDepartmentName.setHorizontalAlignment(JLabel.CENTER);
-        addComponentsBoxes(10, jlblMinistryName, jlblUniversityName, jlblFacultyName, jlblDepartmentName);
+    /**
+     * Метод для настройки макета.
+     */
+    private void setupLayout() {
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        setBackground(new Color(243, 243, 243));
+    }
+
+    /**
+     * Метод для добавления названий.
+     */
+    private void addNames() {
+        String[] names = {"МИНИСТЕРСТВО ОБРАЗОВАНИЯ РЕСПУБЛИКИ БЕЛАРУСЬ",
+                "БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ",
+                "Факультет информационных технологий и робототехники",
+                "Кафедра программного обеспечения информационных систем и технологий"};
+        Font font = new Font("Calibri", Font.BOLD, 14);
+        for (String name : names) {
+            JLabel label = new JLabel(name);
+            label.setHorizontalAlignment(JLabel.CENTER);
+            label.setFont(font);
+            addComponentsBoxes(10, label);
+        }
+    }
+
+    /**
+     * Метод для добавления текстовых меток.
+     */
+    private void addTexts() {
         add(Box.createVerticalStrut(100));
 
+        String[] texts = {"Курсовая работа",
+                "По дисциплине \"Программирование на языке Java\"",
+                "Студенческая группа"};
 
-        JLabel jlblCourseWorkText = new JLabel("Курсовая работа");
-        JLabel jlblDisciplineText = new JLabel("По дисциплине \"Программирование на языке Java\"");
-        JLabel jlblTitleText = new JLabel("на тему \"Студенческая группа\"");
-        addComponentsBoxes(50, jlblCourseWorkText);
-        addComponentsBoxes(10, jlblDisciplineText, jlblTitleText);
+        int[] sizes = {16, 14, 20};
 
-        JLabel jlblStudentStart = new JLabel("Выполнил:");
-        JLabel jlblStudentGroupText = new JLabel("студент группы 10702221");
-        JLabel jlblStudentNameText = new JLabel("Будчанин Вадим Александрович");
-        addComponentsBordered(jlblStudentStart, jlblStudentGroupText, false);
-        addComponentsBordered(null, jlblStudentNameText, true);
+        for (int i = 0; i < texts.length; i++) {
+            JLabel label = new JLabel(texts[i]);
+            label.setFont(new Font("Calibri", Font.BOLD, sizes[i]));
+            addComponentsBoxes(i == 0 ? 20 : 10, label);
+        }
+    }
 
+    /**
+     * Метод для добавления информационных меток.
+     */
+    private void addInfo() {
+        String[] info = {"Выполнил: студент группы 10702221",
+                "Будчанин Вадим Александрович",
+                "Руководитель: к.ф.-м.н., доц",
+                "Сидорик Валерий Владимирович"};
 
-        JLabel jlblLeaderStart = new JLabel("Руководитель: к.ф.-м.н., доц");
-        JLabel jlblLeaderText = new JLabel("к.ф.-м.н., доц");
-        JLabel jlblLeaderNameText = new JLabel("Сидорик Валерий Владимирович");
-        addComponentsBordered(jlblLeaderStart, jlblLeaderText, false);
-        addComponentsBordered(null, jlblLeaderNameText, true);
+        JPanel pnlLabelsWithIcon = new JPanel(new FlowLayout(FlowLayout.CENTER, 150, 10));
+        ImageIcon icon = new ImageIcon("assets/BigGroupIcon.png");
+        JLabel iconLabel = new JLabel(icon);
+        JPanel jPanelLeft = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        jPanelLeft.add(iconLabel, gbc);
+        pnlLabelsWithIcon.add(jPanelLeft);
 
-        JLabel jlblLocationYearText = new JLabel("Минск 2023");
-        addComponentsBoxes(40, jlblLocationYearText);
+        JPanel jPanelRight = new JPanel();
+        jPanelRight.setLayout(new BoxLayout(jPanelRight, BoxLayout.Y_AXIS));
 
-        addButtonsWithActions();
+        for (int i = 0; i < info.length; i++) {
+            JLabel label = new JLabel(info[i]);
+            label.setFont(new Font("Calibri", Font.BOLD, 14));
+            jPanelRight.add(label);
+
+            if (i == 1) {
+                jPanelRight.add(Box.createVerticalStrut(20));
+            }
+        }
+
+        pnlLabelsWithIcon.add(jPanelRight);
+        add(pnlLabelsWithIcon);
+    }
+
+    /**
+     * Метод для добавления текста о местоположении и годе.
+     */
+    private JPanel addLocationYearText() {
+        JLabel jlblLocationYearText = new JLabel("Минск, 2023");
+        jlblLocationYearText.setFont(new Font("Calibri", Font.BOLD, 14));
+
+        JPanel bottomOutYearPanel = new JPanel(new BorderLayout());
+
+        JPanel pnlForLabel = new JPanel();
+        pnlForLabel.add(jlblLocationYearText);
+        bottomOutYearPanel.add(pnlForLabel, BorderLayout.NORTH);
+
+        return bottomOutYearPanel;
     }
 
     /**
      * Метод для добавления кнопок с действиями.
      */
-    private void addButtonsWithActions() {
+    private JPanel addButtonsWithActions() {
         JButton jbtExit = new JButton("Выйти");
         JButton jbtNext = new JButton("Далее");
 
-        jbtExit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
+        jbtExit.addActionListener(e -> System.exit(0));
+
+        jbtNext.addActionListener(e -> {
+            GroupsFrame groupsFrame = new GroupsFrame(new GroupViews());
+            groupsFrame.setVisible(true);
+            dispose();
         });
 
-        jbtNext.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                GroupsFrame groupsFrame = new GroupsFrame(new GroupViews());
-                groupsFrame.setVisible(true);
-            }
-        });
+        JPanel buttonsPanel = new JPanel();
+        JPanel bottomOutPanel = new JPanel(new BorderLayout());
+        buttonsPanel.setLayout(new FlowLayout());
+        buttonsPanel.add(jbtExit);
+        buttonsPanel.add(jbtNext);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
-        panel.add(jbtExit);
-        panel.add(jbtNext);
+        bottomOutPanel.add(buttonsPanel, BorderLayout.SOUTH);
+        return bottomOutPanel;
+    }
 
-        add(panel);
 
+    /**
+     * Метод для добавления нижней панели.
+     * Этот метод создает новую панель с BorderLayout.
+     * Затем он добавляет результаты методов addLocationYearText() и addButtonsWithActions()
+     * в северную и южную части этой панели соответственно.
+     * Наконец, он добавляет эту панель в южную часть текущего компонента.
+     */
+    private void addBottomPanel() {
+        JPanel pnlGridBottom = new JPanel(new BorderLayout());
+        JPanel pnlGridContent = new JPanel(new GridLayout(2, 1));
+
+        pnlGridContent.add(addLocationYearText());
+        pnlGridContent.add(addButtonsWithActions());
+
+        pnlGridBottom.add(new JPanel(), BorderLayout.CENTER);
+        pnlGridBottom.add(pnlGridContent, BorderLayout.SOUTH);
+
+        add(pnlGridBottom, BorderLayout.SOUTH);
     }
 
     /**
      * Метод для добавления компонентов в контейнеры Box.
      *
      * @param verticalStrut Размер вертикального пространства между компонентами.
-     * @param components Компоненты для добавления.
+     * @param components    Компоненты для добавления.
      */
-    private void addComponentsBoxes(int verticalStrut, Component... components){
-        for(Component component: components){
+    private void addComponentsBoxes(int verticalStrut, Component... components) {
+        for (Component component : components) {
             Box componentBox = Box.createHorizontalBox();
             componentBox.add(Box.createHorizontalGlue());
             componentBox.add(component);
@@ -132,22 +198,4 @@ public class SplashFrame extends JFrame {
         }
     }
 
-    /**
-     * Метод для добавления компонентов с границами.
-     *
-     * @param componentLeft Компонент для добавления слева.
-     * @param componentRight Компонент для добавления справа.
-     * @param isOneElement Флаг, указывающий, является ли компонент единственным элементом.
-     */
-    private void addComponentsBordered(Component componentLeft, Component componentRight, boolean isOneElement){
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-
-        if (!isOneElement) {
-            panel.add(componentLeft, BorderLayout.WEST);
-        }
-        panel.add(componentRight, BorderLayout.EAST);
-
-        add(panel);
-    }
 }

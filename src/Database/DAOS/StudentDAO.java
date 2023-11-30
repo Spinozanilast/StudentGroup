@@ -21,7 +21,7 @@ public class StudentDAO {
     /**
      * Соединение с базой данных
      */
-    private Connection connection;
+    private final Connection connection;
 
     /**
      * Конструктор класса StudentDAO.
@@ -183,27 +183,4 @@ public class StudentDAO {
         }
     }
 
-    /**
-     * Метод для удаления нескольких студентов из базы данных.
-     *
-     * @param studentIDs список идентификаторов студентов
-     */
-    public void deleteMultipleStudents(List<String> studentIDs) {
-        String query = "DELETE FROM students WHERE studentID IN (";
-        for (int i = 0; i < studentIDs.size(); i++) {
-            query += "?";
-            if (i < studentIDs.size() - 1) {
-                query += ",";
-            }
-        }
-        query += ")";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            for (int i = 0; i < studentIDs.size(); i++) {
-                statement.setString(i + 1, studentIDs.get(i));
-            }
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }

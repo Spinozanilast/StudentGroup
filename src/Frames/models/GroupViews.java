@@ -9,7 +9,7 @@ public class GroupViews {
     /**
      * Список групп студентов-видов
      */
-    private List<GroupView> groupPanels;
+    private final List<GroupView> groupPanels;
 
     /**
      * Конструктор класса GroupViews.

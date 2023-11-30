@@ -88,51 +88,6 @@ public class RoundedPanel extends JPanel {
     }
 
     /**
-     * Проверяет, включено ли высокое качество отображения компонента.
-     *
-     * @return <b>true</b>, если включено высокое качество, иначе <b>false</b>.
-     */
-    public boolean isHighQuality() {
-        return highQuality;
-    }
-
-    /**
-     * Устанавливает высокое качество отображения компонента.
-     *
-     * @param highQuality <b>true</b>, чтобы включить высокое качество, <b>false</b> в противном случае.
-     */
-    public void setHighQuality(boolean highQuality) {
-        this.highQuality = highQuality;
-    }
-
-    /**
-     * Возвращает цвет тени.
-     *
-     * @return объект Color.
-     */
-    public Color getShadowColor() {
-        return shadowColor;
-    }
-
-    /**
-     * Устанавливает цвет тени.
-     *
-     * @param shadowColor Цвет тени.
-     */
-    public void setShadowColor(Color shadowColor) {
-        this.shadowColor = shadowColor;
-    }
-
-    /**
-     * Проверяет, отображается ли тень.
-     *
-     * @return <b>true</b>, если тень отображается, иначе <b>false</b>.
-     */
-    public boolean isShady() {
-        return shady;
-    }
-
-    /**
      * Устанавливает, отображается ли тень.
      *
      * @param shady <b>true</b>, чтобы отобразить тень, <b>false</b> в противном случае.
@@ -142,104 +97,11 @@ public class RoundedPanel extends JPanel {
     }
 
     /**
-     * Возвращает размер границы.
-     *
-     * @return значение размера границы.
-     */
-    public float getStrokeSize() {
-        return strokeSize;
-    }
-
-    /**
      * Устанавливает значение размера границы.
      *
      * @param strokeSize Значение размера границы.
      */
     public void setStrokeSize(int strokeSize) {
         this.strokeSize = strokeSize;
-    }
-
-    /**
-     * Возвращает размеры закруглений.
-     *
-     * @return размеры закруглений.
-     */
-    public Dimension getArcs() {
-        return arcs;
-    }
-
-    /**
-     * Устанавливает размеры закруглений.
-     *
-     * @param arcs новые размеры закруглений.
-     */
-    public void setArcs(Dimension arcs) {
-        this.arcs = arcs;
-    }
-
-    /**
-     * Возвращает смещение тени.
-     *
-     * @return значение смещения тени.
-     */
-    public int getShadowOffset() {
-        return shadowOffset;
-    }
-
-    /**
-     * Устанавливает смещение тени.
-     *
-     * @param shadowOffset новое значение смещения тени.
-     */
-    public void setShadowOffset(int shadowOffset) {
-        if (shadowOffset >= 1) {
-            this.shadowOffset = shadowOffset;
-        } else {
-            this.shadowOffset = 1;
-        }
-    }
-
-    /**
-     * Возвращает расстояние между границей тени и границей панели.
-     *
-     * @return значение расстояния.
-     */
-    public int getShadowGap() {
-        return shadowGap;
-    }
-
-    /**
-     * Устанавливает расстояние между границей тени и границей панели.
-     *
-     * @param shadowGap новое значение расстояния.
-     */
-    public void setShadowGap(int shadowGap) {
-        if (shadowGap >= 1) {
-            this.shadowGap = shadowGap;
-        } else {
-            this.shadowGap = 1;
-        }
-    }
-
-    /**
-     * Возвращает значение прозрачности для тени.
-     *
-     * @return значение прозрачности для тени.
-     */
-    public int getShadowAlpha() {
-        return shadowAlpha;
-    }
-
-    /**
-     * Устанавливает значение прозрачности для тени.
-     *
-     * @param shadowAlpha новое значение прозрачности для тени.
-     */
-    public void setShadowAlpha(int shadowAlpha) {
-        if (shadowAlpha >= 0 && shadowAlpha <= 255) {
-            this.shadowAlpha = shadowAlpha;
-        } else {
-            this.shadowAlpha = 255;
-        }
     }
 }

@@ -32,11 +32,6 @@ public class ThreeActionLabelsPanel extends JPanel {
     private Color backPanelColor;
 
     /**
-     * Стандартный размер.
-     */
-    private Dimension standardSize;
-
-    /**
      * Левая метка.
      */
     private JLabel leftLabel;
@@ -77,7 +72,10 @@ public class ThreeActionLabelsPanel extends JPanel {
      * @param rightLabelText  Текст правой метки.
      */
     public ThreeActionLabelsPanel(Color foregroundColor, Color backgroundColor, String leftLabelText, String centerLabelText, String rightLabelText) {
-        standardSize = new Dimension(640, 45);
+        /**
+         * Стандартный размер.
+         */
+        Dimension standardSize = new Dimension(640, 45);
         labelsForeground = foregroundColor;
         backPanelColor = backgroundColor;
         setLabelsTexts(leftLabelText, centerLabelText, rightLabelText);

@@ -16,7 +16,7 @@ public class GroupDAO {
     /**
      * Соединение с базой данных
      */
-    private Connection connectionDB;
+    private final Connection connectionDB;
 
     /**
      * Конструктор класса GroupDAO
@@ -102,12 +102,11 @@ public class GroupDAO {
      * @param groupNumber номер группы
      */
     public void deleteGroup(String groupNumber) {
-        String deleteGroup = "PRAGMA foreign_keys = ON;" +
-                "DELETE FROM StudentGroups WHERE groupNumber = ?;";
+        String deleteGroup = "DELETE FROM StudentGroups WHERE groupNumber = ?;";
         try (PreparedStatement statement = connectionDB.prepareStatement(deleteGroup)) {
             statement.setString(1, groupNumber);
             statement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

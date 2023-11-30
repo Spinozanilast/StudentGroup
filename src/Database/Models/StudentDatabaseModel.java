@@ -72,30 +72,12 @@ public class StudentDatabaseModel {
     }
 
     /**
-     * Метод для установки номера студента в журнале
-     *
-     * @param studentID номер студента в журнале
-     */
-    public void setStudentID(int studentID) {
-        this.studentID = studentID;
-    }
-
-    /**
      * Метод для получения номера группы
      *
      * @return номер группы
      */
     public String getGroupNumber() {
         return groupNumber;
-    }
-
-    /**
-     * Метод для установки номера группы
-     *
-     * @param groupNumber номер группы
-     */
-    public void setGroupNumber(String groupNumber) {
-        this.groupNumber = groupNumber;
     }
 
     /**
@@ -108,30 +90,12 @@ public class StudentDatabaseModel {
     }
 
     /**
-     * Метод для установки фамилии студента
-     *
-     * @param surname фамилия студента
-     */
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    /**
      * Метод для получения отчества студента
      *
      * @return отчество студента
      */
     public String getMiddleName() {
         return middleName;
-    }
-
-    /**
-     * Метод для установки отчества студента
-     *
-     * @param middleName отчество студента
-     */
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
     }
 
     /**
@@ -144,30 +108,12 @@ public class StudentDatabaseModel {
     }
 
     /**
-     * Метод для установки имени студента
-     *
-     * @param firstName имя студента
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    /**
      * Метод для получения информации о том, является ли студент плательщиком
      *
      * @return true, если студент является плательщиком, иначе false
      */
     public boolean getIsPayer() {
         return isPayer;
-    }
-
-    /**
-     * Метод для установки информации о том, является ли студент плательщиком
-     *
-     * @param isPayer true, если студент является плательщиком, иначе false
-     */
-    public void setIsPayer(boolean isPayer) {
-        this.isPayer = isPayer;
     }
 
     /**
@@ -180,15 +126,6 @@ public class StudentDatabaseModel {
     }
 
     /**
-     * Метод для установки домашнего адреса студента
-     *
-     * @param homaAddress домашний адрес студента
-     */
-    public void setHomaAddress(String homaAddress) {
-        this.homaAddress = homaAddress;
-    }
-
-    /**
      * Метод для получения текущего адреса студента
      *
      * @return текущий адрес студента
@@ -198,30 +135,12 @@ public class StudentDatabaseModel {
     }
 
     /**
-     * Метод для установки текущего адреса студента
-     *
-     * @param currentAddress текущий адрес студента
-     */
-    public void setCurrentAddress(String currentAddress) {
-        this.currentAddress = currentAddress;
-    }
-
-    /**
      * Метод для получения информации о том, является ли студент местным
      *
      * @return true, если студент является местным, иначе false
      */
     public boolean getIsLocal() {
         return isLocal;
-    }
-
-    /**
-     * Метод для установки информации о том, является ли студент местным
-     *
-     * @param isLocal true, если студент является местным, иначе false
-     */
-    public void setIsLocal(boolean isLocal) {
-        this.isLocal = isLocal;
     }
 
     /**

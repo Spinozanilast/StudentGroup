@@ -77,48 +77,4 @@ public class HighResolutionImageLabel extends JLabel {
         }
     }
 
-    /**
-     * Возвращает изображение.
-     *
-     * @return объект BufferedImage.
-     */
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    /**
-     * Возвращает ширину изображения.
-     *
-     * @return значение ширины изображения.
-     */
-    public int getImageWidth() {
-        return imageWidth;
-    }
-
-    /**
-     * Возвращает высоту изображения.
-     *
-     * @return значение высоты изображения.
-     */
-    public int getImageHeight() {
-        return imageHeight;
-    }
-
-    /**
-     * Устанавливает ширину изображения.
-     *
-     * @param imageWidth Новое значение ширины изображения.
-     */
-    public void setImageWidth(int imageWidth) {
-        this.imageWidth = imageWidth;
-    }
-
-    /**
-     * Устанавливает высоту изображения.
-     *
-     * @param imageHeight Новое значение высоты изображения.
-     */
-    public void setImageHeight(int imageHeight) {
-        this.imageHeight = imageHeight;
-    }
 }

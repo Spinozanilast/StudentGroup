@@ -1,5 +1,7 @@
 package Database.Managers;
 
+import org.sqlite.SQLiteConfig;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,11 +17,6 @@ public class SQLiteConnectionProvider {
      * URL базы данных.
      */
     private static final String DB_URL = "jdbc:sqlite:D:\\3COURSE\\Java\\CourseWork\\src\\Database\\DatabaseFiles\\StudentGroupDB.sqlite";
-
-    /**
-     * Флаг, указывающий, закрыто ли соединение с базой данных.
-     */
-    private boolean isConnectionClosed = false;
 
     /**
      * Соединение с базой данных.
@@ -45,8 +42,9 @@ public class SQLiteConnectionProvider {
     public Connection getConnection() {
         if (connection == null) {
             try {
-                connection = DriverManager.getConnection(DB_URL);
-                isConnectionClosed = false;
+                SQLiteConfig config = new SQLiteConfig();
+                config.enforceForeignKeys(true);
+                connection = DriverManager.getConnection(DB_URL, config.toProperties());
                 System.out.println("Connected to SQLite database.");
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -62,7 +60,6 @@ public class SQLiteConnectionProvider {
         if (connection != null) {
             try {
                 connection.close();
-                isConnectionClosed = true;
                 System.out.println("Connection to SQLite database closed.");
             } catch (SQLException e) {
                 e.printStackTrace();

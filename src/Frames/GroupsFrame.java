@@ -5,6 +5,7 @@ import Database.DAOS.GroupDAO;
 import Database.Managers.SQLiteConnectionProvider;
 import Database.Models.GroupDatabaseModel;
 import Frames.models.GroupViews;
+import org.apache.logging.log4j.message.Message;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,33 +18,33 @@ import java.util.List;
  * Класс GroupsFrame представляет собой начальную форму создания учебной группы.
  *
  * @author Будчанин В.А.
- * @version  1.4
+ * @version 1.4
  */
 public class GroupsFrame extends JFrame {
     /**
      * Предпочтительный размер стандартного элемента.
      */
-    public static final Dimension STANDARD_ELEMENT_PREFFERED_SIZE = new Dimension(640,45);
+    public static final Dimension STANDARD_ELEMENT_PREFFERED_SIZE = new Dimension(640, 45);
 
     /**
      * Цвет фона.
      */
-    public static final Color BACKGROUND_COLOR = new Color(243,243,243);
+    public static final Color BACKGROUND_COLOR = new Color(243, 243, 243);
 
     /**
      * Цвет фона панели группы.
      */
-    public static final Color GROUP_PANEL_BACKGROUND_COLOR = new Color(239,255,255);
+    public static final Color GROUP_PANEL_BACKGROUND_COLOR = new Color(239, 255, 255);
 
     /**
      * Цвет текста неизменяемых полей группы.
      */
-    public static final Color GROUP_NON_EDITABLE_FOREGROUND = new Color(29,105,200);
+    public static final Color GROUP_NON_EDITABLE_FOREGROUND = new Color(29, 105, 200);
 
     /**
      * Цвет фона текстовых полей.
      */
-    public static final Color TEXT_BOXES_BACKGROUND_COLOR = new Color(193,228,228, 179);
+    public static final Color TEXT_BOXES_BACKGROUND_COLOR = new Color(193, 228, 228, 179);
 
     /**
      * Шрифт для неизменяемых полей.
@@ -53,7 +54,7 @@ public class GroupsFrame extends JFrame {
     /**
      * Стандартный размер окна.
      */
-    private static final Dimension STANDARD_FRAME_SIZE = new Dimension(1500,750);
+    private static final Dimension STANDARD_FRAME_SIZE = new Dimension(1500, 750);
 
     /**
      * Панель для добавления группы.
@@ -110,7 +111,7 @@ public class GroupsFrame extends JFrame {
     /**
      * Инициализирует состояние формы.
      */
-    private void initFormState(){
+    private void initFormState() {
         setTitle("Студенческие группа");
         ImageIcon icon = new ImageIcon("assets/GroupIcon.png");
         setIconImage(icon.getImage());
@@ -124,7 +125,7 @@ public class GroupsFrame extends JFrame {
     /**
      * Инициализирует панель макета.
      */
-    private void initLayoutPanel(){
+    private void initLayoutPanel() {
         setLayout(new BorderLayout());
         pnlLayoutGroups.setBackground(BACKGROUND_COLOR);
         pnlLayoutGroups.setLayout(new BoxLayout(pnlLayoutGroups, BoxLayout.Y_AXIS));
@@ -137,9 +138,9 @@ public class GroupsFrame extends JFrame {
     /**
      * Добавляет компонент в макет.
      *
-     * @param component компонент
+     * @param component              компонент
      * @param hasVerticalStrutBefore флаг указывающий на необходимость добавления вертикального промежутка перед компонентом
-     * @param hasVerticalStrutAfter флаг указывающий на необходимость добавления вертикального промежутка после компонента
+     * @param hasVerticalStrutAfter  флаг указывающий на необходимость добавления вертикального промежутка после компонента
      */
     public void addComponent(Component component, boolean hasVerticalStrutBefore, boolean hasVerticalStrutAfter) {
         if (hasVerticalStrutBefore) {
@@ -155,7 +156,7 @@ public class GroupsFrame extends JFrame {
      * Добавляет слушатель событий мыши для панели добавления группы.
      *
      * @param addGroupPanel панель добавления группы
-     * @param mouseAdapter слушатель событий мыши
+     * @param mouseAdapter  слушатель событий мыши
      */
     public void addComponentMouseListener(AddGroupPanel addGroupPanel,
                                           MouseAdapter mouseAdapter) {
@@ -168,23 +169,25 @@ public class GroupsFrame extends JFrame {
      *
      * @param component компонент
      */
-    public void safelyDeleteComponent(Component component){
+    public void safelyDeleteComponent(Component component) {
         pnlLayoutGroups.remove(component);
         pnlLayoutGroups.revalidate();
         pnlLayoutGroups.repaint();
     }
 
     /**
-     *  Создает новый контроллер начальной формы.
+     * Метод для инициализации соединения с базой данных.
      *
-     * @param groupViews модель, содержащая и обрабатывающая группы
+     * @param groupViews Представления группы.
      */
     private void initDBConnection(GroupViews groupViews) {
         SQLiteConnectionProvider sqLiteConnectionProvider = new SQLiteConnectionProvider();
-        Connection connection = sqLiteConnectionProvider.getConnection();
+        Connection connection = null;
+        connection = sqLiteConnectionProvider.getConnection();
         groupDAO = new GroupDAO(connection);
 
         this.groupViews = groupViews;
+        Connection finalConnection = connection;
         addWindowListener(new WindowAdapter() {
             /**
              * Вызывается в процессе закрытия окна formView.
@@ -193,12 +196,11 @@ public class GroupsFrame extends JFrame {
              */
             @Override
             public void windowClosing(WindowEvent e) {
-                try{
-                    if (connection != null && !connection.isClosed()){
+                try {
+                    if (finalConnection != null && !finalConnection.isClosed()) {
                         sqLiteConnectionProvider.closeConnection();
                     }
-                }
-                catch (SQLException exception){
+                } catch (SQLException exception) {
                     exception.printStackTrace();
                 }
             }
@@ -356,9 +358,9 @@ public class GroupsFrame extends JFrame {
     /**
      * Возвращает слушателя событий мыши для панели с изображением высокого разрешения.
      *
-     * @param groupView панель ввода группы
+     * @param groupView                панель ввода группы
      * @param highResolutionImagePanel панель с изображением высокого разрешения
-     * @param isEditMode флаг указывающий на режим редактирования
+     * @param isEditMode               флаг указывающий на режим редактирования
      * @return слушатель событий мыши
      */
     private MouseAdapter getHighResolutionImagePanelMouseListener(GroupView groupView, HighResolutionImagePanel highResolutionImagePanel, boolean isEditMode) {
@@ -373,9 +375,9 @@ public class GroupsFrame extends JFrame {
     /**
      * Возвращает слушателя событий клавиатуры для панели с изображением высокого разрешения.
      *
-     * @param groupView панель ввода группы
+     * @param groupView                панель ввода группы
      * @param highResolutionImagePanel панель с изображением высокого разрешения
-     * @param isEditMode флаг указывающий на режим редактирования
+     * @param isEditMode               флаг указывающий на режим редактирования
      * @return слушатель событий клавиатуры
      */
     private KeyAdapter getHighResolutionImagePanelKeyListener(GroupView groupView, HighResolutionImagePanel highResolutionImagePanel, boolean isEditMode) {
@@ -392,21 +394,20 @@ public class GroupsFrame extends JFrame {
     /**
      * Устанавливает состояние обложки группы в необходимое на основе валидности ввода.
      *
-     * @param groupView панель ввода группы
+     * @param groupView                панель ввода группы
      * @param highResolutionImagePanel панель с изображением высокого разрешения
-     * @param isEditMode флаг указывающий на режим редактирования
+     * @param isEditMode               флаг указывающий на режим редактирования
      */
     private void getResultGroupByInputValidity(GroupView groupView, HighResolutionImagePanel highResolutionImagePanel, boolean isEditMode) {
-        if (areGroupsContainingString(groupView) && !groupPanelIsEditable){
+        if (areGroupsContainingString(groupView) && !groupPanelIsEditable) {
             groupView.setTextFieldsUnValid();
             JOptionPane.showMessageDialog(this, "Значения групп или ФИО старост совпадают, проверьте значения этих полей и исправьте либо удалите существующую группу.");
             return;
         }
-        if (!groupView.isInputValid()){
+        if (!groupView.isInputValid()) {
             groupView.setTextFieldsUnValid();
             return;
-        }
-        else {
+        } else {
             groupView.setTextFieldsValid();
         }
 
@@ -414,8 +415,7 @@ public class GroupsFrame extends JFrame {
 
         if (!groupPanelIsEditable && !groupView.equals(editableGroupView)) {
             writeGroupToDB(groupView.getTextFieldValues());
-        }
-        else{
+        } else {
             groupDAO.editGroupData(previousGroupNumberOfEditable, groupView.getTextFieldValues()[0],
                     Integer.parseInt(groupView.getTextFieldValues()[1]),
                     groupView.getTextFieldValues()[2]);
@@ -431,8 +431,7 @@ public class GroupsFrame extends JFrame {
             addComponent(utilitiesPanel, false, false);
             addComponent(this.addGroupPanel, false, false);
             groupViews.addGroupPanel(groupView);
-        }
-        else {
+        } else {
             safelyDeleteComponent(highResolutionImagePanel);
             addAllGroupPanels(true);
         }
@@ -442,21 +441,19 @@ public class GroupsFrame extends JFrame {
      * Метод для записи информации о группе в базу данных.
      *
      * @param groupData Массив данных о группе, содержащий следующие элементы:
-     * - groupNumber (номер группы)
-     * - course (курс)
-     * - headmanFullName (полное имя старосты)
-     *
+     *                  - groupNumber (номер группы)
+     *                  - course (курс)
+     *                  - headmanFullName (полное имя старосты)
      * @throws NumberFormatException Если при попытке преобразовать курс в целое число возникает ошибка
      */
-    private void writeGroupToDB(String[] groupData){
+    private void writeGroupToDB(String[] groupData) {
         String groupNumber = groupData[0];
         String course = groupData[1];
         String headmanFullName = groupData[2];
 
         try {
             groupDAO.addGroup(groupNumber, Integer.parseInt(course), headmanFullName);
-        }
-        catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         }
     }
@@ -469,40 +466,59 @@ public class GroupsFrame extends JFrame {
      * @return панель утилит группы
      */
     private JPanel getGroupsUtilitiesPanel(GroupView groupView) {
-        Dimension imageLabelSize = new Dimension(27,27);
+        Dimension imageLabelSize = new Dimension(27, 27);
         JPanel groupPanel = new JPanel();
         groupPanel.setOpaque(false);
-        groupPanel.setLayout(new GridLayout(1,3));
+        groupPanel.setLayout(new GridLayout(1, 3));
 
         HighResolutionImageLabel jlblOpenGroupForm = new HighResolutionImageLabel("UtilitiesIcons/Open-Form-Icon.png", 25, 25);
         jlblOpenGroupForm.setToolTipText("Открывает форму редактирования группы");
         jlblOpenGroupForm.setPreferredSize(imageLabelSize);
+
         HighResolutionImageLabel jlblDeleteGroup = new HighResolutionImageLabel("UtilitiesIcons/Delete-Icon.png", 25, 25);
         jlblDeleteGroup.setToolTipText("Удалить все данные, связанные с данной группой");
         jlblDeleteGroup.setPreferredSize(imageLabelSize);
+
         HighResolutionImageLabel jlblEditGroupData = new HighResolutionImageLabel("UtilitiesIcons/Edit-Icon.png", 25, 25);
-        jlblDeleteGroup.setToolTipText("Редактировать обложку данной группы");
+        jlblEditGroupData.setToolTipText("Редактировать обложку данной группы");
         jlblEditGroupData.setPreferredSize(imageLabelSize);
+
         jlblDeleteGroup.addMouseListener(new MouseAdapter() {
+            /**
+             * Вызывается при щелчке мыши на компоненте jlblDeleteGroup.
+             *
+             * @param e - экземпляр MouseEvent
+             */
             @Override
             public void mouseClicked(MouseEvent e) {
                 int choice = JOptionPane.showOptionDialog(null, "Вы действительно хотите удалить все данные о группе?",
                         "Проверка", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[]{"Да", "Нет"}, "Да");
                 if (choice != 0) return;
-
                 groupDAO.deleteGroup(groupView.getTextFieldValues()[0]);
                 groupViews.getGroupPanels().remove(groupView);
                 addAllGroupPanels(true);
             }
         });
+
         jlblOpenGroupForm.addMouseListener(new MouseAdapter() {
+            /**
+             * Вызывается при щелчке мыши на компоненте jlblOpenGroupForm.
+             *
+             * @param e - экземпляр MouseEvent
+             */
             @Override
             public void mouseClicked(MouseEvent e) {
                 StudentsFrame studentsFrame = new StudentsFrame(groupView.getTextFieldValues());
                 studentsFrame.setVisible(true);
             }
         });
+
         jlblEditGroupData.addMouseListener(new MouseAdapter() {
+            /**
+             * Вызывается при щелчке мыши на компоненте jlblEditGroupData.
+             *
+             * @param e - экземпляр MouseEvent
+             */
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (groupPanelIsEditable) {
@@ -511,14 +527,12 @@ public class GroupsFrame extends JFrame {
                 }
                 int editablePanelIndex = groupViews.getGroupPanels().indexOf(groupView);
                 setStartLabelsForLayout();
-                for (int i = 0; i < groupViews.getGroupPanels().size(); i++){
-                    if (i == editablePanelIndex){
-
+                for (int i = 0; i < groupViews.getGroupPanels().size(); i++) {
+                    if (i == editablePanelIndex) {
                         groupPanelIsEditable = true;
                         editableGroupView = groupViews.getGroupPanels().get(i);
                         previousGroupNumberOfEditable = editableGroupView.getTextFieldValues()[0];
-
-                        addComponent(groupViews.getGroupPanels().get(i),false, true);
+                        addComponent(groupViews.getGroupPanels().get(i), false, true);
                         groupViews.getGroupPanels().get(i).setPanelEditableStandardValues();
                         HighResolutionImagePanel highResolutionImagePanel = new HighResolutionImagePanel(new HighResolutionImageLabel("Icons/Tick-Circle.png", 35, 35), 640, 45);
                         addComponent(highResolutionImagePanel, false, true);
@@ -534,10 +548,12 @@ public class GroupsFrame extends JFrame {
                 addComponent(addGroupPanel, false, true);
             }
         });
+
         groupPanel.add(jlblOpenGroupForm);
         groupPanel.add(jlblEditGroupData);
         groupPanel.add(jlblDeleteGroup);
         groupPanel.setMaximumSize(new Dimension(630, 45));
+
         return groupPanel;
     }
 
@@ -552,7 +568,7 @@ public class GroupsFrame extends JFrame {
         final int courseNumberIndexSkip = 1;
         String[] textFieldValues = groupView.getTextFieldValues();
         for (int i = 0; i < numOfTextFields; i++) {
-            if (i == courseNumberIndexSkip){
+            if (i == courseNumberIndexSkip) {
                 //Значит, что лишь значения номера группы и старосты не должно повторяться у разных групп
                 continue;
             }
@@ -601,23 +617,5 @@ public class GroupsFrame extends JFrame {
             addComponent(utilitiesPanel, false, false);
             groupViews.addGroupPanel(groupView);
         }
-    }
-
-    /**
-     * Метод для получения панели макета групп.
-     *
-     * @return Панель макета групп.
-     */
-    public JPanel getPnlLayoutGroups() {
-        return pnlLayoutGroups;
-    }
-
-    /**
-     * Метод для получения панели с тремя действиями.
-     *
-     * @return Панель с тремя действиями.
-     */
-    public ThreeActionLabelsPanel getThreeActionLabelsPanel() {
-        return threeActionLabelsPanel;
     }
 }

@@ -35,27 +35,27 @@ public class StudentsFrame extends JFrame {
     /**
      * Предпочтительный размер кнопки.
      */
-    public static final Dimension BUTTON_PREFFERED_SIZE = new Dimension(200,40);
+    public static final Dimension BUTTON_PREFFERED_SIZE = new Dimension(200, 40);
 
     /**
      * Предпочтительный размер элемента управления "Pills".
      */
-    public static final Dimension PILLS_PREFFERED_SIZE = new Dimension(150,30);
+    public static final Dimension PILLS_PREFFERED_SIZE = new Dimension(150, 30);
 
     /**
      * Цвет переднего плана метки.
      */
-    public static final Color LABEL_FOREGROUND = new Color(29,105,200);
+    public static final Color LABEL_FOREGROUND = new Color(29, 105, 200);
 
     /**
      * Цвет фона панели.
      */
-    public static final Color PANEL_BACKGROUND = new Color(242,250,255);
+    public static final Color PANEL_BACKGROUND = new Color(242, 250, 255);
 
     /**
      * Цвет фона кнопки.
      */
-    public static final Color BUTTON_BACKGROUND = new Color(0,95,184);
+    public static final Color BUTTON_BACKGROUND = new Color(0, 95, 184);
 
     /**
      * Главная панель.
@@ -95,12 +95,12 @@ public class StudentsFrame extends JFrame {
     /**
      * Номер группы.
      */
-    private String groupNumber;
+    private final String groupNumber;
 
     /**
      * Число студентов.
      */
-    private String studentsNum;
+    private final String studentsNum;
 
     /**
      * Кнопка для экспорта в Word.
@@ -112,10 +112,29 @@ public class StudentsFrame extends JFrame {
      */
     private JButton jbtToExcelExport;
 
+    /**
+     * Таблица студентов с действием в столбце.
+     */
     private CustomLightJTableWithActionColumn studentsTable = null;
+
+    /**
+     * Соединение с базой данных.
+     */
     private Connection connection;
+
+    /**
+     * Всплывающее меню.
+     */
     private static JPopupMenu popupMenu;
+
+    /**
+     * Объект доступа к данным студента.
+     */
     private static StudentDAO studentDAO;
+
+    /**
+     * Провайдер соединения SQLite.
+     */
     SQLiteConnectionProvider sqLiteConnectionProvider;
 
 
@@ -123,23 +142,38 @@ public class StudentsFrame extends JFrame {
      * Создает новый экземпляр класса StudentsFrame с указанными номером группы, номером курса и ФИО старосты вместе с
      * кол-вом студентов в группе.
      *
-     * @param groupNumber       Номер группы.
-     * @param courseNumber      Номер курса.
-     * @param headmanFullName   ФИО старосты.
+     * @param groupNumber     Номер группы.
+     * @param courseNumber    Номер курса.
+     * @param headmanFullName ФИО старосты.
      */
     public StudentsFrame(String groupNumber, String courseNumber, String headmanFullName) {
+        // Получаем провайдер соединения SQLite
         sqLiteConnectionProvider = getSqLiteConnectionProvider();
+
+        // Устанавливаем заголовок окна
         setTitle("Данные группы " + groupNumber);
+
+        // Устанавливаем номер группы и количество студентов
         this.groupNumber = groupNumber;
         this.studentsNum = String.valueOf(studentDAO.getCountOfGroupStudents(groupNumber));
+
+        // Устанавливаем иконку окна
         ImageIcon icon = new ImageIcon("assets/AloneGroupIcon.png");
         setIconImage(icon.getImage());
+
+        // Устанавливаем операцию закрытия окна, размер и расположение
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1000, 500);
         setLocationRelativeTo(null);
+
+        // Настраиваем компоненты представления панели
         setLayouts();
         setUpPanelViewComponents(courseNumber, studentsNum, headmanFullName);
+
+        // Настраиваем панель кнопок
         setUpButtonsPanel();
+
+        // Инициализируем соединение с базой данных
         initDBConnection();
     }
 
@@ -147,7 +181,7 @@ public class StudentsFrame extends JFrame {
      * Создает новый экземпляр класса StudentsFrame с указанными данными о группе (группа, курс и ФИО старосты) вместе с
      * кол-вом студентов в группе.
      *
-     * @param groupData         Массив данных о группе (группа, курс и ФИО старосты).
+     * @param groupData Массив данных о группе (группа, курс и ФИО старосты).
      */
     public StudentsFrame(String[] groupData) {
         this(groupData[0], groupData[1], groupData[2]);
@@ -162,12 +196,14 @@ public class StudentsFrame extends JFrame {
         pnlInnerAttributes.setLayout(new BoxLayout(pnlInnerAttributes, BoxLayout.X_AXIS));
         pnlInnerUp.setLayout(new BoxLayout(pnlInnerUp, BoxLayout.X_AXIS));
         pnlContentLayout.setLayout(new BoxLayout(pnlContentLayout, BoxLayout.Y_AXIS));
+
         pnlMain.add(pnlInnerUp);
         pnlMain.add(pnlInnerMenu);
         pnlMain.add(Box.createVerticalStrut(10));
         pnlMain.add(pnlInnerAttributes);
         pnlMain.add(pnlContentLayout);
         pnlMain.setBackground(PANEL_BACKGROUND);
+
         add(pnlMain);
         setContentPane(pnlMain);
     }
@@ -175,11 +211,11 @@ public class StudentsFrame extends JFrame {
     /**
      * Метод setUpPanelViewComponents устанавливает компоненты представления панели.
      *
-     * @param course           Курс.
-     * @param studentsCount    Количество студентов.
-     * @param headmanFullName  ФИО старосты.
+     * @param course          Курс.
+     * @param studentsCount   Количество студентов.
+     * @param headmanFullName ФИО старосты.
      */
-    private void setUpPanelViewComponents(String course, String studentsCount, String headmanFullName){
+    private void setUpPanelViewComponents(String course, String studentsCount, String headmanFullName) {
         int strutWidth = 17;
 
         JLabel lblCourse = new JLabel("Курс: ");
@@ -218,7 +254,7 @@ public class StudentsFrame extends JFrame {
         pnlInnerUp.setBackground(PANEL_BACKGROUND);
     }
 
-    public JButton getExitButton(){
+    public JButton getExitButton() {
         JButton jbtExit = new JButton("Закрыть окно");
         jbtExit.addActionListener(e -> {
             JFrame jFrame = (JFrame) jbtExit.getTopLevelAncestor();
@@ -230,25 +266,23 @@ public class StudentsFrame extends JFrame {
     /**
      * Метод setUpButtonsPanel устанавливает панель кнопок.
      */
-    private void setUpButtonsPanel(){
+    private void setUpButtonsPanel() {
         jbtShowStudentsList = new JButton("Список студентов");
         jbtShowStudentsList.setToolTipText("Вывести список всех студентов для данной группы");
 
         JButton jbtExit = getExitButton();
         jbtExit.setToolTipText("Закрывает окно редактирования данной группы");
 
-        jbtToWordExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().
-                getResource("/CustomComponents/Icons/WordIcon.png"))));
+        jbtToWordExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().getResource("/CustomComponents/Icons/WordIcon.png"))));
         jbtToWordExport.setToolTipText("Экспортирует таблицу со студентами в Word");
 
-        jbtToExcelExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().
-                getResource("/CustomComponents/Icons/ExcelIcon.png"))));
+        jbtToExcelExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().getResource("/CustomComponents/Icons/ExcelIcon.png"))));
         jbtToExcelExport.setToolTipText("Экспортирует таблицу со студентами в Excel");
 
-        stylizeButtons(Color.WHITE, BUTTON_BACKGROUND, jbtShowStudentsList);
-        stylizeButtons(Color.WHITE, Color.RED, jbtExit);
-        stylizeButtons(Color.WHITE, new Color(24, 90, 189), jbtToWordExport);
-        stylizeButtons(Color.WHITE, new Color(16, 124, 65), jbtToExcelExport);
+        stylizeButtons(BUTTON_BACKGROUND, jbtShowStudentsList);
+        stylizeButtons(Color.RED, jbtExit);
+        stylizeButtons(new Color(24, 90, 189), jbtToWordExport);
+        stylizeButtons(new Color(16, 124, 65), jbtToExcelExport);
 
         pnlInnerMenu.setBackground(PANEL_BACKGROUND);
         pnlInnerAttributes.setBackground(PANEL_BACKGROUND);
@@ -262,10 +296,10 @@ public class StudentsFrame extends JFrame {
     /**
      * Метод addButton добавляет кнопку на панель.
      *
-     * @param button        Кнопка.
-     * @param isEndButton   Флаг, указывающий, является ли кнопка последней на панели.
+     * @param button      Кнопка.
+     * @param isEndButton Флаг, указывающий, является ли кнопка последней на панели.
      */
-    private void addButton(JButton button, boolean isEndButton){
+    private void addButton(JButton button, boolean isEndButton) {
         pnlInnerMenu.add(button);
         if (isEndButton) return;
         pnlInnerMenu.add(Box.createHorizontalGlue());
@@ -274,11 +308,11 @@ public class StudentsFrame extends JFrame {
     /**
      * Метод stylizeLabels задает стиль для надписей.
      *
-     * @param foreground    Цвет переднего плана.
-     * @param labels        Надписи.
+     * @param foreground Цвет переднего плана.
+     * @param labels     Надписи.
      */
-    private void stylizeLabels(Color foreground, JLabel ...labels){
-        for(JLabel label: labels) {
+    private void stylizeLabels(Color foreground, JLabel... labels) {
+        for (JLabel label : labels) {
             label.setFont(new Font("Montserrat", Font.BOLD | Font.ITALIC, 24));
             label.setForeground(foreground);
         }
@@ -287,32 +321,17 @@ public class StudentsFrame extends JFrame {
     /**
      * Метод stylizeButtons задает стиль для кнопок.
      *
-     * @param foreground    Цвет переднего плана.
-     * @param background    Цвет заднего плана.
-     * @param jButtons      Кнопки.
+     * @param background Цвет заднего плана.
+     * @param jButtons   Кнопки.
      */
-    private void stylizeButtons(Color foreground, Color background, JButton ...jButtons){
-        for (JButton jButton: jButtons){
+    private void stylizeButtons(Color background, JButton... jButtons) {
+        for (JButton jButton : jButtons) {
             jButton.setPreferredSize(BUTTON_PREFFERED_SIZE);
-            jButton.setForeground(foreground);
+            jButton.setForeground(Color.WHITE);
             jButton.setBackground(background);
             jButton.setFont(new Font("Montserrat", Font.BOLD | Font.ITALIC, 14));
             jButton.setBorder(null);
-            jButton.setBorder(new EmptyBorder(10,10,10,10));
-        }
-    }
-
-    /**
-     * Метод clearLayout очищает компоновку контейнера.
-     *
-     * @param layoutComponent   Компонент компоновки.
-     * @param isRepaint         Флаг, указывающий, нужно ли перерисовать компонент после очистки.
-     */
-    private void clearLayout(Container layoutComponent, boolean isRepaint) {
-        layoutComponent.removeAll();
-        layoutComponent.revalidate();
-        if (isRepaint) {
-            layoutComponent.repaint();
+            jButton.setBorder(new EmptyBorder(10, 10, 10, 10));
         }
     }
 
@@ -320,7 +339,6 @@ public class StudentsFrame extends JFrame {
      * Конструктор контроллера формы группы.
      */
     public void initDBConnection() {
-//        groupFrame = new StudentsFrame(groupData, String.valueOf(studentDAO.getCountOfGroupStudents(groupData[0])));
         addWindowListener(new WindowAdapter() {
             /**
              * Вызывается в процессе закрытия окна formView.
@@ -341,6 +359,11 @@ public class StudentsFrame extends JFrame {
         initButtonsListeners();
     }
 
+    /**
+     * Возвращает провайдера соединения SQLite.
+     *
+     * @return Провайдер соединения SQLite.
+     */
     private SQLiteConnectionProvider getSqLiteConnectionProvider() {
         SQLiteConnectionProvider sqLiteConnectionProvider = new SQLiteConnectionProvider();
         connection = sqLiteConnectionProvider.getConnection();
@@ -353,8 +376,8 @@ public class StudentsFrame extends JFrame {
      */
     private void initButtonsListeners() {
         ActionListener actionListenerShowStudentsTable = this::actionShowStudentsTablePerformed;
-        ActionListener actionListenerExportToWord = this::actionExportToWordPerformed;
-        ActionListener actionListenerExportToExcel = this::actionExportToExcelPerformed;
+        ActionListener actionListenerExportToWord = e -> actionExportToWordPerformed();
+        ActionListener actionListenerExportToExcel = e -> actionExportToExcelPerformed();
         jbtShowStudentsList.addActionListener(actionListenerShowStudentsTable);
         getJbtToWordExport().addActionListener(actionListenerExportToWord);
         getJbtToExcelExport().addActionListener(actionListenerExportToExcel);
@@ -372,8 +395,7 @@ public class StudentsFrame extends JFrame {
             int columnsNumber = columnsNames.length;
             Object[][] studentsData = SQLiteDBHelper.getStudentsTableData(connection, groupNumber, columnsNumber);
             studentsTable = getCustomLightJTableWithActionColumn(studentsData, columnsNames);
-            studentsTable.setCustomBooleanIntegerRenderers(StudentsJTableModelInfo.getBooleanColumnsIndexes(),
-                    StudentsJTableModelInfo.getIntegerColumnsIndexes());
+            studentsTable.setCustomBooleanIntegerRenderers(StudentsJTableModelInfo.getBooleanColumnsIndexes(), StudentsJTableModelInfo.getIntegerColumnsIndexes());
             initAttributesPanel(columnsNames, studentsTable.getColumnModel());
             studentsTable.addActionColumn(getTableActionEvents());
             if (studentsData.length == 0) {
@@ -395,7 +417,7 @@ public class StudentsFrame extends JFrame {
      * @param tableColumnModel модель столбцов таблицы
      */
     private void initAttributesPanel(Object[] columnNames, TableColumnModel tableColumnModel) {
-        if (pnlInnerAttributes.getComponentCount() != 0)  return;
+        if (pnlInnerAttributes.getComponentCount() != 0) return;
         for (int i = 0, columnNamesLength = columnNames.length; i < columnNamesLength; i++) {
             PillButton columnPillButton = getPillButton(columnNames[i]);
             columnPillButton.setLblFont(new Font("Montserrat", Font.ITALIC, 10));
@@ -403,18 +425,6 @@ public class StudentsFrame extends JFrame {
             columnPillButton.setMaximumSize(StudentsFrame.PILLS_PREFFERED_SIZE);
             pnlInnerAttributes.add(columnPillButton);
 
-            int rightBorderWidth = 5;
-            int leftBorderWidth = 0;
-
-            if (i == columnNamesLength - 1) {
-                rightBorderWidth = 0;
-            }
-            if (i == 0){
-                leftBorderWidth = 5;
-            }
-
-//            columnPillButton.setBorder(BorderFactory.createMatteBorder(0, leftBorderWidth,0,
-//                    rightBorderWidth, StudentsFrame.PANEL_BACKGROUND));
             TableColumn columnToHide = tableColumnModel.getColumn(i);
             columnPillButton.addMouseListener(new MouseAdapter() {
                 /**
@@ -442,21 +452,23 @@ public class StudentsFrame extends JFrame {
      * @return кнопка-пилюля
      */
     private static PillButton getPillButton(Object columnNames) {
-        Object columnNameObject = columnNames;
-        String columnName = columnNameObject.toString();
+        String columnName = columnNames.toString();
         Color activatedBackground = new Color(0, 95, 184);
         Color notActivatedBackground = new Color(243, 245, 246);
         Color activatedForeground = Color.WHITE;
         Color notActivatedForeground = Color.BLACK;
-        PillButton columnPillButton = new PillButton(columnName, activatedBackground, notActivatedBackground,
-                activatedForeground, notActivatedForeground);
-        return columnPillButton;
+        return new PillButton(
+                columnName,
+                activatedBackground,
+                notActivatedBackground,
+                activatedForeground,
+                notActivatedForeground);
     }
 
     /**
      * Инициализирует всплывающее меню для таблицы студентов.
      *
-     * @param studentsTable  таблица студентов
+     * @param studentsTable таблица студентов
      */
     private void initTablePopupMenu(CustomLightJTableWithActionColumn studentsTable) {
         popupMenu = new JPopupMenu();
@@ -480,10 +492,10 @@ public class StudentsFrame extends JFrame {
     /**
      * Добавляет элементы контекстного меню в таблицу студентов.
      *
-     * @param studentsTable    таблица студентов
-     * @param addMenuItem      элемент меню "Добавить строку"
-     * @param deleteMenuItem   элемент меню "Удалить студента"
-     * @param updateMenuItem   элемент меню "Обновить таблицу"
+     * @param studentsTable  таблица студентов
+     * @param addMenuItem    элемент меню "Добавить строку"
+     * @param deleteMenuItem элемент меню "Удалить студента"
+     * @param updateMenuItem элемент меню "Обновить таблицу"
      */
     private void addPopupMenuItems(CustomLightJTableWithActionColumn studentsTable, JMenuItem addMenuItem, JMenuItem deleteMenuItem, JMenuItem updateMenuItem) {
         addMenuItem.addActionListener(new ActionListener() {
@@ -493,8 +505,7 @@ public class StudentsFrame extends JFrame {
                     if (isEmptyTable(studentsTable)) {
                         initJTableInput(studentsTable);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Выберите строку таблицы, после которой" +
-                                " необходимо добавить студента");
+                        JOptionPane.showMessageDialog(null, "Выберите строку таблицы, после которой" + " необходимо добавить студента");
                     }
                     return;
                 }
@@ -516,13 +527,13 @@ public class StudentsFrame extends JFrame {
                     return;
                 }
                 DefaultTableModel tableModel = (DefaultTableModel) studentsTable.getModel();
-                for (int rowIndex: selectedRowsIndexes){
+                for (int rowIndex : selectedRowsIndexes) {
                     String studentID = tableModel.getValueAt(rowIndex, 0).toString();
                     studentDAO.deleteStudent(studentID);
                     tableModel.removeRow(rowIndex);
                     setStudentsNum(String.valueOf((Integer.parseInt(studentsNum) - 1)));
                 }
-                if (studentsTable.getModel().getRowCount() == 0){
+                if (studentsTable.getModel().getRowCount() == 0) {
                     addRowToStudentsTable(0, 1, (DefaultTableModel) studentsTable.getModel(), true);
                 }
             }
@@ -538,7 +549,7 @@ public class StudentsFrame extends JFrame {
     /**
      * Проверяет, является ли таблица пустой.
      *
-     * @param studentsTable  таблица студентов
+     * @param studentsTable таблица студентов
      * @return true, если таблица пустая, иначе false
      */
     private static boolean isEmptyTable(JTable studentsTable) {
@@ -586,8 +597,8 @@ public class StudentsFrame extends JFrame {
     /**
      * Возвращает настраиваемую таблицу студентов с действием в столбце.
      *
-     * @param studentsData    данные студентов
-     * @param columnsNames    названия столбцов
+     * @param studentsData данные студентов
+     * @param columnsNames названия столбцов
      * @return настраиваемая таблица студентов
      */
     private static CustomLightJTableWithActionColumn getCustomLightJTableWithActionColumn(Object[][] studentsData, Object[] columnsNames) {
@@ -621,8 +632,7 @@ public class StudentsFrame extends JFrame {
                     Object newRowStudentID = (int) tableModel.getValueAt(rowIndex, 0) + 1;
                     addRowToStudentsTable(rowIndex, newRowStudentID, tableModel, false);
                     setStudentsNum(String.valueOf((Integer.parseInt(studentsNum) + 1)));
-                }
-                catch (ClassCastException e) {
+                } catch (ClassCastException e) {
                     JOptionPane.showMessageDialog(null, "Извините, что-то пошло не так");
                 }
             }
@@ -636,7 +646,7 @@ public class StudentsFrame extends JFrame {
                 if (rowIndex >= 0 && rowIndex < rowCount) {
                     tableModel.removeRow(rowIndex);
                 }
-                if (jTable.getModel().getRowCount() == 0){
+                if (jTable.getModel().getRowCount() == 0) {
                     addRowToStudentsTable(0, 1, (DefaultTableModel) jTable.getModel(), true);
                 }
             }
@@ -650,7 +660,7 @@ public class StudentsFrame extends JFrame {
                     rowData[i] = tableModel.getValueAt(rowIndex, i);
                 }
                 SQLiteDBHelper.StudentsDataValidator.ValidityConstants validityResult = SQLiteDBHelper
-                        .StudentsDataValidator.isValidData(rowData, connection, groupNumber);
+                        .StudentsDataValidator.validateData(rowData, connection, groupNumber);
                 if (validityResult == SQLiteDBHelper.StudentsDataValidator.ValidityConstants.NOT_VALID_VALUES) {
                     return;
                 } else if (validityResult == SQLiteDBHelper.StudentsDataValidator.ValidityConstants.VALID_ROW) {
@@ -668,10 +678,10 @@ public class StudentsFrame extends JFrame {
     /**
      * Добавляет строку в таблицу студентов.
      *
-     * @param rowIndex          индекс строки
-     * @param newRowStudentID   идентификатор новой строки студента
-     * @param tableModel        модель таблицы
-     * @param isFirstRow        флаг, указывающий, является ли это первой строкой
+     * @param rowIndex        индекс строки
+     * @param newRowStudentID идентификатор новой строки студента
+     * @param tableModel      модель таблицы
+     * @param isFirstRow      флаг, указывающий, является ли это первой строкой
      */
     private static void addRowToStudentsTable(int rowIndex, Object newRowStudentID, DefaultTableModel tableModel, boolean isFirstRow) {
         Object[] rowData = {newRowStudentID, "", "", "", false, "", "", false, ""};
@@ -683,28 +693,17 @@ public class StudentsFrame extends JFrame {
     /**
      * Возвращает модель студента из строки данных.
      *
-     * @param rowData   строка данных
+     * @param rowData строка данных
      * @return модель студента
      */
     private StudentDatabaseModel getStudentDBModelFromRow(Object[] rowData) {
-        return new StudentDatabaseModel(
-                (int) rowData[0],
-                groupNumber,
-                rowData[1].toString(),
-                rowData[2].toString(),
-                rowData[3].toString(),
-                (boolean) rowData[4],
-                rowData[5].toString() == null ? "" : rowData[5].toString(),
-                rowData[6].toString() == null ? "" : rowData[6].toString(),
-                (boolean) rowData[7],
-                rowData[8].toString()
-        );
+        return new StudentDatabaseModel((int) rowData[0], groupNumber, rowData[1].toString(), rowData[2].toString(), rowData[3].toString(), (boolean) rowData[4], rowData[5].toString() == null ? "" : rowData[5].toString(), rowData[6].toString() == null ? "" : rowData[6].toString(), (boolean) rowData[7], rowData[8].toString());
     }
 
     /**
      * Инициализирует ввод таблицы студентов.
      *
-     * @param jTableStudentsList  таблица студентов
+     * @param jTableStudentsList таблица студентов
      */
     private void initJTableInput(JTable jTableStudentsList) {
         DefaultTableModel defaultTableModel = (DefaultTableModel) jTableStudentsList.getModel();
@@ -715,10 +714,9 @@ public class StudentsFrame extends JFrame {
     /**
      * Метод для выполнения экспорта в файл.
      *
-     * @param event    событие, вызывающее экспорт
      * @param fileType тип файла для экспорта (WORD или EXCEL)
      */
-    private void actionExportPerformed(ActionEvent event, FilePathChooserDialog.FileType fileType) {
+    private void actionExportPerformed(FilePathChooserDialog.FileType fileType) {
         TableExporter exporter;
         if (fileType == FilePathChooserDialog.FileType.WORD) {
             exporter = new TableExporterToWord();
@@ -735,13 +733,11 @@ public class StudentsFrame extends JFrame {
     /**
      * Метод для выполнения экспорта в файл Word.
      *
-     * @param event событие, вызывающее экспорт в Word
      */
-    private void actionExportToWordPerformed(ActionEvent event) {
+    private void actionExportToWordPerformed() {
         if (studentsTable != null) {
-            actionExportPerformed(event, FilePathChooserDialog.FileType.WORD);
-        }
-        else {
+            actionExportPerformed(FilePathChooserDialog.FileType.WORD);
+        } else {
             JOptionPane.showMessageDialog(null, "Отобразите таблицу, которую необходимо вывести.");
         }
     }
@@ -749,99 +745,27 @@ public class StudentsFrame extends JFrame {
     /**
      * Метод для выполнения экспорта в файл Excel.
      *
-     * @param event событие, вызывающее экспорт в Excel
      */
-    private void actionExportToExcelPerformed(ActionEvent event) {
+    private void actionExportToExcelPerformed() {
         if (studentsTable != null) {
-            actionExportPerformed(event, FilePathChooserDialog.FileType.EXCEL);
-        }
-        else {
+            actionExportPerformed(FilePathChooserDialog.FileType.EXCEL);
+        } else {
             JOptionPane.showMessageDialog(null, "Отобразите таблицу, которую необходимо вывести.");
         }
     }
 
     /**
-     * Метод getStudentsNumValueLabel возвращает метку с количеством студентов.
-     *
-     * @return Метка с количеством студентов.
-     */
-    public JLabel getLblStudentsNumValue() {
-        return lblStudentsNumValue;
-    }
-
-    /**
-     * Метод setStudentsNumValueLabel устанавливает метку с количеством студентов.
-     *
-     * @param lblStudentsNumValue    Метка с количеством студентов.
-     */
-    public void setLblStudentsNumValue(JLabel lblStudentsNumValue) {
-        this.lblStudentsNumValue = lblStudentsNumValue;
-    }
-
-    /**
-     * Метод getContentLayoutPanel возвращает панель содержимого.
-     *
-     * @return Панель содержимого.
-     */
-    public JPanel getPnlContentLayout() {
-        return pnlContentLayout;
-    }
-
-    /**
-     * Метод getJbtShowStudentsList возвращает кнопку "Список студентов".
-     *
-     * @return Кнопка "Список студентов".
-     */
-    public JButton getJbtShowStudentsList() {
-        return jbtShowStudentsList;
-    }
-
-    /**
-     * Метод getGroupNumber возвращает номер группы.
-     *
-     * @return Номер группы.
-     */
-    public String getGroupNumber() {
-        return groupNumber;
-    }
-
-    /**
-     * Метод setGroupNumber устанавливает номер группы.
-     *
-     * @param groupNumber   Номер группы.
-     */
-    public void setGroupNumber(String groupNumber) {
-        this.groupNumber = groupNumber;
-    }
-
-    /**
-     * Метод getStudentsNum возвращает количество студентов.
-     *
-     * @return Количество студентов.
-     */
-    public String getStudentsNum() {
-        return studentsNum;
-    }
-
-    /**
      * Метод setStudentsNum устанавливает количество студентов.
      *
-     * @param studentsNum   Количество студентов.
+     * @param studentsNum Количество студентов.
      */
     public void setStudentsNum(String studentsNum) {
         lblStudentsNumValue.setText(studentsNum);
     }
 
     /**
-     * Возвращает панель pnlInnerAttributes.
-     * @return панель pnlInnerAttributes
-     */
-    public JPanel getPnlInnerAttributes() {
-        return pnlInnerAttributes;
-    }
-
-    /**
      * Возвращает кнопку jbtToWordExport.
+     *
      * @return кнопка jbtToWordExport
      */
     public JButton getJbtToWordExport() {
@@ -850,6 +774,7 @@ public class StudentsFrame extends JFrame {
 
     /**
      * Возвращает кнопку jbtToExcelExport.
+     *
      * @return кнопка jbtToExcelExport
      */
     public JButton getJbtToExcelExport() {

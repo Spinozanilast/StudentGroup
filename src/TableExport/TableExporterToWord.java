@@ -1,10 +1,10 @@
 package TableExport;
 
-import org.apache.poi.ss.usermodel.Color;
-import org.apache.poi.xwpf.usermodel.*;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,7 +34,6 @@ public class TableExporterToWord implements TableExporter {
                 if (table.getColumnModel().getColumn(i).getMaxWidth() == 0){
                     continue;
                 }
-                //TODO: Сделать сдвиг влево по пропуску столбцов с нулевой шириной (не должны выводиться)
                 XWPFTableCell headerCell = wordTable.getRow(0).getCell(rowColumnFilterIndex);
                 headerCell.setText(table.getColumnName(i));
                 rowColumnFilterIndex++;
@@ -70,7 +69,8 @@ public class TableExporterToWord implements TableExporter {
 
         }
         catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Случились непредвиденные проблемы, быть может файл используется чем-то.");
+            JOptionPane.showMessageDialog(null, "Случились непредвиденные проблемы, быть может " +
+                    "файл используется чем-то.");
         }
     }
 

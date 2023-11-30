@@ -61,8 +61,8 @@ public class SQLiteDBHelper {
          * @param groupNumber  номер группы
          * @return константа, указывающая на результат валидации
          */
-        public static ValidityConstants isValidData(Object[] dataRow, Connection connection, String groupNumber) {
-            ValidityConstants validityResult = isValidStudentID(dataRow[0], connection, groupNumber);
+        public static ValidityConstants validateData(Object[] dataRow, Connection connection, String groupNumber) {
+            ValidityConstants validityResult = validateStudentID(dataRow[0], connection, groupNumber);
             if (validityResult == ValidityConstants.NOT_VALID_VALUES || !isValidString(dataRow[1]) || !isValidString(dataRow[2])
                     || !isValidString(dataRow[3]) || !isValidBoolean(dataRow[4])) {
                 JOptionPane.showMessageDialog(null, "Не были введены обязательные данные.");
@@ -79,7 +79,7 @@ public class SQLiteDBHelper {
          * @param groupNumber   номер группы
          * @return константа, указывающая на результат проверки
          */
-        private static ValidityConstants isValidStudentID(Object value, Connection connection, String groupNumber) {
+        private static ValidityConstants validateStudentID(Object value, Connection connection, String groupNumber) {
             if (value instanceof Integer) {
                 StudentDAO studentDAO = new StudentDAO(connection);
                 int studentID = (int) value;
@@ -89,29 +89,29 @@ public class SQLiteDBHelper {
                             "Диалоговое окно с выбором", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
                             null, new Object[]{"Обновить запись", "Отменить добавление новой записи"}, "Отменить добавление новой записи");
                     return switch (choice) {
-                        /**
-                         * Обновить запись.
-                         */
+                        /*
+                        Обновить запись.
+                        */
                         case 0 -> ValidityConstants.UPDATE_ROW;
-                        /**
-                         * Закрыть редактирование.
-                         */
+                        /*
+                        Закрыть редактирование.
+                        */
                         case 1 -> ValidityConstants.CLOSE_EDIT;
-                        /**
-                         * Недопустимые значения.
-                         */
+                        /*
+                        Недопустимые значения.
+                        */
                         default -> ValidityConstants.NOT_VALID_VALUES;
                     };
                 } else {
-                    /**
-                     * Допустимая запись.
-                     */
+                    /*
+                    Допустимая запись.
+                    */
                     return ValidityConstants.VALID_ROW;
                 }
             }
-            /**
-             * Недопустимые значения.
-             */
+            /*
+            Недопустимые значения.
+            */
             return ValidityConstants.NOT_VALID_VALUES;
         }
 

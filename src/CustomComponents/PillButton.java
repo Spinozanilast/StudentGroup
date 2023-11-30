@@ -18,24 +18,9 @@ public class PillButton extends RoundedPanel {
     private Color activatedBackgroundColor;
 
     /**
-     * Цвет фона при неактивации.
-     */
-    private Color notActivatedBackgroundColor;
-
-    /**
      * Цвет переднего плана при активации.
      */
     private Color activatedforeground;
-
-    /**
-     * Цвет переднего плана при неактивации.
-     */
-    private final Color notActivatedforeground;
-
-    /**
-     * Текст.
-     */
-    private String text;
 
     /**
      * Текстовая метка.
@@ -59,11 +44,8 @@ public class PillButton extends RoundedPanel {
     public PillButton(String text, Color activatedBackgroundColor, Color notActivatedBackgroundColor,
                       Color isActivatedforeground, Color notActivatedforeground){
         setShady(false);
-        this.text = text;
         this.activatedBackgroundColor = activatedBackgroundColor;
-        this.notActivatedBackgroundColor = notActivatedBackgroundColor;
         this.activatedforeground = isActivatedforeground;
-        this.notActivatedforeground = notActivatedforeground;
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
