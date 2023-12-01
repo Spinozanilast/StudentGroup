@@ -6,7 +6,7 @@ package Database.Models;
  * Автор: Будчанин В.А.
  * Версия: 1.1
  */
-public class StudentDatabaseModel {
+public class Student {
     private int studentID;
     private String groupNumber;
     private String surname;
@@ -19,7 +19,7 @@ public class StudentDatabaseModel {
     private String phoneNumber;
 
     /**
-     * Конструктор класса StudentDatabaseModel
+     * Конструктор класса Student
      *
      * @param magazineStudentNumber номер студента в журнале
      * @param groupNumber           номер группы
@@ -28,7 +28,7 @@ public class StudentDatabaseModel {
      * @param firstName             имя студента
      * @param isPayer               является ли студент плательщиком
      */
-    public StudentDatabaseModel(int magazineStudentNumber, String groupNumber, String surname, String middleName, String firstName, boolean isPayer) {
+    public Student(int magazineStudentNumber, String groupNumber, String surname, String middleName, String firstName, boolean isPayer) {
         studentID = magazineStudentNumber;
         this.groupNumber = groupNumber;
         this.surname = surname;
@@ -41,7 +41,7 @@ public class StudentDatabaseModel {
     }
 
     /**
-     * Конструктор класса StudentDatabaseModel
+     * Конструктор класса Student
      *
      * @param magazineStudentNumber номер студента в журнале
      * @param groupNumber           номер группы
@@ -54,7 +54,7 @@ public class StudentDatabaseModel {
      * @param isLocal               является ли студент местным
      * @param phoneNumber           номер телефона студента
      */
-    public StudentDatabaseModel(int magazineStudentNumber, String groupNumber, String firstName, String surname, String middleName, boolean isPayer, String homaAddress, String currentAddress, boolean isLocal, String phoneNumber) {
+    public Student(int magazineStudentNumber, String groupNumber, String firstName, String surname, String middleName, boolean isPayer, String homaAddress, String currentAddress, boolean isLocal, String phoneNumber) {
         this(magazineStudentNumber, groupNumber, surname, middleName, firstName, isPayer);
         this.homaAddress = homaAddress;
         this.currentAddress = currentAddress;

@@ -1,6 +1,6 @@
 package Database.DAOS;
 
-import Database.Models.GroupDatabaseModel;
+import Database.Models.Group;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -78,8 +78,8 @@ public class GroupDAO {
      *
      * @return список объектов GroupViews, представляющих группы
      */
-    public List<GroupDatabaseModel> getAllGroups() {
-        List<GroupDatabaseModel> groupDatabaseModelList = new ArrayList<>();
+    public List<Group> getAllGroups() {
+        List<Group> groupList = new ArrayList<>();
         String query = "SELECT * FROM StudentGroups";
         try (PreparedStatement statement = connectionDB.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
@@ -87,13 +87,13 @@ public class GroupDAO {
                 String groupNumber = resultSet.getString("groupNumber");
                 int course = resultSet.getInt("course");
                 String headmanFullName = resultSet.getString("headmanFullName");
-                GroupDatabaseModel groupDatabaseModel = new GroupDatabaseModel(groupNumber, course, headmanFullName);
-                groupDatabaseModelList.add(groupDatabaseModel);
+                Group group = new Group(groupNumber, course, headmanFullName);
+                groupList.add(group);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return groupDatabaseModelList;
+        return groupList;
     }
 
     /**

@@ -1,14 +1,14 @@
 package Database.Managers;
 
 import Database.DAOS.StudentDAO;
-import Database.Models.StudentDatabaseModel;
+import Database.Models.Student;
 
 import javax.swing.*;
 import java.sql.Connection;
 import java.util.List;
 
 /**
- * Класс-менеджер, осуществляющий периферийные действия между базой данных и контроллером.
+ * Класс-по, осуществляющий периферийные действия между базой данных и контроллером.
  *
  * @author Будчанин В.А.
  * @version 1.1
@@ -25,20 +25,20 @@ public class SQLiteDBHelper {
      */
     public static Object[][] getStudentsTableData(Connection connection, String groupNumber, int columnsNum) {
         StudentDAO studentDAO = new StudentDAO(connection);
-        List<StudentDatabaseModel> studentDatabaseModelList = studentDAO.getAllGroupStudents(groupNumber);
-        Object[][] tableData = new Object[studentDatabaseModelList.size()][columnsNum];
+        List<Student> studentList = studentDAO.getAllGroupStudents(groupNumber);
+        Object[][] tableData = new Object[studentList.size()][columnsNum];
         int rowIndex = 0;
-        for (StudentDatabaseModel studentDatabaseModel : studentDatabaseModelList) {
+        for (Student student : studentList) {
             Object[] rowElements = new Object[columnsNum];
-            rowElements[0] = studentDatabaseModel.getStudentID();
-            rowElements[1] = studentDatabaseModel.getFirstName();
-            rowElements[2] = studentDatabaseModel.getSurname();
-            rowElements[3] = studentDatabaseModel.getMiddleName();
-            rowElements[4] = studentDatabaseModel.getIsPayer();
-            rowElements[5] = studentDatabaseModel.getHomeAddress();
-            rowElements[6] = studentDatabaseModel.getCurrentAddress();
-            rowElements[7] = studentDatabaseModel.getIsLocal();
-            rowElements[8] = studentDatabaseModel.getPhoneNumber();
+            rowElements[0] = student.getStudentID();
+            rowElements[1] = student.getFirstName();
+            rowElements[2] = student.getSurname();
+            rowElements[3] = student.getMiddleName();
+            rowElements[4] = student.getIsPayer();
+            rowElements[5] = student.getHomeAddress();
+            rowElements[6] = student.getCurrentAddress();
+            rowElements[7] = student.getIsLocal();
+            rowElements[8] = student.getPhoneNumber();
             tableData[rowIndex] = rowElements;
             rowIndex++;
         }

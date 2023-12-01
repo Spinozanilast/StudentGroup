@@ -6,7 +6,7 @@ package Database.Models;
  * @author Будчанин В.А.
  * @version 1.0
  */
-public class GroupDatabaseModel {
+public class Group {
     /**
      * Номер группы.
      */
@@ -29,7 +29,7 @@ public class GroupDatabaseModel {
      * @param courseNumber     номер курса
      * @param headmanFullName  полное имя старосты
      */
-    public GroupDatabaseModel(String groupNumber, int courseNumber, String headmanFullName) {
+    public Group(String groupNumber, int courseNumber, String headmanFullName) {
         this.groupNumber = groupNumber;
         this.courseNumber = courseNumber;
         this.headmanFullName = headmanFullName;

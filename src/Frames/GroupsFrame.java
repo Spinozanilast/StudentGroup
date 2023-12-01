@@ -3,9 +3,8 @@ package Frames;
 import CustomComponents.*;
 import Database.DAOS.GroupDAO;
 import Database.Managers.SQLiteConnectionProvider;
-import Database.Models.GroupDatabaseModel;
+import Database.Models.Group;
 import Frames.models.GroupViews;
-import org.apache.logging.log4j.message.Message;
 
 import javax.swing.*;
 import java.awt.*;
@@ -602,12 +601,12 @@ public class GroupsFrame extends JFrame {
      */
     private void createGroupsFromDB() {
         if (groupDAO.isTableEmpty()) return;
-        List<GroupDatabaseModel> groupDatabaseModelList;
-        groupDatabaseModelList = groupDAO.getAllGroups();
-        for (GroupDatabaseModel groupDatabaseModel : groupDatabaseModelList) {
+        List<Group> groupList;
+        groupList = groupDAO.getAllGroups();
+        for (Group group : groupList) {
             GroupView groupView = new GroupView(Color.BLACK, GroupsFrame.GROUP_PANEL_BACKGROUND_COLOR,
                     GroupsFrame.TEXT_BOXES_BACKGROUND_COLOR, "№ группы", "Курс", "ФИО старосты");
-            groupView.setTextFieldsLeftToRightStrings(groupDatabaseModel.getGroupNumber(), String.valueOf(groupDatabaseModel.getCourseNumber()), groupDatabaseModel.getHeadmanFullName());
+            groupView.setTextFieldsLeftToRightStrings(group.getGroupNumber(), String.valueOf(group.getCourseNumber()), group.getHeadmanFullName());
             groupView.setTextFieldsValid();
             groupView.setPanelNonEditableCustom(GroupsFrame.GROUP_PANEL_BACKGROUND_COLOR, GroupsFrame.GROUP_NON_EDITABLE_FOREGROUND, GroupsFrame.FONT_NON_EDITABLE);
             groupView.setPreferredSize(GroupsFrame.STANDARD_ELEMENT_PREFFERED_SIZE);

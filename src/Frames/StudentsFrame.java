@@ -6,7 +6,7 @@ import CustomComponents.PillButton;
 import Database.DAOS.StudentDAO;
 import Database.Managers.SQLiteConnectionProvider;
 import Database.Managers.SQLiteDBHelper;
-import Database.Models.StudentDatabaseModel;
+import Database.Models.Student;
 import Frames.models.StudentsJTableModelInfo;
 import TableExport.FilePathChooserDialog;
 import TableExport.TableExporter;
@@ -56,42 +56,38 @@ public class StudentsFrame extends JFrame {
      * Цвет фона кнопки.
      */
     public static final Color BUTTON_BACKGROUND = new Color(0, 95, 184);
-
+    /**
+     * Всплывающее меню.
+     */
+    private static JPopupMenu popupMenu;
+    /**
+     * Объект доступа к данным студента.
+     */
+    private static StudentDAO studentDAO;
     /**
      * Главная панель.
      */
     private final JPanel pnlMain = new JPanel();
-
     /**
      * Внутреннее меню панели.
      */
-    private final JPanel pnlInnerMenu = new JPanel();
-
+    private final JPanel pnlUpButtons = new JPanel();
     /**
      * Внутренние атрибуты панели.
      */
     private final JPanel pnlInnerAttributes = new JPanel();
-
     /**
      * Внутренняя верхняя панель.
      */
-    private final JPanel pnlInnerUp = new JPanel();
-
+    private final JPanel pnlShortGroupInfo = new JPanel();
     /**
      * Макет содержимого панели.
      */
     private final JPanel pnlContentLayout = new JPanel();
-
     /**
-     * Значение числа студентов.
+     * Нижняя панель, содержащая кнопки "Выход", "Об Авторе", "О Программе"
      */
-    private JLabel lblStudentsNumValue;
-
-    /**
-     * Кнопка для отображения списка студентов.
-     */
-    private JButton jbtShowStudentsList;
-
+    private final JPanel pnlDownButtonsPanel = new JPanel();
     /**
      * Номер группы.
      */
@@ -101,42 +97,34 @@ public class StudentsFrame extends JFrame {
      * Число студентов.
      */
     private final String studentsNum;
-
-    /**
-     * Кнопка для экспорта в Word.
-     */
-    private JButton jbtToWordExport;
-
-    /**
-     * Кнопка для экспорта в Excel.
-     */
-    private JButton jbtToExcelExport;
-
-    /**
-     * Таблица студентов с действием в столбце.
-     */
-    private CustomLightJTableWithActionColumn studentsTable = null;
-
-    /**
-     * Соединение с базой данных.
-     */
-    private Connection connection;
-
-    /**
-     * Всплывающее меню.
-     */
-    private static JPopupMenu popupMenu;
-
-    /**
-     * Объект доступа к данным студента.
-     */
-    private static StudentDAO studentDAO;
-
     /**
      * Провайдер соединения SQLite.
      */
     SQLiteConnectionProvider sqLiteConnectionProvider;
-
+    /**
+     * Значение числа студентов.
+     */
+    private JLabel lblStudentsNumValue;
+    /**
+     * Кнопка для отображения списка студентов.
+     */
+    private JButton jbtShowStudentsTable;
+    /**
+     * Кнопка для экспорта в Word.
+     */
+    private JButton jbtToWordExport;
+    /**
+     * Кнопка для экспорта в Excel.
+     */
+    private JButton jbtToExcelExport;
+    /**
+     * Таблица студентов с действием в столбце.
+     */
+    private CustomLightJTableWithActionColumn studentsTable = null;
+    /**
+     * Соединение с базой данных.
+     */
+    private Connection connection;
 
     /**
      * Создает новый экземпляр класса StudentsFrame с указанными номером группы, номером курса и ФИО старосты вместе с
@@ -170,8 +158,11 @@ public class StudentsFrame extends JFrame {
         setLayouts();
         setUpPanelViewComponents(courseNumber, studentsNum, headmanFullName);
 
-        // Настраиваем панель кнопок
+        // Настраиваем верхнюю панель кнопок
         setUpButtonsPanel();
+
+        // Настраиваем нижнюю панель кнопок
+        setDownButtonsPanel();
 
         // Инициализируем соединение с базой данных
         initDBConnection();
@@ -188,264 +179,6 @@ public class StudentsFrame extends JFrame {
     }
 
     /**
-     * Метод setLayouts устанавливает компоновки для панелей.
-     */
-    private void setLayouts() {
-        pnlMain.setLayout(new BoxLayout(pnlMain, BoxLayout.Y_AXIS));
-        pnlInnerMenu.setLayout(new BoxLayout(pnlInnerMenu, BoxLayout.X_AXIS));
-        pnlInnerAttributes.setLayout(new BoxLayout(pnlInnerAttributes, BoxLayout.X_AXIS));
-        pnlInnerUp.setLayout(new BoxLayout(pnlInnerUp, BoxLayout.X_AXIS));
-        pnlContentLayout.setLayout(new BoxLayout(pnlContentLayout, BoxLayout.Y_AXIS));
-
-        pnlMain.add(pnlInnerUp);
-        pnlMain.add(pnlInnerMenu);
-        pnlMain.add(Box.createVerticalStrut(10));
-        pnlMain.add(pnlInnerAttributes);
-        pnlMain.add(pnlContentLayout);
-        pnlMain.setBackground(PANEL_BACKGROUND);
-
-        add(pnlMain);
-        setContentPane(pnlMain);
-    }
-
-    /**
-     * Метод setUpPanelViewComponents устанавливает компоненты представления панели.
-     *
-     * @param course          Курс.
-     * @param studentsCount   Количество студентов.
-     * @param headmanFullName ФИО старосты.
-     */
-    private void setUpPanelViewComponents(String course, String studentsCount, String headmanFullName) {
-        int strutWidth = 17;
-
-        JLabel lblCourse = new JLabel("Курс: ");
-        JLabel lblStudentsNum = new JLabel("Количество студентов: ");
-        JLabel lblHeadmanFullName = new JLabel("Староста: ");
-        JLabel lblCourseValue = new JLabel(course);
-        JLabel lblHeadmanValue = new JLabel(headmanFullName);
-        lblStudentsNumValue = new JLabel(studentsCount);
-
-        pnlInnerUp.setLayout(new BoxLayout(pnlInnerUp, BoxLayout.X_AXIS));
-
-        stylizeLabels(LABEL_FOREGROUND, lblCourse, lblStudentsNum, lblHeadmanFullName);
-        stylizeLabels(Color.BLACK, lblCourseValue, lblStudentsNumValue, lblHeadmanValue);
-
-        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
-        pnlInnerUp.add(lblCourse);
-
-        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
-        pnlInnerUp.add(lblCourseValue);
-
-        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
-        pnlInnerUp.add(Box.createHorizontalGlue());
-        pnlInnerUp.add(lblStudentsNum);
-
-        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
-        pnlInnerUp.add(lblStudentsNumValue);
-
-        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
-        pnlInnerUp.add(Box.createHorizontalGlue());
-        pnlInnerUp.add(lblHeadmanFullName);
-
-        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
-        pnlInnerUp.add(lblHeadmanValue);
-        pnlInnerUp.add(Box.createHorizontalStrut(strutWidth));
-
-        pnlInnerUp.setBackground(PANEL_BACKGROUND);
-    }
-
-    public JButton getExitButton() {
-        JButton jbtExit = new JButton("Закрыть окно");
-        jbtExit.addActionListener(e -> {
-            JFrame jFrame = (JFrame) jbtExit.getTopLevelAncestor();
-            jFrame.dispose();
-        });
-        return jbtExit;
-    }
-
-    /**
-     * Метод setUpButtonsPanel устанавливает панель кнопок.
-     */
-    private void setUpButtonsPanel() {
-        jbtShowStudentsList = new JButton("Список студентов");
-        jbtShowStudentsList.setToolTipText("Вывести список всех студентов для данной группы");
-
-        JButton jbtExit = getExitButton();
-        jbtExit.setToolTipText("Закрывает окно редактирования данной группы");
-
-        jbtToWordExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().getResource("/CustomComponents/Icons/WordIcon.png"))));
-        jbtToWordExport.setToolTipText("Экспортирует таблицу со студентами в Word");
-
-        jbtToExcelExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass().getResource("/CustomComponents/Icons/ExcelIcon.png"))));
-        jbtToExcelExport.setToolTipText("Экспортирует таблицу со студентами в Excel");
-
-        stylizeButtons(BUTTON_BACKGROUND, jbtShowStudentsList);
-        stylizeButtons(Color.RED, jbtExit);
-        stylizeButtons(new Color(24, 90, 189), jbtToWordExport);
-        stylizeButtons(new Color(16, 124, 65), jbtToExcelExport);
-
-        pnlInnerMenu.setBackground(PANEL_BACKGROUND);
-        pnlInnerAttributes.setBackground(PANEL_BACKGROUND);
-        pnlContentLayout.setBackground(PANEL_BACKGROUND);
-        addButton(jbtShowStudentsList, false);
-        addButton(jbtToWordExport, false);
-        addButton(jbtToExcelExport, false);
-        addButton(jbtExit, true);
-    }
-
-    /**
-     * Метод addButton добавляет кнопку на панель.
-     *
-     * @param button      Кнопка.
-     * @param isEndButton Флаг, указывающий, является ли кнопка последней на панели.
-     */
-    private void addButton(JButton button, boolean isEndButton) {
-        pnlInnerMenu.add(button);
-        if (isEndButton) return;
-        pnlInnerMenu.add(Box.createHorizontalGlue());
-    }
-
-    /**
-     * Метод stylizeLabels задает стиль для надписей.
-     *
-     * @param foreground Цвет переднего плана.
-     * @param labels     Надписи.
-     */
-    private void stylizeLabels(Color foreground, JLabel... labels) {
-        for (JLabel label : labels) {
-            label.setFont(new Font("Montserrat", Font.BOLD | Font.ITALIC, 24));
-            label.setForeground(foreground);
-        }
-    }
-
-    /**
-     * Метод stylizeButtons задает стиль для кнопок.
-     *
-     * @param background Цвет заднего плана.
-     * @param jButtons   Кнопки.
-     */
-    private void stylizeButtons(Color background, JButton... jButtons) {
-        for (JButton jButton : jButtons) {
-            jButton.setPreferredSize(BUTTON_PREFFERED_SIZE);
-            jButton.setForeground(Color.WHITE);
-            jButton.setBackground(background);
-            jButton.setFont(new Font("Montserrat", Font.BOLD | Font.ITALIC, 14));
-            jButton.setBorder(null);
-            jButton.setBorder(new EmptyBorder(10, 10, 10, 10));
-        }
-    }
-
-    /**
-     * Конструктор контроллера формы группы.
-     */
-    public void initDBConnection() {
-        addWindowListener(new WindowAdapter() {
-            /**
-             * Вызывается в процессе закрытия окна formView.
-             *
-             * @param e экземпляр WindowEvent
-             */
-            @Override
-            public void windowClosing(WindowEvent e) {
-                try {
-                    if (connection != null && !connection.isClosed()) {
-                        sqLiteConnectionProvider.closeConnection();
-                    }
-                } catch (SQLException exception) {
-                    exception.printStackTrace();
-                }
-            }
-        });
-        initButtonsListeners();
-    }
-
-    /**
-     * Возвращает провайдера соединения SQLite.
-     *
-     * @return Провайдер соединения SQLite.
-     */
-    private SQLiteConnectionProvider getSqLiteConnectionProvider() {
-        SQLiteConnectionProvider sqLiteConnectionProvider = new SQLiteConnectionProvider();
-        connection = sqLiteConnectionProvider.getConnection();
-        studentDAO = new StudentDAO(connection);
-        return sqLiteConnectionProvider;
-    }
-
-    /**
-     * Инициализирует слушателей событий для кнопок на View.
-     */
-    private void initButtonsListeners() {
-        ActionListener actionListenerShowStudentsTable = this::actionShowStudentsTablePerformed;
-        ActionListener actionListenerExportToWord = e -> actionExportToWordPerformed();
-        ActionListener actionListenerExportToExcel = e -> actionExportToExcelPerformed();
-        jbtShowStudentsList.addActionListener(actionListenerShowStudentsTable);
-        getJbtToWordExport().addActionListener(actionListenerExportToWord);
-        getJbtToExcelExport().addActionListener(actionListenerExportToExcel);
-    }
-
-    /**
-     * Метод, содержащий логику добавления таблицы,
-     * осуществляемое соответствующей кнопкой.
-     *
-     * @param event Экземпляр сообщения о произошедшем событии
-     */
-    private void actionShowStudentsTablePerformed(ActionEvent event) {
-        if (pnlContentLayout.getComponentCount() == 0) {
-            Object[] columnsNames = StudentsJTableModelInfo.getTableColumnsNamesWithoutGroup();
-            int columnsNumber = columnsNames.length;
-            Object[][] studentsData = SQLiteDBHelper.getStudentsTableData(connection, groupNumber, columnsNumber);
-            studentsTable = getCustomLightJTableWithActionColumn(studentsData, columnsNames);
-            studentsTable.setCustomBooleanIntegerRenderers(StudentsJTableModelInfo.getBooleanColumnsIndexes(), StudentsJTableModelInfo.getIntegerColumnsIndexes());
-            initAttributesPanel(columnsNames, studentsTable.getColumnModel());
-            studentsTable.addActionColumn(getTableActionEvents());
-            if (studentsData.length == 0) {
-                initJTableInput(studentsTable);
-            }
-            JScrollPane tableScrollPane = new JScrollPane(studentsTable);
-            pnlContentLayout.add(tableScrollPane);
-            addTablePopupMenu(studentsTable);
-            revalidate();
-            repaint();
-            initTablePopupMenu(studentsTable);
-        }
-    }
-
-    /**
-     * Инициализирует панель атрибутов.
-     *
-     * @param columnNames      имена столбцов
-     * @param tableColumnModel модель столбцов таблицы
-     */
-    private void initAttributesPanel(Object[] columnNames, TableColumnModel tableColumnModel) {
-        if (pnlInnerAttributes.getComponentCount() != 0) return;
-        for (int i = 0, columnNamesLength = columnNames.length; i < columnNamesLength; i++) {
-            PillButton columnPillButton = getPillButton(columnNames[i]);
-            columnPillButton.setLblFont(new Font("Montserrat", Font.ITALIC, 10));
-            columnPillButton.setPreferredSize(StudentsFrame.PILLS_PREFFERED_SIZE);
-            columnPillButton.setMaximumSize(StudentsFrame.PILLS_PREFFERED_SIZE);
-            pnlInnerAttributes.add(columnPillButton);
-
-            TableColumn columnToHide = tableColumnModel.getColumn(i);
-            columnPillButton.addMouseListener(new MouseAdapter() {
-                /**
-                 * Вызывается при щелчке мыши на кнопке.
-                 *
-                 * @param e экземпляр MouseEvent
-                 */
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    int normalWidth = getWidth() / columnNames.length;
-                    int widthToSet = columnPillButton.getPillActivated() ? normalWidth : 0;
-                    columnToHide.setMinWidth(widthToSet);
-                    columnToHide.setMaxWidth(widthToSet);
-                    columnToHide.setWidth(widthToSet);
-                    columnToHide.setPreferredWidth(widthToSet);
-                }
-            });
-        }
-    }
-
-    /**
      * Возвращает кнопку-пилюлю.
      *
      * @param columnNames имена столбцов
@@ -457,93 +190,7 @@ public class StudentsFrame extends JFrame {
         Color notActivatedBackground = new Color(243, 245, 246);
         Color activatedForeground = Color.WHITE;
         Color notActivatedForeground = Color.BLACK;
-        return new PillButton(
-                columnName,
-                activatedBackground,
-                notActivatedBackground,
-                activatedForeground,
-                notActivatedForeground);
-    }
-
-    /**
-     * Инициализирует всплывающее меню для таблицы студентов.
-     *
-     * @param studentsTable таблица студентов
-     */
-    private void initTablePopupMenu(CustomLightJTableWithActionColumn studentsTable) {
-        popupMenu = new JPopupMenu();
-
-        JMenuItem addMenuItem = new JMenuItem("Добавить строку");
-        addMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
-
-        JMenuItem deleteMenuItem = new JMenuItem("Удалить студента");
-        deleteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
-
-        JMenuItem updateMenuItem = new JMenuItem("Обновить таблицу");
-        updateMenuItem.setFocusable(true);
-        updateMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_DOWN_MASK));
-
-        addPopupMenuItems(studentsTable, addMenuItem, deleteMenuItem, updateMenuItem);
-        popupMenu.add(addMenuItem);
-        popupMenu.add(deleteMenuItem);
-        popupMenu.add(updateMenuItem);
-    }
-
-    /**
-     * Добавляет элементы контекстного меню в таблицу студентов.
-     *
-     * @param studentsTable  таблица студентов
-     * @param addMenuItem    элемент меню "Добавить строку"
-     * @param deleteMenuItem элемент меню "Удалить студента"
-     * @param updateMenuItem элемент меню "Обновить таблицу"
-     */
-    private void addPopupMenuItems(CustomLightJTableWithActionColumn studentsTable, JMenuItem addMenuItem, JMenuItem deleteMenuItem, JMenuItem updateMenuItem) {
-        addMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int rowIndex = studentsTable.getSelectedRow();
-                if (rowIndex < 0) {
-                    if (isEmptyTable(studentsTable)) {
-                        initJTableInput(studentsTable);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Выберите строку таблицы, после которой" + " необходимо добавить студента");
-                    }
-                    return;
-                }
-                DefaultTableModel tableModel = (DefaultTableModel) studentsTable.getModel();
-                Object previousStudentID = 0;
-                previousStudentID = tableModel.getValueAt(rowIndex, 0);
-                addRowToStudentsTable(rowIndex, (int) previousStudentID + 1, tableModel, false);
-                setStudentsNum(String.valueOf((Integer.parseInt(studentsNum) + 1)));
-
-            }
-        });
-
-        deleteMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (isEmptyTable(studentsTable)) return;
-                int[] selectedRowsIndexes = studentsTable.getSelectedRows();
-                if (selectedRowsIndexes.length == 0) {
-                    JOptionPane.showMessageDialog(null, "Выберите студента, которого необходимо удалить");
-                    return;
-                }
-                DefaultTableModel tableModel = (DefaultTableModel) studentsTable.getModel();
-                for (int rowIndex : selectedRowsIndexes) {
-                    String studentID = tableModel.getValueAt(rowIndex, 0).toString();
-                    studentDAO.deleteStudent(studentID);
-                    tableModel.removeRow(rowIndex);
-                    setStudentsNum(String.valueOf((Integer.parseInt(studentsNum) - 1)));
-                }
-                if (studentsTable.getModel().getRowCount() == 0) {
-                    addRowToStudentsTable(0, 1, (DefaultTableModel) studentsTable.getModel(), true);
-                }
-            }
-        });
-
-        updateMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jbtShowStudentsList.doClick();
-            }
-        });
+        return new PillButton(columnName, activatedBackground, notActivatedBackground, activatedForeground, notActivatedForeground);
     }
 
     /**
@@ -619,63 +266,6 @@ public class StudentsFrame extends JFrame {
     }
 
     /**
-     * Возвращает события действий таблицы.
-     *
-     * @return события действий таблицы
-     */
-    private TableActionCellEvent getTableActionEvents() {
-        return new TableActionCellEvent() {
-            @Override
-            public void onAddRow(int rowIndex, JTable jTable) {
-                try {
-                    DefaultTableModel tableModel = (DefaultTableModel) jTable.getModel();
-                    Object newRowStudentID = (int) tableModel.getValueAt(rowIndex, 0) + 1;
-                    addRowToStudentsTable(rowIndex, newRowStudentID, tableModel, false);
-                    setStudentsNum(String.valueOf((Integer.parseInt(studentsNum) + 1)));
-                } catch (ClassCastException e) {
-                    JOptionPane.showMessageDialog(null, "Извините, что-то пошло не так");
-                }
-            }
-
-            @Override
-            public void onDelete(int rowIndex, JTable jTable) {
-                DefaultTableModel tableModel = (DefaultTableModel) jTable.getModel();
-                String studentID = tableModel.getValueAt(rowIndex, 0).toString();
-                studentDAO.deleteStudent(studentID);
-                int rowCount = tableModel.getRowCount();
-                if (rowIndex >= 0 && rowIndex < rowCount) {
-                    tableModel.removeRow(rowIndex);
-                }
-                if (jTable.getModel().getRowCount() == 0) {
-                    addRowToStudentsTable(0, 1, (DefaultTableModel) jTable.getModel(), true);
-                }
-            }
-
-            @Override
-            public void onUpdateDB(int rowIndex, JTable jTable) {
-                DefaultTableModel tableModel = (DefaultTableModel) jTable.getModel();
-                int columnCount = tableModel.getColumnCount();
-                Object[] rowData = new Object[columnCount];
-                for (int i = 0; i < columnCount; i++) {
-                    rowData[i] = tableModel.getValueAt(rowIndex, i);
-                }
-                SQLiteDBHelper.StudentsDataValidator.ValidityConstants validityResult = SQLiteDBHelper
-                        .StudentsDataValidator.validateData(rowData, connection, groupNumber);
-                if (validityResult == SQLiteDBHelper.StudentsDataValidator.ValidityConstants.NOT_VALID_VALUES) {
-                    return;
-                } else if (validityResult == SQLiteDBHelper.StudentsDataValidator.ValidityConstants.VALID_ROW) {
-                    studentDAO.addStudentToDB(getStudentDBModelFromRow(rowData));
-                    setStudentsNum(String.valueOf(Integer.parseInt(studentsNum) + 1));
-                } else if (validityResult == SQLiteDBHelper.StudentsDataValidator.ValidityConstants.UPDATE_ROW) {
-                    studentDAO.updateStudentInDB(getStudentDBModelFromRow(rowData));
-                }
-                pnlContentLayout.removeAll();
-                jbtShowStudentsList.doClick();
-            }
-        };
-    }
-
-    /**
      * Добавляет строку в таблицу студентов.
      *
      * @param rowIndex        индекс строки
@@ -691,13 +281,422 @@ public class StudentsFrame extends JFrame {
     }
 
     /**
+     * Метод setLayouts устанавливает компоновки для панелей.
+     */
+    private void setLayouts() {
+        pnlMain.setLayout(new BoxLayout(pnlMain, BoxLayout.Y_AXIS));
+        pnlUpButtons.setLayout(new BoxLayout(pnlUpButtons, BoxLayout.X_AXIS));
+        pnlInnerAttributes.setLayout(new BoxLayout(pnlInnerAttributes, BoxLayout.X_AXIS));
+        pnlShortGroupInfo.setLayout(new BoxLayout(pnlShortGroupInfo, BoxLayout.X_AXIS));
+        pnlContentLayout.setLayout(new BoxLayout(pnlContentLayout, BoxLayout.Y_AXIS));
+        pnlDownButtonsPanel.setLayout(new BoxLayout(pnlDownButtonsPanel, BoxLayout.X_AXIS));
+
+        pnlMain.add(pnlShortGroupInfo);
+        pnlMain.add(pnlUpButtons);
+        pnlMain.add(Box.createVerticalStrut(10));
+        pnlMain.add(pnlInnerAttributes);
+        pnlMain.add(pnlContentLayout);
+        pnlMain.add(pnlDownButtonsPanel);
+
+        pnlMain.setBackground(PANEL_BACKGROUND);
+        pnlInnerAttributes.setBackground(PANEL_BACKGROUND);
+        pnlContentLayout.setBackground(PANEL_BACKGROUND);
+
+        add(pnlMain);
+        setContentPane(pnlMain);
+    }
+
+    /**
+     * Метод setUpPanelViewComponents устанавливает компоненты представления панели.
+     *
+     * @param course          Курс.
+     * @param studentsCount   Количество студентов.
+     * @param headmanFullName ФИО старосты.
+     */
+    private void setUpPanelViewComponents(String course, String studentsCount, String headmanFullName) {
+        int strutWidth = 15;
+
+        JLabel lblCourse = new JLabel("Курс: ");
+        JLabel lblStudentsNum = new JLabel("Количество студентов: ");
+        JLabel lblHeadmanFullName = new JLabel("Староста: ");
+        JLabel lblCourseValue = new JLabel(course);
+        JLabel lblHeadmanValue = new JLabel(headmanFullName);
+        lblStudentsNumValue = new JLabel(studentsCount);
+
+        pnlShortGroupInfo.setLayout(new BoxLayout(pnlShortGroupInfo, BoxLayout.X_AXIS));
+
+        stylizeLabels(LABEL_FOREGROUND, lblCourse, lblStudentsNum, lblHeadmanFullName);
+        stylizeLabels(Color.BLACK, lblCourseValue, lblStudentsNumValue, lblHeadmanValue);
+
+        pnlShortGroupInfo.add(Box.createHorizontalStrut(strutWidth));
+        pnlShortGroupInfo.add(lblCourse);
+
+        pnlShortGroupInfo.add(Box.createHorizontalStrut(strutWidth));
+        pnlShortGroupInfo.add(lblCourseValue);
+
+        pnlShortGroupInfo.add(Box.createHorizontalStrut(strutWidth));
+        pnlShortGroupInfo.add(Box.createHorizontalGlue());
+        pnlShortGroupInfo.add(lblStudentsNum);
+
+        pnlShortGroupInfo.add(Box.createHorizontalStrut(strutWidth));
+        pnlShortGroupInfo.add(lblStudentsNumValue);
+
+        pnlShortGroupInfo.add(Box.createHorizontalStrut(strutWidth));
+        pnlShortGroupInfo.add(Box.createHorizontalGlue());
+        pnlShortGroupInfo.add(lblHeadmanFullName);
+
+        pnlShortGroupInfo.add(Box.createHorizontalStrut(strutWidth));
+        pnlShortGroupInfo.add(lblHeadmanValue);
+        pnlShortGroupInfo.add(Box.createHorizontalStrut(strutWidth));
+
+        pnlShortGroupInfo.setBackground(PANEL_BACKGROUND);
+    }
+    /**
+     * Метод getJbtAboutAuthor создает кнопку "Об авторе".
+     *
+     * @return JButton, который отображает информацию об авторе при нажатии.
+     */
+    public JButton getJbtAboutAuthor() {
+        JButton jbtAboutAuthorInfo = new JButton("Об авторе", new ImageIcon(Objects.requireNonNull(getClass()
+                .getResource("/CustomComponents/Icons/AuthorButtonIcon.png"))));
+        jbtToWordExport.setToolTipText("Показать краткие сведения об авторе приложения");
+        jbtAboutAuthorInfo.addActionListener(e -> {
+            AboutAuthorFrame aboutAuthorFrame = new AboutAuthorFrame();
+            aboutAuthorFrame.setLocationRelativeTo(null);
+        });
+        return jbtAboutAuthorInfo;
+    }
+
+    /**
+     * Метод getJbtAboutApp создает кнопку "О приложении".
+     *
+     * @return JButton, который отображает информацию о приложении при нажатии.
+     */
+    public JButton getJbtAboutApp() {
+        JButton jbtAboutAppInfo = new JButton("О приложении", new ImageIcon(Objects.requireNonNull(getClass()
+                .getResource("/CustomComponents/Icons/AboutButtonIcon.png"))));
+        jbtAboutAppInfo.setToolTipText("Показать краткую информацию о приложении");
+        jbtAboutAppInfo.addActionListener(e -> {
+            AboutAppFrame aboutAppFrame = new AboutAppFrame();
+            aboutAppFrame.setLocationRelativeTo(null);
+        });
+        return jbtAboutAppInfo;
+    }
+
+    /**
+     * Метод getExitButton создает кнопку "Закрыть окно".
+     *
+     * @return JButton, который закрывает окно при нажатии.
+     */
+    public JButton getExitButton() {
+        JButton jbtExit = new JButton("Закрыть окно", new ImageIcon(Objects.requireNonNull(getClass()
+                .getResource("/CustomComponents/Icons/CloseButtonIcon.png"))));
+        jbtExit.setToolTipText("Закрывает окно редактирования данной группы");
+        jbtExit.addActionListener(e -> {
+            JFrame jFrame = (JFrame) jbtExit.getTopLevelAncestor();
+            jFrame.dispose();
+        });
+        return jbtExit;
+    }
+
+    /**
+     * Метод setUpButtonsPanel устанавливает верхнюю панель кнопок.
+     */
+    private void setUpButtonsPanel() {
+        jbtShowStudentsTable = new JButton("Список студентов", new ImageIcon(Objects.requireNonNull(getClass()
+                .getResource("/CustomComponents/Icons/TableButtonIcon.png"))));
+        jbtShowStudentsTable.setToolTipText("Вывести список всех студентов для данной группы");
+
+        jbtToWordExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass()
+                .getResource("/CustomComponents/Icons/WordIcon.png"))));
+
+        jbtToExcelExport = new JButton("Экспорт", new ImageIcon(Objects.requireNonNull(getClass()
+                .getResource("/CustomComponents/Icons/ExcelIcon.png"))));
+        jbtToExcelExport.setToolTipText("Экспортирует таблицу со студентами в Excel");
+
+        stylizeButtons(BUTTON_BACKGROUND, jbtShowStudentsTable);
+        stylizeButtons(new Color(24, 90, 189), jbtToWordExport);
+        stylizeButtons(new Color(16, 124, 65), jbtToExcelExport);
+
+        pnlUpButtons.setBackground(PANEL_BACKGROUND);
+        pnlInnerAttributes.setBackground(PANEL_BACKGROUND);
+        pnlContentLayout.setBackground(PANEL_BACKGROUND);
+        addButton(pnlUpButtons, jbtShowStudentsTable, false);
+        addButton(pnlUpButtons, jbtToWordExport, false);
+        addButton(pnlUpButtons, jbtToExcelExport, true);
+    }
+
+    /**
+     * Метод setUpButtonsPanel устанавливает нижнюю панель кнопок с дополнительной информацией.
+     */
+    private void setDownButtonsPanel() {
+        JButton jbtAboutAppInfo = getJbtAboutApp();
+        JButton jbtAboutAuthorInfo = getJbtAboutAuthor();
+        JButton jbtExit = getExitButton();
+
+        stylizeButtons(BUTTON_BACKGROUND, jbtAboutAppInfo, jbtAboutAuthorInfo);
+        stylizeButtons(Color.RED, jbtExit);
+
+        pnlDownButtonsPanel.setBackground(PANEL_BACKGROUND);
+        addButton(pnlDownButtonsPanel, jbtAboutAppInfo, false);
+        addButton(pnlDownButtonsPanel, jbtAboutAuthorInfo, false);
+        addButton(pnlDownButtonsPanel, jbtExit, true);
+    }
+
+    /**
+     * Метод addButton добавляет кнопку на панель.
+     *
+     * @param pnlLayout   Панель, которая будет содержать кнопки
+     * @param button      Кнопка.
+     * @param isEndButton Флаг, указывающий, является ли кнопка последней на панели.
+     */
+    private void addButton(JPanel pnlLayout, JButton button, boolean isEndButton) {
+        pnlLayout.add(button);
+        if (isEndButton) return;
+        pnlLayout.add(Box.createHorizontalGlue());
+    }
+
+    /**
+     * Метод stylizeLabels задает стиль для надписей.
+     *
+     * @param foreground Цвет переднего плана.
+     * @param labels     Надписи.
+     */
+    private void stylizeLabels(Color foreground, JLabel... labels) {
+        for (JLabel label : labels) {
+            label.setFont(new Font("Montserrat", Font.BOLD | Font.ITALIC, 24));
+            label.setForeground(foreground);
+        }
+    }
+
+    /**
+     * Метод stylizeButtons задает стиль для кнопок.
+     *
+     * @param background Цвет заднего плана.
+     * @param jButtons   Кнопки.
+     */
+    private void stylizeButtons(Color background, JButton... jButtons) {
+        for (JButton jButton : jButtons) {
+            jButton.setPreferredSize(BUTTON_PREFFERED_SIZE);
+            jButton.setForeground(Color.WHITE);
+            jButton.setBackground(background);
+            jButton.setFont(new Font("Montserrat", Font.BOLD | Font.ITALIC, 14));
+            jButton.setBorder(null);
+            jButton.setBorder(new EmptyBorder(10, 10, 10, 10));
+        }
+    }
+
+    /**
+     * Конструктор контроллера формы группы.
+     */
+    public void initDBConnection() {
+        addWindowListener(new WindowAdapter() {
+            /**
+             * Вызывается в процессе закрытия окна formView.
+             *
+             * @param e экземпляр WindowEvent
+             */
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    if (connection != null && !connection.isClosed()) {
+                        sqLiteConnectionProvider.closeConnection();
+                    }
+                } catch (SQLException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        });
+        initButtonsListeners();
+    }
+
+    /**
+     * Возвращает провайдера соединения SQLite.
+     *
+     * @return Провайдер соединения SQLite.
+     */
+    private SQLiteConnectionProvider getSqLiteConnectionProvider() {
+        SQLiteConnectionProvider sqLiteConnectionProvider = new SQLiteConnectionProvider();
+        connection = sqLiteConnectionProvider.getConnection();
+        studentDAO = new StudentDAO(connection);
+        return sqLiteConnectionProvider;
+    }
+
+    /**
+     * Инициализирует слушателей событий для кнопок на View.
+     */
+    private void initButtonsListeners() {
+        ActionListener actionListenerShowStudentsTable = this::actionShowStudentsTablePerformed;
+        ActionListener actionListenerExportToWord = e -> actionExportToWordPerformed();
+        ActionListener actionListenerExportToExcel = e -> actionExportToExcelPerformed();
+        jbtShowStudentsTable.addActionListener(actionListenerShowStudentsTable);
+        getJbtToWordExport().addActionListener(actionListenerExportToWord);
+        getJbtToExcelExport().addActionListener(actionListenerExportToExcel);
+    }
+
+    /**
+     * Метод, содержащий логику добавления таблицы,
+     * осуществляемое соответствующей кнопкой.
+     *
+     * @param event Экземпляр сообщения о произошедшем событии
+     */
+    private void actionShowStudentsTablePerformed(ActionEvent event) {
+        if (pnlContentLayout.getComponentCount() == 0) {
+            Object[] columnsNames = StudentsJTableModelInfo.getTableColumnsNamesWithoutGroup();
+            int columnsNumber = columnsNames.length;
+            Object[][] studentsData = SQLiteDBHelper.getStudentsTableData(connection, groupNumber, columnsNumber);
+            studentsTable = getCustomLightJTableWithActionColumn(studentsData, columnsNames);
+            studentsTable.setCustomBooleanIntegerRenderers(StudentsJTableModelInfo.getBooleanColumnsIndexes(),
+                    StudentsJTableModelInfo.getIntegerColumnsIndexes());
+            initAttributesPanel(columnsNames, studentsTable.getColumnModel());
+            studentsTable.addActionColumn(getTableActionEvents());
+            if (studentsData.length == 0) {
+                initJTableInput(studentsTable);
+            }
+            JScrollPane tableScrollPane = new JScrollPane(studentsTable);
+            pnlContentLayout.add(tableScrollPane);
+            addTablePopupMenu(studentsTable);
+            revalidate();
+            repaint();
+            initTablePopupMenu(studentsTable);
+        }
+    }
+
+    /**
+     * Инициализирует панель атрибутов.
+     *
+     * @param columnNames      имена столбцов
+     * @param tableColumnModel модель столбцов таблицы
+     */
+    private void initAttributesPanel(Object[] columnNames, TableColumnModel tableColumnModel) {
+        if (pnlInnerAttributes.getComponentCount() != 0) return;
+        for (int i = 0, columnNamesLength = columnNames.length; i < columnNamesLength; i++) {
+            PillButton columnPillButton = getPillButton(columnNames[i]);
+            columnPillButton.setLblFont(new Font("Montserrat", Font.ITALIC, 10));
+            columnPillButton.setPreferredSize(StudentsFrame.PILLS_PREFFERED_SIZE);
+            columnPillButton.setMaximumSize(StudentsFrame.PILLS_PREFFERED_SIZE);
+            pnlInnerAttributes.add(columnPillButton);
+
+            TableColumn columnToHide = tableColumnModel.getColumn(i);
+            columnPillButton.addMouseListener(new MouseAdapter() {
+                /**
+                 * Вызывается при щелчке мыши на кнопке.
+                 *
+                 * @param e экземпляр MouseEvent
+                 */
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    int normalWidth = getWidth() / columnNames.length;
+                    int widthToSet = columnPillButton.getPillActivated() ? normalWidth : 0;
+                    columnToHide.setMinWidth(widthToSet);
+                    columnToHide.setMaxWidth(widthToSet);
+                    columnToHide.setWidth(widthToSet);
+                    columnToHide.setPreferredWidth(widthToSet);
+                }
+            });
+        }
+    }
+
+    /**
+     * Инициализирует всплывающее меню для таблицы студентов.
+     *
+     * @param studentsTable таблица студентов
+     */
+    private void initTablePopupMenu(CustomLightJTableWithActionColumn studentsTable) {
+        popupMenu = new JPopupMenu();
+
+        JMenuItem addMenuItem = new JMenuItem("Добавить строку");
+        addMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
+
+        JMenuItem deleteMenuItem = new JMenuItem("Удалить студента");
+        deleteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
+
+        JMenuItem updateMenuItem = new JMenuItem("Обновить таблицу");
+        updateMenuItem.setFocusable(true);
+        updateMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_DOWN_MASK));
+
+        addPopupMenuItems(studentsTable, addMenuItem, deleteMenuItem, updateMenuItem);
+        popupMenu.add(addMenuItem);
+        popupMenu.add(deleteMenuItem);
+        popupMenu.add(updateMenuItem);
+    }
+
+    /**
+     * Добавляет элементы контекстного меню в таблицу студентов.
+     *
+     * @param studentsTable  таблица студентов
+     * @param addMenuItem    элемент меню "Добавить строку"
+     * @param deleteMenuItem элемент меню "Удалить студента"
+     * @param updateMenuItem элемент меню "Обновить таблицу"
+     */
+    private void addPopupMenuItems(CustomLightJTableWithActionColumn studentsTable, JMenuItem addMenuItem,
+                                   JMenuItem deleteMenuItem, JMenuItem updateMenuItem) {
+        addMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int rowIndex = studentsTable.getSelectedRow();
+                if (rowIndex < 0) {
+                    if (isEmptyTable(studentsTable)) {
+                        initJTableInput(studentsTable);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Выберите строку таблицы, после " +
+                                "которой" + " необходимо добавить студента");
+                    }
+                    return;
+                }
+                DefaultTableModel tableModel = (DefaultTableModel) studentsTable.getModel();
+                Object previousStudentID = 0;
+                previousStudentID = tableModel.getValueAt(rowIndex, 0);
+                addRowToStudentsTable(rowIndex, (int) previousStudentID + 1, tableModel, false);
+                setStudentsNum(String.valueOf((Integer.parseInt(studentsNum) + 1)));
+
+            }
+        });
+
+        deleteMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (isEmptyTable(studentsTable)) return;
+                int[] selectedRowsIndexes = studentsTable.getSelectedRows();
+                if (selectedRowsIndexes.length == 0) {
+                    JOptionPane.showMessageDialog(null, "Выберите студента, которого необходимо удалить");
+                    return;
+                }
+                DefaultTableModel tableModel = (DefaultTableModel) studentsTable.getModel();
+                for (int rowIndex : selectedRowsIndexes) {
+                    String studentID = tableModel.getValueAt(rowIndex, 0).toString();
+                    studentDAO.deleteStudent(studentID);
+                    tableModel.removeRow(rowIndex);
+                    setStudentsNum(String.valueOf((Integer.parseInt(studentsNum) - 1)));
+                }
+                if (studentsTable.getModel().getRowCount() == 0) {
+                    addRowToStudentsTable(0, 1, (DefaultTableModel) studentsTable.getModel(), true);
+                }
+            }
+        });
+
+        updateMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jbtShowStudentsTable.doClick();
+            }
+        });
+    }
+
+    /**
+     * Возвращает события действий таблицы.
+     *
+     * @return события действий таблицы
+     */
+    private TableActionCellEvent getTableActionEvents() {
+        return new TableActionCellEvents();
+    }
+
+    /**
      * Возвращает модель студента из строки данных.
      *
      * @param rowData строка данных
      * @return модель студента
      */
-    private StudentDatabaseModel getStudentDBModelFromRow(Object[] rowData) {
-        return new StudentDatabaseModel((int) rowData[0], groupNumber, rowData[1].toString(), rowData[2].toString(), rowData[3].toString(), (boolean) rowData[4], rowData[5].toString() == null ? "" : rowData[5].toString(), rowData[6].toString() == null ? "" : rowData[6].toString(), (boolean) rowData[7], rowData[8].toString());
+    private Student getStudentDBModelFromRow(Object[] rowData) {
+        return new Student((int) rowData[0], groupNumber, rowData[1].toString(), rowData[2].toString(), rowData[3].toString(), (boolean) rowData[4], rowData[5].toString() == null ? "" : rowData[5].toString(), rowData[6].toString() == null ? "" : rowData[6].toString(), (boolean) rowData[7], rowData[8].toString());
     }
 
     /**
@@ -732,7 +731,6 @@ public class StudentsFrame extends JFrame {
 
     /**
      * Метод для выполнения экспорта в файл Word.
-     *
      */
     private void actionExportToWordPerformed() {
         if (studentsTable != null) {
@@ -744,7 +742,6 @@ public class StudentsFrame extends JFrame {
 
     /**
      * Метод для выполнения экспорта в файл Excel.
-     *
      */
     private void actionExportToExcelPerformed() {
         if (studentsTable != null) {
@@ -779,5 +776,76 @@ public class StudentsFrame extends JFrame {
      */
     public JButton getJbtToExcelExport() {
         return jbtToExcelExport;
+    }
+
+    /**
+     * Класс, реализующий события действий таблицы.
+     */
+    private class TableActionCellEvents implements TableActionCellEvent {
+
+        /**
+         * Добавляет строку в таблицу.
+         *
+         * @param rowIndex индекс строки
+         * @param jTable   таблица
+         */
+        @Override
+        public void onAddRow(int rowIndex, JTable jTable) {
+            try {
+                DefaultTableModel tableModel = (DefaultTableModel) jTable.getModel();
+                Object newRowStudentID = (int) tableModel.getValueAt(rowIndex, 0) + 1;
+                addRowToStudentsTable(rowIndex, newRowStudentID, tableModel, false);
+                setStudentsNum(String.valueOf((Integer.parseInt(studentsNum) + 1)));
+            } catch (ClassCastException e) {
+                JOptionPane.showMessageDialog(null, "Извините, что-то пошло не так");
+            }
+        }
+
+        /**
+         * Удаляет строку из таблицы.
+         *
+         * @param rowIndex индекс строки
+         * @param jTable   таблица
+         */
+        @Override
+        public void onDelete(int rowIndex, JTable jTable) {
+            DefaultTableModel tableModel = (DefaultTableModel) jTable.getModel();
+            String studentID = tableModel.getValueAt(rowIndex, 0).toString();
+            studentDAO.deleteStudent(studentID);
+            int rowCount = tableModel.getRowCount();
+            if (rowIndex >= 0 && rowIndex < rowCount) {
+                tableModel.removeRow(rowIndex);
+            }
+            if (jTable.getModel().getRowCount() == 0) {
+                addRowToStudentsTable(0, 1, (DefaultTableModel) jTable.getModel(), true);
+            }
+        }
+
+        /**
+         * Обновляет базу данных.
+         *
+         * @param rowIndex индекс строки
+         * @param jTable   таблица
+         */
+        @Override
+        public void onUpdateDB(int rowIndex, JTable jTable) {
+            DefaultTableModel tableModel = (DefaultTableModel) jTable.getModel();
+            int columnCount = tableModel.getColumnCount();
+            Object[] rowData = new Object[columnCount];
+            for (int i = 0; i < columnCount; i++) {
+                rowData[i] = tableModel.getValueAt(rowIndex, i);
+            }
+            SQLiteDBHelper.StudentsDataValidator.ValidityConstants validityResult = SQLiteDBHelper.StudentsDataValidator.validateData(rowData, connection, groupNumber);
+            if (validityResult == SQLiteDBHelper.StudentsDataValidator.ValidityConstants.NOT_VALID_VALUES) {
+                return;
+            } else if (validityResult == SQLiteDBHelper.StudentsDataValidator.ValidityConstants.VALID_ROW) {
+                studentDAO.addStudentToDB(getStudentDBModelFromRow(rowData));
+                setStudentsNum(String.valueOf(Integer.parseInt(studentsNum) + 1));
+            } else if (validityResult == SQLiteDBHelper.StudentsDataValidator.ValidityConstants.UPDATE_ROW) {
+                studentDAO.updateStudentInDB(getStudentDBModelFromRow(rowData));
+            }
+            pnlContentLayout.removeAll();
+            jbtShowStudentsTable.doClick();
+        }
     }
 }

@@ -26,6 +26,7 @@ public class SplashFrame extends JFrame {
         setIconImage(icon.getImage());
         setLocationRelativeTo(null);
         initView();
+        setVisible(true);
     }
 
     /**
@@ -94,13 +95,13 @@ public class SplashFrame extends JFrame {
 
         JPanel pnlLabelsWithIcon = new JPanel(new FlowLayout(FlowLayout.CENTER, 150, 10));
         ImageIcon icon = new ImageIcon("assets/BigGroupIcon.png");
-        JLabel iconLabel = new JLabel(icon);
-        JPanel jPanelLeft = new JPanel(new GridBagLayout());
+        JLabel lblIcon = new JLabel(icon);
+        JPanel jPnlLeft = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        jPanelLeft.add(iconLabel, gbc);
-        pnlLabelsWithIcon.add(jPanelLeft);
+        jPnlLeft.add(lblIcon, gbc);
+        pnlLabelsWithIcon.add(jPnlLeft);
 
         JPanel jPanelRight = new JPanel();
         jPanelRight.setLayout(new BoxLayout(jPanelRight, BoxLayout.Y_AXIS));
@@ -197,5 +198,4 @@ public class SplashFrame extends JFrame {
             add(Box.createVerticalStrut(verticalStrut));
         }
     }
-
 }

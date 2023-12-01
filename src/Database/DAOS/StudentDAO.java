@@ -1,6 +1,6 @@
 package Database.DAOS;
 
-import Database.Models.StudentDatabaseModel;
+import Database.Models.Student;
 import org.sqlite.SQLiteErrorCode;
 
 import javax.swing.*;
@@ -36,10 +36,10 @@ public class StudentDAO {
      * Метод для получения списка всех студентов из конкретной группы из базы данных.
      *
      * @param groupNumber номер группы
-     * @return список объектов StudentDatabaseModel, представляющих студентов
+     * @return список объектов Student, представляющих студентов
      */
-    public List<StudentDatabaseModel> getAllGroupStudents(String groupNumber) {
-        List<StudentDatabaseModel> students = new ArrayList<>();
+    public List<Student> getAllGroupStudents(String groupNumber) {
+        List<Student> students = new ArrayList<>();
         String query = "SELECT * FROM Students WHERE groupNumber = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, groupNumber);
@@ -54,7 +54,7 @@ public class StudentDAO {
                     String homeAddress = resultSet.getString("homeAddress");
                     boolean isLocal = resultSet.getBoolean("isLocal");
                     String phoneNumber = resultSet.getString("phoneNumber");
-                    StudentDatabaseModel student = new StudentDatabaseModel(studentID, groupNumber, firstName, surname, middleName, isPayer,
+                    Student student = new Student(studentID, groupNumber, firstName, surname, middleName, isPayer,
                             homeAddress, currentAddress, isLocal, phoneNumber);
                     students.add(student);
                 }
@@ -70,7 +70,7 @@ public class StudentDAO {
      *
      * @param student модель студента, содержащая данные для добавления
      */
-    public void addStudentToDB(StudentDatabaseModel student) {
+    public void addStudentToDB(Student student) {
         String query = "INSERT INTO Students (studentID, groupNumber, firstname, surname, middleName, isPayer, homeAddress, currentAddress, isLocal, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, student.getStudentID());
@@ -102,7 +102,7 @@ public class StudentDAO {
      *
      * @param student Объект студента, содержащий обновленную информацию о студенте.
      */
-    public void updateStudentInDB(StudentDatabaseModel student) {
+    public void updateStudentInDB(Student student) {
         String query = "UPDATE Students SET groupNumber = ?, firstname = ?, surname = ?, middleName = ?, isPayer = ?, currentAddress = ?, homeAddress = ?, isLocal = ?, phoneNumber = ? WHERE studentID = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, student.getGroupNumber());
