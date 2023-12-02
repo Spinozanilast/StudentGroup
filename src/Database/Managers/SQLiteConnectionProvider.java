@@ -16,7 +16,7 @@ public class SQLiteConnectionProvider {
     /**
      * URL базы данных.
      */
-    private static final String DB_URL = "jdbc:sqlite:D:\\3COURSE\\Java\\CourseWork\\src\\Database\\DatabaseFiles\\StudentGroupDB.sqlite";
+    private static final String DB_URL = "jdbc:sqlite:D:\\3COURSE\\Java\\CourseWork\\CourseWorkApp\\src\\Database\\DatabaseFiles\\StudentGroupDB.sqlite";
 
     /**
      * Соединение с базой данных.

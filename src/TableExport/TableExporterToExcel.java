@@ -29,7 +29,7 @@ public class TableExporterToExcel implements TableExporter {
 
             Row headerRow = sheet.createRow(0);
             int rowColumnFilterIndex = 0;
-            for (int i = 0; i < table.getColumnCount(); i++) {
+            for (int i = 0; i < table.getColumnCount() - 1; i++) {
                 if (table.getColumnModel().getColumn(i).getMaxWidth() == 0){
                     continue;
                 }
@@ -57,7 +57,7 @@ public class TableExporterToExcel implements TableExporter {
             for (int i = 0; i < table.getRowCount(); i++) {
                 Row dataRow = sheet.createRow(i + 1);
                 rowColumnFilterIndex = 0;
-                for (int j = 0; j < table.getColumnCount();j++) {
+                for (int j = 0; j < table.getColumnCount() - 1;j++) {
                     if (table.getColumnModel().getColumn(j).getMaxWidth() == 0){
                         continue;
                     }
@@ -75,6 +75,9 @@ public class TableExporterToExcel implements TableExporter {
 
             try (FileOutputStream out = new FileOutputStream(filePath)) {
                 workbook.write(out);
+            }
+            catch (NullPointerException ignored){
+                return;
             }
 
             // Запрашиваем у пользователя, хочет ли он открыть файл

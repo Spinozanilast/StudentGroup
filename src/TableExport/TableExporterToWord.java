@@ -30,7 +30,7 @@ public class TableExporterToWord implements TableExporter {
 
             XWPFTable wordTable = document.createTable(table.getRowCount(), table.getColumnCount());
             int rowColumnFilterIndex = 0;
-            for (int i = 0; i < table.getColumnCount(); i++) {
+            for (int i = 0; i < table.getColumnCount() - 1; i++) {
                 if (table.getColumnModel().getColumn(i).getMaxWidth() == 0){
                     continue;
                 }
@@ -41,8 +41,8 @@ public class TableExporterToWord implements TableExporter {
 
             for (int i = 0; i < table.getRowCount(); i++) {
                 rowColumnFilterIndex = 0;
-                for (int j = 0; j < table.getColumnCount(); j++) {
-                    wordTable.createRow();
+                wordTable.createRow();
+                for (int j = 0; j < table.getColumnCount() - 1; j++) {
                     if (table.getColumnModel().getColumn(j).getMaxWidth() == 0){
                         continue;
                     }
@@ -58,10 +58,13 @@ public class TableExporterToWord implements TableExporter {
             try (FileOutputStream out = new FileOutputStream(filePath)) {
                 document.write(out);
             }
+            catch (NullPointerException ignored){
+                return;
+            }
 
             // Запрашиваем у пользователя, хочет ли он открыть файл
             int dialogResult = JOptionPane.showConfirmDialog(null,
-                    "Запись таблицы в файл" + filePath + " произошла успешно" +
+                    "Запись таблицы в файл " + filePath + " произошла успешно" +
                             "\nВы хотите открыть его ?", "Подтверждение", JOptionPane.YES_NO_OPTION);
 
             openFileChooseResult(filePath, dialogResult);

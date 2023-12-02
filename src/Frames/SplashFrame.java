@@ -1,6 +1,5 @@
 package Frames;
 
-import Frames.models.GroupViews;
 import javax.swing.*;
 import java.awt.*;
 
@@ -146,7 +145,7 @@ public class SplashFrame extends JFrame {
         jbtExit.addActionListener(e -> System.exit(0));
 
         jbtNext.addActionListener(e -> {
-            GroupsFrame groupsFrame = new GroupsFrame(new GroupViews());
+            GroupsFrame groupsFrame = new GroupsFrame(new GroupsFrame.GroupViews());
             groupsFrame.setVisible(true);
             dispose();
         });

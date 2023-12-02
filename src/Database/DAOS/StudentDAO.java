@@ -1,7 +1,7 @@
 package Database.DAOS;
 
-import Database.Models.Student;
-import org.sqlite.SQLiteErrorCode;
+import Frames.models.Student;
+import org.sqlite .SQLiteErrorCode;
 
 import javax.swing.*;
 import java.sql.Connection;

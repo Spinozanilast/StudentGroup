@@ -1,6 +1,6 @@
 package Database.DAOS;
 
-import Database.Models.Group;
+import Frames.models.Group;
 
 import java.sql.*;
 import java.util.ArrayList;

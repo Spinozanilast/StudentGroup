@@ -6,15 +6,17 @@ import CustomComponents.PillButton;
 import Database.DAOS.StudentDAO;
 import Database.Managers.SQLiteConnectionProvider;
 import Database.Managers.SQLiteDBHelper;
-import Database.Models.Student;
-import Frames.models.StudentsJTableModelInfo;
+import Frames.models.Student;
 import TableExport.FilePathChooserDialog;
 import TableExport.TableExporter;
 import TableExport.TableExporterToExcel;
 import TableExport.TableExporterToWord;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -297,7 +299,6 @@ public class StudentsFrame extends JFrame {
         pnlMain.add(pnlInnerAttributes);
         pnlMain.add(pnlContentLayout);
         pnlMain.add(pnlDownButtonsPanel);
-
         pnlMain.setBackground(PANEL_BACKGROUND);
         pnlInnerAttributes.setBackground(PANEL_BACKGROUND);
         pnlContentLayout.setBackground(PANEL_BACKGROUND);
@@ -419,6 +420,7 @@ public class StudentsFrame extends JFrame {
         stylizeButtons(new Color(16, 124, 65), jbtToExcelExport);
 
         pnlUpButtons.setBackground(PANEL_BACKGROUND);
+        pnlUpButtons.setBorder(getTitledBorder("Действия с данными о студентах"));
         pnlInnerAttributes.setBackground(PANEL_BACKGROUND);
         pnlContentLayout.setBackground(PANEL_BACKGROUND);
         addButton(pnlUpButtons, jbtShowStudentsTable, false);
@@ -438,9 +440,26 @@ public class StudentsFrame extends JFrame {
         stylizeButtons(Color.RED, jbtExit);
 
         pnlDownButtonsPanel.setBackground(PANEL_BACKGROUND);
+        pnlDownButtonsPanel.setBorder(getTitledBorder("Дополнительные сведения и действия"));
         addButton(pnlDownButtonsPanel, jbtAboutAppInfo, false);
         addButton(pnlDownButtonsPanel, jbtAboutAuthorInfo, false);
         addButton(pnlDownButtonsPanel, jbtExit, true);
+    }
+
+    /**
+     * Возвращает объект TitledBorder с настроенным шрифтом и стилем.
+     *
+     * @param title     Текст границы панели
+     * @return          объект TitledBorder с настроенным шрифтом и стилем
+     */
+    private static TitledBorder getTitledBorder(String title) {
+        TitledBorder pnlUpTitledBorder = BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.lightGray),
+                title,
+                TitledBorder.CENTER,
+                TitledBorder.DEFAULT_POSITION);
+        pnlUpTitledBorder.setTitleFont(new Font("Montserrat", Font.ITALIC, 12));
+        return pnlUpTitledBorder;
     }
 
     /**
@@ -542,12 +561,12 @@ public class StudentsFrame extends JFrame {
      */
     private void actionShowStudentsTablePerformed(ActionEvent event) {
         if (pnlContentLayout.getComponentCount() == 0) {
-            Object[] columnsNames = StudentsJTableModelInfo.getTableColumnsNamesWithoutGroup();
+            Object[] columnsNames = Student.StudentsJTableModelInfo.getTableColumnsNamesWithoutGroup();
             int columnsNumber = columnsNames.length;
             Object[][] studentsData = SQLiteDBHelper.getStudentsTableData(connection, groupNumber, columnsNumber);
             studentsTable = getCustomLightJTableWithActionColumn(studentsData, columnsNames);
-            studentsTable.setCustomBooleanIntegerRenderers(StudentsJTableModelInfo.getBooleanColumnsIndexes(),
-                    StudentsJTableModelInfo.getIntegerColumnsIndexes());
+            studentsTable.setCustomBooleanIntegerRenderers(Student.StudentsJTableModelInfo.getBooleanColumnsIndexes(),
+                    Student.StudentsJTableModelInfo.getIntegerColumnsIndexes());
             initAttributesPanel(columnsNames, studentsTable.getColumnModel());
             studentsTable.addActionColumn(getTableActionEvents());
             if (studentsData.length == 0) {

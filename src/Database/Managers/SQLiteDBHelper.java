@@ -1,7 +1,7 @@
 package Database.Managers;
 
 import Database.DAOS.StudentDAO;
-import Database.Models.Student;
+import Frames.models.Student;
 
 import javax.swing.*;
 import java.sql.Connection;
