@@ -45,7 +45,6 @@ public class SQLiteConnectionProvider {
                 SQLiteConfig config = new SQLiteConfig();
                 config.enforceForeignKeys(true);
                 connection = DriverManager.getConnection(DB_URL, config.toProperties());
-                System.out.println("Connected to SQLite database.");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -60,7 +59,6 @@ public class SQLiteConnectionProvider {
         if (connection != null) {
             try {
                 connection.close();
-                System.out.println("Connection to SQLite database closed.");
             } catch (SQLException e) {
                 e.printStackTrace();
             }

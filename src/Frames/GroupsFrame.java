@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Класс GroupsFrame представляет собой начальную форму создания учебной группы.
@@ -112,7 +113,7 @@ public class GroupsFrame extends JFrame {
      */
     private void initFormState() {
         setTitle("Студенческие группа");
-        ImageIcon icon = new ImageIcon("assets/GroupIcon.png");
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/GroupIcon.png")));
         setIconImage(icon.getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(STANDARD_FRAME_SIZE);

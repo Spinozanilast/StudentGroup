@@ -5,6 +5,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * Класс AboutAppFrame представляет собой окно с информацией о приложении.
@@ -22,7 +23,7 @@ public class AboutAppFrame extends JFrame {
     /**
      * Минимальный размер окна.
      */
-    private final Dimension MINIMUM_FRAME_SIZE = new Dimension(600, 600);
+    private final Dimension MINIMUM_FRAME_SIZE = new Dimension(750, 600);
 
     /**
      * Цвет фона.
@@ -57,7 +58,7 @@ public class AboutAppFrame extends JFrame {
      * Метод для настройки основных параметров окна.
      */
     private void setupFrame() {
-        ImageIcon icon = new ImageIcon("assets/AboutAppIcon.png");
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/AboutAppIcon.png")));
         setBackground(BACKGROUND_COLOR);
         getContentPane().setBackground(BACKGROUND_COLOR);
         setMinimumSize(MINIMUM_FRAME_SIZE);
@@ -99,9 +100,9 @@ public class AboutAppFrame extends JFrame {
      * @return JLabel объект.
      */
     private JLabel createImageLabel() {
-        ImageIcon imageIcon = new ImageIcon("assets/AppDiagram.png");
+        ImageIcon imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/AppDiagram.png")));
         Image image = imageIcon.getImage();
-        Image newimg = image.getScaledInstance(500/2, 650/2,  java.awt.Image.SCALE_SMOOTH);
+        Image newimg = image.getScaledInstance(500/2, 650/2 - 50,  java.awt.Image.SCALE_SMOOTH);
         imageIcon = new ImageIcon(newimg);
 
         return new JLabel(imageIcon);

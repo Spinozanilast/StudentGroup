@@ -3,6 +3,7 @@ package Frames;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * Класс AboutAuthorFrame представляет собой окно с информацией об авторе.
@@ -69,7 +70,7 @@ public class AboutAuthorFrame extends JFrame {
      */
     public AboutAuthorFrame() {
         setMinimumSize(MINIMUM_FRAME_SIZE);
-        ImageIcon icon = new ImageIcon("assets/AuthorFrameIcon.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/assets/AuthorFrameIcon.png"));
         setIconImage(icon.getImage());
 
         setTitle("Об Авторе");
@@ -153,7 +154,7 @@ public class AboutAuthorFrame extends JFrame {
      */
     private void setIcon(JLabel label) {
 
-        ImageIcon icon = new ImageIcon("assets/AuthorPhoto.jpg");
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/AuthorPhoto.jpg")));
 
         Image image = icon.getImage();
         // Масштабируем изображение с сохранением качества

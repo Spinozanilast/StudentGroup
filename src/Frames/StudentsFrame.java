@@ -148,7 +148,7 @@ public class StudentsFrame extends JFrame {
         this.studentsNum = String.valueOf(studentDAO.getCountOfGroupStudents(groupNumber));
 
         // Устанавливаем иконку окна
-        ImageIcon icon = new ImageIcon("assets/AloneGroupIcon.png");
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/AloneGroupIcon.png")));
         setIconImage(icon.getImage());
 
         // Устанавливаем операцию закрытия окна, размер и расположение
@@ -394,6 +394,9 @@ public class StudentsFrame extends JFrame {
                 .getResource("/CustomComponents/Icons/CloseButtonIcon.png"))));
         jbtExit.setToolTipText("Закрывает окно редактирования данной группы");
         jbtExit.addActionListener(e -> {
+            int choice = JOptionPane.showOptionDialog(null, "Вы действительно хотите Выйти? Убедитесь, что все необходимые пользователи добавлены в базу данных (правая клавиша на панели действий)",
+                    "Подтверждение выхода", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[]{"Да", "Нет"}, "Да");
+            if (choice != 0) return;
             JFrame jFrame = (JFrame) jbtExit.getTopLevelAncestor();
             jFrame.dispose();
         });

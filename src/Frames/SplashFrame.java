@@ -2,6 +2,7 @@ package Frames;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * Класс SplashFrame, представляющий титульный лист курсовой работы.
@@ -21,7 +22,7 @@ public class SplashFrame extends JFrame {
         Timer timer = new Timer(60000, e -> dispose());
         timer.start();
         setTitle("Титульный лист");
-        ImageIcon icon = new ImageIcon("assets/TitleFrameIcon.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/assets/TitleFrameIcon.png"));
         setIconImage(icon.getImage());
         setLocationRelativeTo(null);
         initView();
@@ -93,7 +94,7 @@ public class SplashFrame extends JFrame {
                 "Сидорик Валерий Владимирович"};
 
         JPanel pnlLabelsWithIcon = new JPanel(new FlowLayout(FlowLayout.CENTER, 150, 10));
-        ImageIcon icon = new ImageIcon("assets/BigGroupIcon.png");
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/BigGroupIcon.png")));
         JLabel lblIcon = new JLabel(icon);
         JPanel jPnlLeft = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

@@ -2,6 +2,8 @@ package CustomComponents;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
+import java.util.Objects;
 
 /**
  * ThreeActionLabelsPanel - это пользовательский класс JPanel, который содержит три метки действий.
@@ -14,12 +16,12 @@ public class ThreeActionLabelsPanel extends JPanel {
     /**
      * Путь к иконке стрелки вниз.
      */
-    public static final String DOWN_ARROW_ICON = "assets/DownArrowIcon.png";
+    public static URL DOWN_ARROW_ICON;
 
     /**
      * Путь к иконке стрелки вверх.
      */
-    public static final String UP_ARROW_ICON = "assets/UpArrowIcon.png";
+    public static URL UP_ARROW_ICON;
 
     /**
      * Цвет переднего плана меток.
@@ -72,6 +74,9 @@ public class ThreeActionLabelsPanel extends JPanel {
      * @param rightLabelText  Текст правой метки.
      */
     public ThreeActionLabelsPanel(Color foregroundColor, Color backgroundColor, String leftLabelText, String centerLabelText, String rightLabelText) {
+        DOWN_ARROW_ICON = getClass().getResource("src/assets/DownArrowIcon.png");
+        UP_ARROW_ICON = getClass().getResource("src/assets/UpArrowIcon.png");
+
         /**
          * Стандартный размер.
          */
@@ -123,7 +128,7 @@ public class ThreeActionLabelsPanel extends JPanel {
             setBackground(backPanelColor);
             label.setForeground(labelsForeground);
 
-            ImageIcon icon = new ImageIcon("assets/DownArrowIcon.png");
+            ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/DownArrowIcon.png")));
             label.setIcon(icon);
         }
     }
@@ -133,7 +138,7 @@ public class ThreeActionLabelsPanel extends JPanel {
      *
      * @param filename Имя файла иконки.
      */
-    public void setLeftLabelIcon(String filename) {
+    public void setLeftLabelIcon(URL filename) {
         isLeftArrowDown = !isLeftArrowDown;
         ImageIcon icon = new ImageIcon(filename);
         leftLabel.setIcon(icon);
@@ -144,7 +149,7 @@ public class ThreeActionLabelsPanel extends JPanel {
      *
      * @param filename Имя файла иконки.
      */
-    public void setCenterLabelIcon(String filename) {
+    public void setCenterLabelIcon(URL filename) {
         isCenterArrowDown = !isCenterArrowDown;
         ImageIcon icon = new ImageIcon(filename);
         centerLabel.setIcon(icon);
@@ -155,7 +160,7 @@ public class ThreeActionLabelsPanel extends JPanel {
      *
      * @param filename Имя файла иконки.
      */
-    public void setRightLabelIcon(String filename) {
+    public void setRightLabelIcon(URL filename) {
         isRightArrowDown = !isRightArrowDown;
         ImageIcon icon = new ImageIcon(filename);
         rightLabel.setIcon(icon);
